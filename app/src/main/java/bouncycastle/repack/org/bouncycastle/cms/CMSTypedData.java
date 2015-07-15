@@ -3,7 +3,7 @@ package repack.org.bouncycastle.cms;
 import repack.org.bouncycastle.asn1.ASN1ObjectIdentifier;
 
 public interface CMSTypedData
-    extends CMSProcessable
+		extends CMSProcessable
 {
-    ASN1ObjectIdentifier getContentType();
+	ASN1ObjectIdentifier getContentType();
 }

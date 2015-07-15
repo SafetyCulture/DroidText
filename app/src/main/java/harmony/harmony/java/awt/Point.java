@@ -23,31 +23,38 @@ import harmony.java.awt.geom.Point2D;
 
 import java.io.Serializable;
 
-public class Point extends Point2D implements Serializable {
+public class Point extends Point2D implements Serializable
+{
 
 	private static final long serialVersionUID = -5276940640259749850L;
 
 	public int x;
 	public int y;
 
-	public Point() {
+	public Point()
+	{
 		setLocation(0, 0);
 	}
 
-	public Point(int x, int y) {
+	public Point(int x, int y)
+	{
 		setLocation(x, y);
 	}
 
-	public Point(Point p) {
+	public Point(Point p)
+	{
 		setLocation(p.x, p.y);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
 			return true;
 		}
-		if (obj instanceof Point) {
+		if(obj instanceof Point)
+		{
 			Point p = (Point) obj;
 			return x == p.x && y == p.y;
 		}
@@ -55,45 +62,54 @@ public class Point extends Point2D implements Serializable {
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return getClass().getName() + "[x=" + x + ",y=" + y + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
-	public double getX() {
+	public double getX()
+	{
 		return x;
 	}
 
 	@Override
-	public double getY() {
+	public double getY()
+	{
 		return y;
 	}
 
-	public Point getLocation() {
+	public Point getLocation()
+	{
 		return new Point(x, y);
 	}
 
-	public void setLocation(Point p) {
+	public void setLocation(Point p)
+	{
 		setLocation(p.x, p.y);
 	}
 
-	public void setLocation(int x, int y) {
+	public void setLocation(int x, int y)
+	{
 		this.x = x;
 		this.y = y;
 	}
 
 	@Override
-	public void setLocation(double x, double y) {
+	public void setLocation(double x, double y)
+	{
 		x = x < Integer.MIN_VALUE ? Integer.MIN_VALUE : x > Integer.MAX_VALUE ? Integer.MAX_VALUE : x;
 		y = y < Integer.MIN_VALUE ? Integer.MIN_VALUE : y > Integer.MAX_VALUE ? Integer.MAX_VALUE : y;
 		setLocation((int) Math.round(x), (int) Math.round(y));
 	}
 
-	public void move(int x, int y) {
+	public void move(int x, int y)
+	{
 		setLocation(x, y);
 	}
 
-	public void translate(int dx, int dy) {
+	public void translate(int dx, int dy)
+	{
 		x += dx;
 		y += dy;
 	}

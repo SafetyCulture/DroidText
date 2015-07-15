@@ -1,7 +1,5 @@
 package repack.org.bouncycastle.operator.bc;
 
-import java.io.IOException;
-
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import repack.org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import repack.org.bouncycastle.crypto.Digest;
@@ -12,28 +10,30 @@ import repack.org.bouncycastle.crypto.util.PublicKeyFactory;
 import repack.org.bouncycastle.operator.DigestAlgorithmIdentifierFinder;
 import repack.org.bouncycastle.operator.OperatorCreationException;
 
+import java.io.IOException;
+
 public class BcRSAContentVerifierProviderBuilder
-    extends BcContentVerifierProviderBuilder
+		extends BcContentVerifierProviderBuilder
 {
-    private DigestAlgorithmIdentifierFinder digestAlgorithmFinder;
+	private DigestAlgorithmIdentifierFinder digestAlgorithmFinder;
 
-    public BcRSAContentVerifierProviderBuilder(DigestAlgorithmIdentifierFinder digestAlgorithmFinder)
-    {
-        this.digestAlgorithmFinder = digestAlgorithmFinder;
-    }
+	public BcRSAContentVerifierProviderBuilder(DigestAlgorithmIdentifierFinder digestAlgorithmFinder)
+	{
+		this.digestAlgorithmFinder = digestAlgorithmFinder;
+	}
 
-    protected Signer createSigner(AlgorithmIdentifier sigAlgId)
-        throws OperatorCreationException
-    {
-        AlgorithmIdentifier digAlg = digestAlgorithmFinder.find(sigAlgId);
-        Digest dig = BcUtil.createDigest(digAlg);
+	protected Signer createSigner(AlgorithmIdentifier sigAlgId)
+			throws OperatorCreationException
+	{
+		AlgorithmIdentifier digAlg = digestAlgorithmFinder.find(sigAlgId);
+		Digest dig = BcUtil.createDigest(digAlg);
 
-        return new RSADigestSigner(dig);
-    }
+		return new RSADigestSigner(dig);
+	}
 
-    protected AsymmetricKeyParameter extractKeyParameters(SubjectPublicKeyInfo publicKeyInfo)
-        throws IOException
-    {
-        return PublicKeyFactory.createKey(publicKeyInfo);
-    }
+	protected AsymmetricKeyParameter extractKeyParameters(SubjectPublicKeyInfo publicKeyInfo)
+			throws IOException
+	{
+		return PublicKeyFactory.createKey(publicKeyInfo);
+	}
 }

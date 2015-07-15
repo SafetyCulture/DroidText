@@ -9,81 +9,81 @@ import repack.org.bouncycastle.operator.OperatorCreationException;
 
 public class SignerInfoGeneratorBuilder
 {
-    private DigestCalculatorProvider digestProvider;
-    private boolean directSignature;
-    private CMSAttributeTableGenerator signedGen;
-    private CMSAttributeTableGenerator unsignedGen;
+	private DigestCalculatorProvider digestProvider;
+	private boolean directSignature;
+	private CMSAttributeTableGenerator signedGen;
+	private CMSAttributeTableGenerator unsignedGen;
 
-    public SignerInfoGeneratorBuilder(DigestCalculatorProvider digestProvider)
-    {
-        this.digestProvider = digestProvider;
-    }
+	public SignerInfoGeneratorBuilder(DigestCalculatorProvider digestProvider)
+	{
+		this.digestProvider = digestProvider;
+	}
 
-    /**
-     * If the passed in flag is true, the signer signature will be based on the data, not
-     * a collection of signed attributes, and no signed attributes will be included.
-     *
-     * @return the builder object
-     */
-    public SignerInfoGeneratorBuilder setDirectSignature(boolean hasNoSignedAttributes)
-    {
-        this.directSignature = hasNoSignedAttributes;
+	/**
+	 * If the passed in flag is true, the signer signature will be based on the data, not
+	 * a collection of signed attributes, and no signed attributes will be included.
+	 *
+	 * @return the builder object
+	 */
+	public SignerInfoGeneratorBuilder setDirectSignature(boolean hasNoSignedAttributes)
+	{
+		this.directSignature = hasNoSignedAttributes;
 
-        return this;
-    }
+		return this;
+	}
 
-    public SignerInfoGeneratorBuilder setSignedAttributeGenerator(CMSAttributeTableGenerator signedGen)
-    {
-        this.signedGen = signedGen;
+	public SignerInfoGeneratorBuilder setSignedAttributeGenerator(CMSAttributeTableGenerator signedGen)
+	{
+		this.signedGen = signedGen;
 
-        return this;
-    }
+		return this;
+	}
 
-    public SignerInfoGeneratorBuilder setUnsignedAttributeGenerator(CMSAttributeTableGenerator unsignedGen)
-    {
-        this.unsignedGen = unsignedGen;
+	public SignerInfoGeneratorBuilder setUnsignedAttributeGenerator(CMSAttributeTableGenerator unsignedGen)
+	{
+		this.unsignedGen = unsignedGen;
 
-        return this;
-    }
+		return this;
+	}
 
-    public SignerInfoGenerator build(ContentSigner contentSigner, X509CertificateHolder certHolder)
-        throws OperatorCreationException
-    {
-        SignerIdentifier sigId = new SignerIdentifier(certHolder.getIssuerAndSerialNumber());
+	public SignerInfoGenerator build(ContentSigner contentSigner, X509CertificateHolder certHolder)
+			throws OperatorCreationException
+	{
+		SignerIdentifier sigId = new SignerIdentifier(certHolder.getIssuerAndSerialNumber());
 
-        SignerInfoGenerator sigInfoGen = createGenerator(contentSigner, sigId);
+		SignerInfoGenerator sigInfoGen = createGenerator(contentSigner, sigId);
 
-        sigInfoGen.setAssociatedCertificate(certHolder);
+		sigInfoGen.setAssociatedCertificate(certHolder);
 
-        return sigInfoGen;
-    }
+		return sigInfoGen;
+	}
 
-    public SignerInfoGenerator build(ContentSigner contentSigner, byte[] keyIdentifier)
-        throws OperatorCreationException
-    {
-        SignerIdentifier sigId = new SignerIdentifier(new DEROctetString(keyIdentifier));
+	public SignerInfoGenerator build(ContentSigner contentSigner, byte[] keyIdentifier)
+			throws OperatorCreationException
+	{
+		SignerIdentifier sigId = new SignerIdentifier(new DEROctetString(keyIdentifier));
 
-        return createGenerator(contentSigner, sigId);
-    }
+		return createGenerator(contentSigner, sigId);
+	}
 
-    private SignerInfoGenerator createGenerator(ContentSigner contentSigner, SignerIdentifier sigId)
-        throws OperatorCreationException
-    {
-        if (directSignature)
-        {
-            return new SignerInfoGenerator(sigId, contentSigner, digestProvider, true);
-        }
+	private SignerInfoGenerator createGenerator(ContentSigner contentSigner, SignerIdentifier sigId)
+			throws OperatorCreationException
+	{
+		if(directSignature)
+		{
+			return new SignerInfoGenerator(sigId, contentSigner, digestProvider, true);
+		}
 
-        if (signedGen != null || unsignedGen != null)
-        {
-            if (signedGen == null)
-            {
-                signedGen = new DefaultSignedAttributeTableGenerator();
-            }
+		if(signedGen != null || unsignedGen != null)
+		{
+			if(signedGen == null)
+			{
+				signedGen = new DefaultSignedAttributeTableGenerator();
+			}
 
-            return new SignerInfoGenerator(sigId, contentSigner, digestProvider, signedGen, unsignedGen);
-        }
-        
-        return new SignerInfoGenerator(sigId, contentSigner, digestProvider);
-    }
+			return new SignerInfoGenerator(sigId, contentSigner, digestProvider, signedGen, unsignedGen);
+		}
+
+		return new SignerInfoGenerator(sigId, contentSigner, digestProvider);
+	}
 }

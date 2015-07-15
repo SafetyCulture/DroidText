@@ -3,34 +3,34 @@ package repack.org.bouncycastle.crypto.params;
 import repack.org.bouncycastle.crypto.CipherParameters;
 
 public class RC2Parameters
-    implements CipherParameters
+		implements CipherParameters
 {
-    private byte[]  key;
-    private int     bits;
+	private byte[] key;
+	private int bits;
 
-    public RC2Parameters(
-        byte[]  key)
-    {
-        this(key, (key.length > 128) ? 1024 : (key.length * 8));
-    }
+	public RC2Parameters(
+			byte[] key)
+	{
+		this(key, (key.length > 128) ? 1024 : (key.length * 8));
+	}
 
-    public RC2Parameters(
-        byte[]  key,
-        int     bits)
-    {
-        this.key = new byte[key.length];
-        this.bits = bits;
+	public RC2Parameters(
+			byte[] key,
+			int bits)
+	{
+		this.key = new byte[key.length];
+		this.bits = bits;
 
-        System.arraycopy(key, 0, this.key, 0, key.length);
-    }
+		System.arraycopy(key, 0, this.key, 0, key.length);
+	}
 
-    public byte[] getKey()
-    {
-        return key;
-    }
+	public byte[] getKey()
+	{
+		return key;
+	}
 
-    public int getEffectiveKeyBits()
-    {
-        return bits;
-    }
+	public int getEffectiveKeyBits()
+	{
+		return bits;
+	}
 }

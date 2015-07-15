@@ -1,12 +1,5 @@
 package repack.org.bouncycastle.cert.crmf.jcajce;
 
-import java.security.GeneralSecurityException;
-import java.security.MessageDigest;
-import java.security.Provider;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import repack.org.bouncycastle.cert.crmf.CRMFException;
 import repack.org.bouncycastle.cert.crmf.PKMACValuesCalculator;
@@ -14,56 +7,62 @@ import repack.org.bouncycastle.jcajce.DefaultJcaJceHelper;
 import repack.org.bouncycastle.jcajce.NamedJcaJceHelper;
 import repack.org.bouncycastle.jcajce.ProviderJcaJceHelper;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.Provider;
+
 public class JcePKMACValuesCalculator
-    implements PKMACValuesCalculator
+		implements PKMACValuesCalculator
 {
-    private MessageDigest digest;
-    private Mac           mac;
-    private CRMFHelper    helper;
+	private MessageDigest digest;
+	private Mac mac;
+	private CRMFHelper helper;
 
-    public JcePKMACValuesCalculator()
-    {
-        this.helper = new CRMFHelper(new DefaultJcaJceHelper());
-    }
+	public JcePKMACValuesCalculator()
+	{
+		this.helper = new CRMFHelper(new DefaultJcaJceHelper());
+	}
 
-    public JcePKMACValuesCalculator setProvider(Provider provider)
-    {
-        this.helper = new CRMFHelper(new ProviderJcaJceHelper(provider));
+	public JcePKMACValuesCalculator setProvider(Provider provider)
+	{
+		this.helper = new CRMFHelper(new ProviderJcaJceHelper(provider));
 
-        return this;
-    }
+		return this;
+	}
 
-    public JcePKMACValuesCalculator setProvider(String providerName)
-    {
-        this.helper = new CRMFHelper(new NamedJcaJceHelper(providerName));
+	public JcePKMACValuesCalculator setProvider(String providerName)
+	{
+		this.helper = new CRMFHelper(new NamedJcaJceHelper(providerName));
 
-        return this;
-    }
+		return this;
+	}
 
-    public void setup(AlgorithmIdentifier digAlg, AlgorithmIdentifier macAlg)
-        throws CRMFException
-    {
-        digest = helper.createDigest(digAlg.getAlgorithm());
-        mac = helper.createMac(macAlg.getAlgorithm());
-    }
+	public void setup(AlgorithmIdentifier digAlg, AlgorithmIdentifier macAlg)
+			throws CRMFException
+	{
+		digest = helper.createDigest(digAlg.getAlgorithm());
+		mac = helper.createMac(macAlg.getAlgorithm());
+	}
 
-    public byte[] calculateDigest(byte[] data)
-    {
-        return digest.digest(data);
-    }
+	public byte[] calculateDigest(byte[] data)
+	{
+		return digest.digest(data);
+	}
 
-    public byte[] calculateMac(byte[] pwd, byte[] data)
-        throws CRMFException
-    {
-        try
-        {
-            mac.init(new SecretKeySpec(pwd, mac.getAlgorithm()));
+	public byte[] calculateMac(byte[] pwd, byte[] data)
+			throws CRMFException
+	{
+		try
+		{
+			mac.init(new SecretKeySpec(pwd, mac.getAlgorithm()));
 
-            return mac.doFinal(data);
-        }
-        catch (GeneralSecurityException e)
-        {
-            throw new CRMFException("failure in setup: " + e.getMessage(), e);
-        }
-    }
+			return mac.doFinal(data);
+		}
+		catch(GeneralSecurityException e)
+		{
+			throw new CRMFException("failure in setup: " + e.getMessage(), e);
+		}
+	}
 }

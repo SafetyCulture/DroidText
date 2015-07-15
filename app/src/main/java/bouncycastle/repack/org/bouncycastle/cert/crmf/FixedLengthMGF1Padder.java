@@ -1,122 +1,122 @@
 package repack.org.bouncycastle.cert.crmf;
 
-import java.security.SecureRandom;
-
 import repack.org.bouncycastle.crypto.Digest;
 import repack.org.bouncycastle.crypto.digests.SHA1Digest;
 import repack.org.bouncycastle.crypto.generators.MGF1BytesGenerator;
 import repack.org.bouncycastle.crypto.params.MGFParameters;
 
+import java.security.SecureRandom;
+
 /**
  * An encrypted value padder that uses MGF1 as the basis of the padding.
  */
 public class FixedLengthMGF1Padder
-    implements EncryptedValuePadder
+		implements EncryptedValuePadder
 {
-    private int length;
-    private SecureRandom random;
-    private Digest dig = new SHA1Digest();
+	private int length;
+	private SecureRandom random;
+	private Digest dig = new SHA1Digest();
 
-    /**
-     * Create a padder to so that padded output will always be at least
-     * length bytes long.
-     *
-     * @param length fixed length for padded output.
-     */
-    public FixedLengthMGF1Padder(int length)
-    {
-        this(length, null);
-    }
+	/**
+	 * Create a padder to so that padded output will always be at least
+	 * length bytes long.
+	 *
+	 * @param length fixed length for padded output.
+	 */
+	public FixedLengthMGF1Padder(int length)
+	{
+		this(length, null);
+	}
 
-    /**
-     * Create a padder to so that padded output will always be at least
-     * length bytes long, using the passed in source of randomness to
-     * provide the random material for the padder.
-     *
-     * @param length fixed length for padded output.
-     * @param random a source of randomness.
-     */
-    public FixedLengthMGF1Padder(int length, SecureRandom random)
-    {
-        this.length = length;
-        this.random = random;
-    }
+	/**
+	 * Create a padder to so that padded output will always be at least
+	 * length bytes long, using the passed in source of randomness to
+	 * provide the random material for the padder.
+	 *
+	 * @param length fixed length for padded output.
+	 * @param random a source of randomness.
+	 */
+	public FixedLengthMGF1Padder(int length, SecureRandom random)
+	{
+		this.length = length;
+		this.random = random;
+	}
 
-    public byte[] getPaddedData(byte[] data)
-    {
-        byte[] bytes = new byte[length];
-        byte[] seed = new byte[dig.getDigestSize()];
-        byte[] mask = new byte[length - dig.getDigestSize()];
+	public byte[] getPaddedData(byte[] data)
+	{
+		byte[] bytes = new byte[length];
+		byte[] seed = new byte[dig.getDigestSize()];
+		byte[] mask = new byte[length - dig.getDigestSize()];
 
-        if (random == null)
-        {
-            random = new SecureRandom();
-        }
+		if(random == null)
+		{
+			random = new SecureRandom();
+		}
 
-        random.nextBytes(seed);
+		random.nextBytes(seed);
 
-        MGF1BytesGenerator maskGen = new MGF1BytesGenerator(dig);
+		MGF1BytesGenerator maskGen = new MGF1BytesGenerator(dig);
 
-        maskGen.init(new MGFParameters(seed));
+		maskGen.init(new MGFParameters(seed));
 
-        maskGen.generateBytes(mask, 0, mask.length);
+		maskGen.generateBytes(mask, 0, mask.length);
 
-        System.arraycopy(seed, 0, bytes, 0, seed.length);
-        System.arraycopy(data, 0, bytes, seed.length, data.length);
+		System.arraycopy(seed, 0, bytes, 0, seed.length);
+		System.arraycopy(data, 0, bytes, seed.length, data.length);
 
-        for (int i = seed.length + data.length + 1; i != bytes.length; i++)
-        {
-            byte b = (byte)random.nextInt();
+		for(int i = seed.length + data.length + 1; i != bytes.length; i++)
+		{
+			byte b = (byte) random.nextInt();
 
-            bytes[i] = (b == 0) ? 1 : b;
-        }
-        
-        for (int i = 0; i != mask.length; i++)
-        {
-            bytes[i + seed.length] ^= mask[i];
-        }
+			bytes[i] = (b == 0) ? 1 : b;
+		}
 
-        return bytes;
-    }
+		for(int i = 0; i != mask.length; i++)
+		{
+			bytes[i + seed.length] ^= mask[i];
+		}
 
-    public byte[] getUnpaddedData(byte[] paddedData)
-    {
-        byte[] seed = new byte[dig.getDigestSize()];
-        byte[] mask = new byte[length - dig.getDigestSize()];
+		return bytes;
+	}
 
-        System.arraycopy(paddedData, 0, seed, 0, seed.length);
+	public byte[] getUnpaddedData(byte[] paddedData)
+	{
+		byte[] seed = new byte[dig.getDigestSize()];
+		byte[] mask = new byte[length - dig.getDigestSize()];
 
-        MGF1BytesGenerator maskGen = new MGF1BytesGenerator(dig);
+		System.arraycopy(paddedData, 0, seed, 0, seed.length);
 
-        maskGen.init(new MGFParameters(seed));
+		MGF1BytesGenerator maskGen = new MGF1BytesGenerator(dig);
 
-        maskGen.generateBytes(mask, 0, mask.length);
+		maskGen.init(new MGFParameters(seed));
 
-        for (int i = 0; i != mask.length; i++)
-        {
-            paddedData[i + seed.length] ^= mask[i];
-        }
+		maskGen.generateBytes(mask, 0, mask.length);
 
-        int end = 0;
+		for(int i = 0; i != mask.length; i++)
+		{
+			paddedData[i + seed.length] ^= mask[i];
+		}
 
-        for (int i = paddedData.length - 1; i != seed.length; i--)
-        {
-            if (paddedData[i] == 0)
-            {
-                end = i;
-                break;
-            }
-        }
+		int end = 0;
 
-        if (end == 0)
-        {
-            throw new IllegalStateException("bad padding in encoding");
-        }
+		for(int i = paddedData.length - 1; i != seed.length; i--)
+		{
+			if(paddedData[i] == 0)
+			{
+				end = i;
+				break;
+			}
+		}
 
-        byte[] data = new byte[end - seed.length];
+		if(end == 0)
+		{
+			throw new IllegalStateException("bad padding in encoding");
+		}
 
-        System.arraycopy(paddedData, seed.length, data, 0, data.length);
+		byte[] data = new byte[end - seed.length];
 
-        return data;
-    }
+		System.arraycopy(paddedData, seed.length, data, 0, data.length);
+
+		return data;
+	}
 }

@@ -19,58 +19,68 @@
  */
 package harmony.java.awt.geom;
 
-import java.util.NoSuchElementException;
-
 import org.apache.harmony.awt.internal.nls.Messages;
 import org.apache.harmony.misc.HashCode;
 
-public abstract class Rectangle2D extends RectangularShape {
+import java.util.NoSuchElementException;
+
+public abstract class Rectangle2D extends RectangularShape
+{
 
 	public static final int OUT_LEFT = 1;
 	public static final int OUT_TOP = 2;
 	public static final int OUT_RIGHT = 4;
 	public static final int OUT_BOTTOM = 8;
 
-	public static class Float extends Rectangle2D {
+	public static class Float extends Rectangle2D
+	{
 
 		public float x;
 		public float y;
 		public float width;
 		public float height;
 
-		public Float() {
+		public Float()
+		{
 		}
 
-		public Float(float x, float y, float width, float height) {
+		public Float(float x, float y, float width, float height)
+		{
 			setRect(x, y, width, height);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0f || height <= 0.0f;
 		}
 
-		public void setRect(float x, float y, float width, float height) {
+		public void setRect(float x, float y, float width, float height)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -78,7 +88,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRect(double x, double y, double width, double height) {
+		public void setRect(double x, double y, double width, double height)
+		{
 			this.x = (float) x;
 			this.y = (float) y;
 			this.width = (float) width;
@@ -86,7 +97,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRect(Rectangle2D r) {
+		public void setRect(Rectangle2D r)
+		{
 			this.x = (float) r.getX();
 			this.y = (float) r.getY();
 			this.width = (float) r.getWidth();
@@ -94,22 +106,33 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public int outcode(double px, double py) {
+		public int outcode(double px, double py)
+		{
 			int code = 0;
 
-			if (width <= 0.0f) {
+			if(width <= 0.0f)
+			{
 				code |= OUT_LEFT | OUT_RIGHT;
-			} else if (px < x) {
+			}
+			else if(px < x)
+			{
 				code |= OUT_LEFT;
-			} else if (px > x + width) {
+			}
+			else if(px > x + width)
+			{
 				code |= OUT_RIGHT;
 			}
 
-			if (height <= 0.0f) {
+			if(height <= 0.0f)
+			{
 				code |= OUT_TOP | OUT_BOTTOM;
-			} else if (py < y) {
+			}
+			else if(py < y)
+			{
 				code |= OUT_TOP;
-			} else if (py > y + height) {
+			}
+			else if(py > y + height)
+			{
 				code |= OUT_BOTTOM;
 			}
 
@@ -117,16 +140,21 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Float(x, y, width, height);
 		}
 
 		@Override
-		public Rectangle2D createIntersection(Rectangle2D r) {
+		public Rectangle2D createIntersection(Rectangle2D r)
+		{
 			Rectangle2D dst;
-			if (r instanceof Double) {
+			if(r instanceof Double)
+			{
 				dst = new Rectangle2D.Double();
-			} else {
+			}
+			else
+			{
 				dst = new Rectangle2D.Float();
 			}
 			Rectangle2D.intersect(this, r, dst);
@@ -134,11 +162,15 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public Rectangle2D createUnion(Rectangle2D r) {
+		public Rectangle2D createUnion(Rectangle2D r)
+		{
 			Rectangle2D dst;
-			if (r instanceof Double) {
+			if(r instanceof Double)
+			{
 				dst = new Rectangle2D.Double();
-			} else {
+			}
+			else
+			{
 				dst = new Rectangle2D.Float();
 			}
 			Rectangle2D.union(this, r, dst);
@@ -146,7 +178,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			// The output format based on 1.5 release behaviour. It could be
 			// obtained in the following way
 			// System.out.println(new Rectangle2D.Float().toString())
@@ -154,47 +187,56 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 	}
 
-	public static class Double extends Rectangle2D {
+	public static class Double extends Rectangle2D
+	{
 
 		public double x;
 		public double y;
 		public double width;
 		public double height;
 
-		public Double() {
+		public Double()
+		{
 		}
 
-		public Double(double x, double y, double width, double height) {
+		public Double(double x, double y, double width, double height)
+		{
 			setRect(x, y, width, height);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0 || height <= 0.0;
 		}
 
 		@Override
-		public void setRect(double x, double y, double width, double height) {
+		public void setRect(double x, double y, double width, double height)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -202,7 +244,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRect(Rectangle2D r) {
+		public void setRect(Rectangle2D r)
+		{
 			this.x = r.getX();
 			this.y = r.getY();
 			this.width = r.getWidth();
@@ -210,22 +253,33 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public int outcode(double px, double py) {
+		public int outcode(double px, double py)
+		{
 			int code = 0;
 
-			if (width <= 0.0) {
+			if(width <= 0.0)
+			{
 				code |= OUT_LEFT | OUT_RIGHT;
-			} else if (px < x) {
+			}
+			else if(px < x)
+			{
 				code |= OUT_LEFT;
-			} else if (px > x + width) {
+			}
+			else if(px > x + width)
+			{
 				code |= OUT_RIGHT;
 			}
 
-			if (height <= 0.0) {
+			if(height <= 0.0)
+			{
 				code |= OUT_TOP | OUT_BOTTOM;
-			} else if (py < y) {
+			}
+			else if(py < y)
+			{
 				code |= OUT_TOP;
-			} else if (py > y + height) {
+			}
+			else if(py > y + height)
+			{
 				code |= OUT_BOTTOM;
 			}
 
@@ -233,26 +287,30 @@ public abstract class Rectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Double(x, y, width, height);
 		}
 
 		@Override
-		public Rectangle2D createIntersection(Rectangle2D r) {
+		public Rectangle2D createIntersection(Rectangle2D r)
+		{
 			Rectangle2D dst = new Rectangle2D.Double();
 			Rectangle2D.intersect(this, r, dst);
 			return dst;
 		}
 
 		@Override
-		public Rectangle2D createUnion(Rectangle2D r) {
+		public Rectangle2D createUnion(Rectangle2D r)
+		{
 			Rectangle2D dest = new Rectangle2D.Double();
 			Rectangle2D.union(this, r, dest);
 			return dest;
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			// The output format based on 1.5 release behaviour. It could be
 			// obtained in the following way
 			// System.out.println(new Rectangle2D.Double().toString())
@@ -263,7 +321,8 @@ public abstract class Rectangle2D extends RectangularShape {
 	/*
 	 * Rectangle2D path iterator
 	 */
-	class Iterator implements PathIterator {
+	class Iterator implements PathIterator
+	{
 
 		/**
 		 * The x coordinate of left-upper rectangle corner
@@ -298,108 +357,127 @@ public abstract class Rectangle2D extends RectangularShape {
 		/**
 		 * Constructs a new Rectangle2D.Iterator for given rectangle and
 		 * transformation
-		 * 
-		 * @param r
-		 *            - the source Rectangle2D object
-		 * @param at
-		 *            - the AffineTransform object to apply rectangle path
+		 *
+		 * @param r  - the source Rectangle2D object
+		 * @param at - the AffineTransform object to apply rectangle path
 		 */
-		Iterator(Rectangle2D r, AffineTransform at) {
+		Iterator(Rectangle2D r, AffineTransform at)
+		{
 			this.x = r.getX();
 			this.y = r.getY();
 			this.width = r.getWidth();
 			this.height = r.getHeight();
 			this.t = at;
-			if (width < 0.0 || height < 0.0) {
+			if(width < 0.0 || height < 0.0)
+			{
 				index = 6;
 			}
 		}
 
-		public int getWindingRule() {
+		public int getWindingRule()
+		{
 			return WIND_NON_ZERO;
 		}
 
-		public boolean isDone() {
+		public boolean isDone()
+		{
 			return index > 5;
 		}
 
-		public void next() {
+		public void next()
+		{
 			index++;
 		}
 
-		public int currentSegment(double[] coords) {
-			if (isDone()) {
+		public int currentSegment(double[] coords)
+		{
+			if(isDone())
+			{
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == 5) {
+			if(index == 5)
+			{
 				return SEG_CLOSE;
 			}
 			int type;
-			if (index == 0) {
+			if(index == 0)
+			{
 				type = SEG_MOVETO;
 				coords[0] = x;
 				coords[1] = y;
-			} else {
+			}
+			else
+			{
 				type = SEG_LINETO;
-				switch (index) {
-				case 1:
-					coords[0] = x + width;
-					coords[1] = y;
-					break;
-				case 2:
-					coords[0] = x + width;
-					coords[1] = y + height;
-					break;
-				case 3:
-					coords[0] = x;
-					coords[1] = y + height;
-					break;
-				case 4:
-					coords[0] = x;
-					coords[1] = y;
-					break;
+				switch(index)
+				{
+					case 1:
+						coords[0] = x + width;
+						coords[1] = y;
+						break;
+					case 2:
+						coords[0] = x + width;
+						coords[1] = y + height;
+						break;
+					case 3:
+						coords[0] = x;
+						coords[1] = y + height;
+						break;
+					case 4:
+						coords[0] = x;
+						coords[1] = y;
+						break;
 				}
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, 1);
 			}
 			return type;
 		}
 
-		public int currentSegment(float[] coords) {
-			if (isDone()) {
+		public int currentSegment(float[] coords)
+		{
+			if(isDone())
+			{
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == 5) {
+			if(index == 5)
+			{
 				return SEG_CLOSE;
 			}
 			int type;
-			if (index == 0) {
+			if(index == 0)
+			{
 				coords[0] = (float) x;
 				coords[1] = (float) y;
 				type = SEG_MOVETO;
-			} else {
+			}
+			else
+			{
 				type = SEG_LINETO;
-				switch (index) {
-				case 1:
-					coords[0] = (float) (x + width);
-					coords[1] = (float) y;
-					break;
-				case 2:
-					coords[0] = (float) (x + width);
-					coords[1] = (float) (y + height);
-					break;
-				case 3:
-					coords[0] = (float) x;
-					coords[1] = (float) (y + height);
-					break;
-				case 4:
-					coords[0] = (float) x;
-					coords[1] = (float) y;
-					break;
+				switch(index)
+				{
+					case 1:
+						coords[0] = (float) (x + width);
+						coords[1] = (float) y;
+						break;
+					case 2:
+						coords[0] = (float) (x + width);
+						coords[1] = (float) (y + height);
+						break;
+					case 3:
+						coords[0] = (float) x;
+						coords[1] = (float) (y + height);
+						break;
+					case 4:
+						coords[0] = (float) x;
+						coords[1] = (float) y;
+						break;
 				}
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, 1);
 			}
 			return type;
@@ -407,7 +485,8 @@ public abstract class Rectangle2D extends RectangularShape {
 
 	}
 
-	protected Rectangle2D() {
+	protected Rectangle2D()
+	{
 	}
 
 	public abstract void setRect(double x, double y, double width, double height);
@@ -418,20 +497,24 @@ public abstract class Rectangle2D extends RectangularShape {
 
 	public abstract Rectangle2D createUnion(Rectangle2D r);
 
-	public void setRect(Rectangle2D r) {
+	public void setRect(Rectangle2D r)
+	{
 		setRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 
 	@Override
-	public void setFrame(double x, double y, double width, double height) {
+	public void setFrame(double x, double y, double width, double height)
+	{
 		setRect(x, y, width, height);
 	}
 
-	public Rectangle2D getBounds2D() {
+	public Rectangle2D getBounds2D()
+	{
 		return (Rectangle2D) clone();
 	}
 
-	public boolean intersectsLine(double x1, double y1, double x2, double y2) {
+	public boolean intersectsLine(double x1, double y1, double x2, double y2)
+	{
 		double rx1 = getX();
 		double ry1 = getY();
 		double rx2 = rx1 + getWidth();
@@ -441,16 +524,20 @@ public abstract class Rectangle2D extends RectangularShape {
 				|| Line2D.linesIntersect(rx2, ry1, rx1, ry2, x1, y1, x2, y2);
 	}
 
-	public boolean intersectsLine(Line2D l) {
+	public boolean intersectsLine(Line2D l)
+	{
 		return intersectsLine(l.getX1(), l.getY1(), l.getX2(), l.getY2());
 	}
 
-	public int outcode(Point2D p) {
+	public int outcode(Point2D p)
+	{
 		return outcode(p.getX(), p.getY());
 	}
 
-	public boolean contains(double x, double y) {
-		if (isEmpty()) {
+	public boolean contains(double x, double y)
+	{
+		if(isEmpty())
+		{
 			return false;
 		}
 
@@ -462,8 +549,10 @@ public abstract class Rectangle2D extends RectangularShape {
 		return x1 <= x && x < x2 && y1 <= y && y < y2;
 	}
 
-	public boolean intersects(double x, double y, double width, double height) {
-		if (isEmpty() || width <= 0.0 || height <= 0.0) {
+	public boolean intersects(double x, double y, double width, double height)
+	{
+		if(isEmpty() || width <= 0.0 || height <= 0.0)
+		{
 			return false;
 		}
 
@@ -475,8 +564,10 @@ public abstract class Rectangle2D extends RectangularShape {
 		return x + width > x1 && x < x2 && y + height > y1 && y < y2;
 	}
 
-	public boolean contains(double x, double y, double width, double height) {
-		if (isEmpty() || width <= 0.0 || height <= 0.0) {
+	public boolean contains(double x, double y, double width, double height)
+	{
+		if(isEmpty() || width <= 0.0 || height <= 0.0)
+		{
 			return false;
 		}
 
@@ -488,7 +579,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		return x1 <= x && x + width <= x2 && y1 <= y && y + height <= y2;
 	}
 
-	public static void intersect(Rectangle2D src1, Rectangle2D src2, Rectangle2D dst) {
+	public static void intersect(Rectangle2D src1, Rectangle2D src2, Rectangle2D dst)
+	{
 		double x1 = Math.max(src1.getMinX(), src2.getMinX());
 		double y1 = Math.max(src1.getMinY(), src2.getMinY());
 		double x2 = Math.min(src1.getMaxX(), src2.getMaxX());
@@ -496,7 +588,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		dst.setFrame(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public static void union(Rectangle2D src1, Rectangle2D src2, Rectangle2D dst) {
+	public static void union(Rectangle2D src1, Rectangle2D src2, Rectangle2D dst)
+	{
 		double x1 = Math.min(src1.getMinX(), src2.getMinX());
 		double y1 = Math.min(src1.getMinY(), src2.getMinY());
 		double x2 = Math.max(src1.getMaxX(), src2.getMaxX());
@@ -504,7 +597,8 @@ public abstract class Rectangle2D extends RectangularShape {
 		dst.setFrame(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public void add(double x, double y) {
+	public void add(double x, double y)
+	{
 		double x1 = Math.min(getMinX(), x);
 		double y1 = Math.min(getMinY(), y);
 		double x2 = Math.max(getMaxX(), x);
@@ -512,25 +606,30 @@ public abstract class Rectangle2D extends RectangularShape {
 		setRect(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public void add(Point2D p) {
+	public void add(Point2D p)
+	{
 		add(p.getX(), p.getY());
 	}
 
-	public void add(Rectangle2D r) {
+	public void add(Rectangle2D r)
+	{
 		union(this, r, this);
 	}
 
-	public PathIterator getPathIterator(AffineTransform t) {
+	public PathIterator getPathIterator(AffineTransform t)
+	{
 		return new Iterator(this, t);
 	}
 
 	@Override
-	public PathIterator getPathIterator(AffineTransform t, double flatness) {
+	public PathIterator getPathIterator(AffineTransform t, double flatness)
+	{
 		return new Iterator(this, t);
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		HashCode hash = new HashCode();
 		hash.append(getX());
 		hash.append(getY());
@@ -540,11 +639,14 @@ public abstract class Rectangle2D extends RectangularShape {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
 			return true;
 		}
-		if (obj instanceof Rectangle2D) {
+		if(obj instanceof Rectangle2D)
+		{
 			Rectangle2D r = (Rectangle2D) obj;
 			return getX() == r.getX() && getY() == r.getY() && getWidth() == r.getWidth()
 					&& getHeight() == r.getHeight();

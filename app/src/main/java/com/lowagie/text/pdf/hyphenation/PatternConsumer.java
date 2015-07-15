@@ -24,32 +24,35 @@ import java.util.ArrayList;
  *
  * @author Carlos Villegas <cav@uniscope.co.jp>
  */
-public interface PatternConsumer {
+public interface PatternConsumer
+{
 
-    /**
-     * Add a character class.
-     * A character class defines characters that are considered
-     * equivalent for the purpose of hyphenation (e.g. "aA"). It
-     * usually means to ignore case.
-     * @param chargroup character group
-     */
-    void addClass(String chargroup);
+	/**
+	 * Add a character class.
+	 * A character class defines characters that are considered
+	 * equivalent for the purpose of hyphenation (e.g. "aA"). It
+	 * usually means to ignore case.
+	 *
+	 * @param chargroup character group
+	 */
+	void addClass(String chargroup);
 
-    /**
-     * Add a hyphenation exception. An exception replaces the
-     * result obtained by the algorithm for cases for which this
-     * fails or the user wants to provide his own hyphenation.
-     * A hyphenatedword is a vector of alternating String's and
-     * {@link Hyphen Hyphen} instances
-     */
-    void addException(String word, ArrayList hyphenatedword);
+	/**
+	 * Add a hyphenation exception. An exception replaces the
+	 * result obtained by the algorithm for cases for which this
+	 * fails or the user wants to provide his own hyphenation.
+	 * A hyphenatedword is a vector of alternating String's and
+	 * {@link Hyphen Hyphen} instances
+	 */
+	void addException(String word, ArrayList hyphenatedword);
 
-    /**
-     * Add hyphenation patterns.
-     * @param pattern the pattern
-     * @param values interletter values expressed as a string of
-     * digit characters.
-     */
-    void addPattern(String pattern, String values);
+	/**
+	 * Add hyphenation patterns.
+	 *
+	 * @param pattern the pattern
+	 * @param values  interletter values expressed as a string of
+	 *                digit characters.
+	 */
+	void addPattern(String pattern, String values);
 
 }

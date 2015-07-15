@@ -46,19 +46,19 @@
  */
 package com.lowagie.text.pdf;
 
-import java.io.IOException;
-
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 
+import java.io.IOException;
+
 /**
  * Creates a pushbutton field. It supports all the text and icon alignments. The
  * icon may be an image or a template.
- * <p>
+ * <p/>
  * Example usage:
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <PRE>
  * Document document = new Document(PageSize.A4, 50, 50, 50, 50);
  * PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + "droidtext" + File.separator + &quot;output.pdf&quot;));
@@ -80,32 +80,55 @@ import com.lowagie.text.Rectangle;
  * writer.addAnnotation(ff);
  * document.close();
  * </PRE>
- * 
+ *
  * @author Paulo Soares (psoares@consiste.pt)
  */
-public class PushbuttonField extends BaseField {
+public class PushbuttonField extends BaseField
+{
 
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_LABEL_ONLY = 1;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_ICON_ONLY = 2;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_ICON_TOP_LABEL_BOTTOM = 3;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_LABEL_TOP_ICON_BOTTOM = 4;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_ICON_LEFT_LABEL_RIGHT = 5;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_LABEL_LEFT_ICON_RIGHT = 6;
-	/** A layout option */
+	/**
+	 * A layout option
+	 */
 	public static final int LAYOUT_LABEL_OVER_ICON = 7;
-	/** An icon scaling option */
+	/**
+	 * An icon scaling option
+	 */
 	public static final int SCALE_ICON_ALWAYS = 1;
-	/** An icon scaling option */
+	/**
+	 * An icon scaling option
+	 */
 	public static final int SCALE_ICON_NEVER = 2;
-	/** An icon scaling option */
+	/**
+	 * An icon scaling option
+	 */
 	public static final int SCALE_ICON_IS_TOO_BIG = 3;
-	/** An icon scaling option */
+	/**
+	 * An icon scaling option
+	 */
 	public static final int SCALE_ICON_IS_TOO_SMALL = 4;
 
 	/**
@@ -152,26 +175,25 @@ public class PushbuttonField extends BaseField {
 
 	/**
 	 * Creates a new instance of PushbuttonField
-	 * 
-	 * @param writer
-	 *            the document <CODE>PdfWriter</CODE>
-	 * @param box
-	 *            the field location and dimensions
-	 * @param fieldName
-	 *            the field name. If <CODE>null</CODE> only the widget keys will
-	 *            be included in the field allowing it to be used as a kid
-	 *            field.
+	 *
+	 * @param writer    the document <CODE>PdfWriter</CODE>
+	 * @param box       the field location and dimensions
+	 * @param fieldName the field name. If <CODE>null</CODE> only the widget keys will
+	 *                  be included in the field allowing it to be used as a kid
+	 *                  field.
 	 */
-	public PushbuttonField(PdfWriter writer, Rectangle box, String fieldName) {
+	public PushbuttonField(PdfWriter writer, Rectangle box, String fieldName)
+	{
 		super(writer, box, fieldName);
 	}
 
 	/**
 	 * Getter for property layout.
-	 * 
+	 *
 	 * @return Value of property layout.
 	 */
-	public int getLayout() {
+	public int getLayout()
+	{
 		return this.layout;
 	}
 
@@ -184,62 +206,65 @@ public class PushbuttonField extends BaseField {
 	 * <CODE>LAYOUT_LABEL_LEFT_ICON_RIGHT</CODE> and
 	 * <CODE>LAYOUT_LABEL_OVER_ICON</CODE>. The default is
 	 * <CODE>LAYOUT_LABEL_ONLY</CODE>.
-	 * 
-	 * @param layout
-	 *            New value of property layout.
+	 *
+	 * @param layout New value of property layout.
 	 */
-	public void setLayout(int layout) {
-		if (layout < LAYOUT_LABEL_ONLY || layout > LAYOUT_LABEL_OVER_ICON)
+	public void setLayout(int layout)
+	{
+		if(layout < LAYOUT_LABEL_ONLY || layout > LAYOUT_LABEL_OVER_ICON)
 			throw new IllegalArgumentException("Layout out of bounds.");
 		this.layout = layout;
 	}
 
 	/**
 	 * Getter for property image.
-	 * 
+	 *
 	 * @return Value of property image.
 	 */
-	public Image getImage() {
+	public Image getImage()
+	{
 		return this.image;
 	}
 
 	/**
 	 * Sets the icon as an image.
-	 * 
-	 * @param image
-	 *            the image
+	 *
+	 * @param image the image
 	 */
-	public void setImage(Image image) {
+	public void setImage(Image image)
+	{
 		this.image = image;
 		template = null;
 	}
 
 	/**
 	 * Getter for property template.
-	 * 
+	 *
 	 * @return Value of property template.
 	 */
-	public PdfTemplate getTemplate() {
+	public PdfTemplate getTemplate()
+	{
 		return this.template;
 	}
 
 	/**
 	 * Sets the icon as a template.
-	 * 
-	 * @param template
-	 *            the template
+	 *
+	 * @param template the template
 	 */
-	public void setTemplate(PdfTemplate template) {
+	public void setTemplate(PdfTemplate template)
+	{
 		this.template = template;
 		image = null;
 	}
 
 	/**
 	 * Getter for property scaleIcon.
-	 * 
+	 *
 	 * @return Value of property scaleIcon.
 	 */
-	public int getScaleIcon() {
+	public int getScaleIcon()
+	{
 		return this.scaleIcon;
 	}
 
@@ -249,42 +274,44 @@ public class PushbuttonField extends BaseField {
 	 * <CODE>SCALE_ICON_IS_TOO_BIG</CODE> and
 	 * <CODE>SCALE_ICON_IS_TOO_SMALL</CODE>. The default is
 	 * <CODE>SCALE_ICON_ALWAYS</CODE>.
-	 * 
-	 * @param scaleIcon
-	 *            the way the icon will be scaled
+	 *
+	 * @param scaleIcon the way the icon will be scaled
 	 */
-	public void setScaleIcon(int scaleIcon) {
-		if (scaleIcon < SCALE_ICON_ALWAYS || scaleIcon > SCALE_ICON_IS_TOO_SMALL)
+	public void setScaleIcon(int scaleIcon)
+	{
+		if(scaleIcon < SCALE_ICON_ALWAYS || scaleIcon > SCALE_ICON_IS_TOO_SMALL)
 			scaleIcon = SCALE_ICON_ALWAYS;
 		this.scaleIcon = scaleIcon;
 	}
 
 	/**
 	 * Getter for property proportionalIcon.
-	 * 
+	 *
 	 * @return Value of property proportionalIcon.
 	 */
-	public boolean isProportionalIcon() {
+	public boolean isProportionalIcon()
+	{
 		return this.proportionalIcon;
 	}
 
 	/**
 	 * Sets the way the icon is scaled. If <CODE>true</CODE> the icon is scaled
 	 * proportionally, if <CODE>false</CODE> the scaling is done anamorphicaly.
-	 * 
-	 * @param proportionalIcon
-	 *            the way the icon is scaled
+	 *
+	 * @param proportionalIcon the way the icon is scaled
 	 */
-	public void setProportionalIcon(boolean proportionalIcon) {
+	public void setProportionalIcon(boolean proportionalIcon)
+	{
 		this.proportionalIcon = proportionalIcon;
 	}
 
 	/**
 	 * Getter for property iconVerticalAdjustment.
-	 * 
+	 *
 	 * @return Value of property iconVerticalAdjustment.
 	 */
-	public float getIconVerticalAdjustment() {
+	public float getIconVerticalAdjustment()
+	{
 		return this.iconVerticalAdjustment;
 	}
 
@@ -293,25 +320,26 @@ public class PushbuttonField extends BaseField {
 	 * allocate at the bottom of the icon. A value of 0 positions the icon at
 	 * the bottom of the annotation rectangle. A value of 0.5 centers it within
 	 * the rectangle. The default is 0.5.
-	 * 
-	 * @param iconVerticalAdjustment
-	 *            a number between 0 and 1 indicating the fraction of leftover
-	 *            space to allocate at the bottom of the icon
+	 *
+	 * @param iconVerticalAdjustment a number between 0 and 1 indicating the fraction of leftover
+	 *                               space to allocate at the bottom of the icon
 	 */
-	public void setIconVerticalAdjustment(float iconVerticalAdjustment) {
-		if (iconVerticalAdjustment < 0)
+	public void setIconVerticalAdjustment(float iconVerticalAdjustment)
+	{
+		if(iconVerticalAdjustment < 0)
 			iconVerticalAdjustment = 0;
-		else if (iconVerticalAdjustment > 1)
+		else if(iconVerticalAdjustment > 1)
 			iconVerticalAdjustment = 1;
 		this.iconVerticalAdjustment = iconVerticalAdjustment;
 	}
 
 	/**
 	 * Getter for property iconHorizontalAdjustment.
-	 * 
+	 *
 	 * @return Value of property iconHorizontalAdjustment.
 	 */
-	public float getIconHorizontalAdjustment() {
+	public float getIconHorizontalAdjustment()
+	{
 		return this.iconHorizontalAdjustment;
 	}
 
@@ -320,31 +348,33 @@ public class PushbuttonField extends BaseField {
 	 * allocate at the left of the icon. A value of 0 positions the icon at the
 	 * left of the annotation rectangle. A value of 0.5 centers it within the
 	 * rectangle. The default is 0.5.
-	 * 
-	 * @param iconHorizontalAdjustment
-	 *            a number between 0 and 1 indicating the fraction of leftover
-	 *            space to allocate at the left of the icon
+	 *
+	 * @param iconHorizontalAdjustment a number between 0 and 1 indicating the fraction of leftover
+	 *                                 space to allocate at the left of the icon
 	 */
-	public void setIconHorizontalAdjustment(float iconHorizontalAdjustment) {
-		if (iconHorizontalAdjustment < 0)
+	public void setIconHorizontalAdjustment(float iconHorizontalAdjustment)
+	{
+		if(iconHorizontalAdjustment < 0)
 			iconHorizontalAdjustment = 0;
-		else if (iconHorizontalAdjustment > 1)
+		else if(iconHorizontalAdjustment > 1)
 			iconHorizontalAdjustment = 1;
 		this.iconHorizontalAdjustment = iconHorizontalAdjustment;
 	}
 
-	private float calculateFontSize(float w, float h) throws IOException, DocumentException {
+	private float calculateFontSize(float w, float h) throws IOException, DocumentException
+	{
 		BaseFont ufont = getRealFont();
 		float fsize = fontSize;
-		if (fsize == 0) {
+		if(fsize == 0)
+		{
 			float bw = ufont.getWidthPoint(text, 1);
-			if (bw == 0)
+			if(bw == 0)
 				fsize = 12;
 			else
 				fsize = w / bw;
 			float nfsize = h / (1 - ufont.getFontDescriptor(BaseFont.DESCENT, 1));
 			fsize = Math.min(fsize, nfsize);
-			if (fsize < 4)
+			if(fsize < 4)
 				fsize = 4;
 		}
 		return fsize;
@@ -352,28 +382,29 @@ public class PushbuttonField extends BaseField {
 
 	/**
 	 * Gets the button appearance.
-	 * 
-	 * @throws IOException
-	 *             on error
-	 * @throws DocumentException
-	 *             on error
+	 *
 	 * @return the button appearance
+	 * @throws IOException       on error
+	 * @throws DocumentException on error
 	 */
-	public PdfAppearance getAppearance() throws IOException, DocumentException {
+	public PdfAppearance getAppearance() throws IOException, DocumentException
+	{
 		PdfAppearance app = getBorderAppearance();
 		Rectangle box = new Rectangle(app.getBoundingBox());
-		if ((text == null || text.length() == 0)
-				&& (layout == LAYOUT_LABEL_ONLY || (image == null && template == null && iconReference == null))) {
+		if((text == null || text.length() == 0)
+				&& (layout == LAYOUT_LABEL_ONLY || (image == null && template == null && iconReference == null)))
+		{
 			return app;
 		}
-		if (layout == LAYOUT_ICON_ONLY && image == null && template == null && iconReference == null)
+		if(layout == LAYOUT_ICON_ONLY && image == null && template == null && iconReference == null)
 			return app;
 		BaseFont ufont = getRealFont();
 		boolean borderExtra = borderStyle == PdfBorderDictionary.STYLE_BEVELED
 				|| borderStyle == PdfBorderDictionary.STYLE_INSET;
 		float h = box.getHeight() - borderWidth * 2;
 		float bw2 = borderWidth;
-		if (borderExtra) {
+		if(borderExtra)
+		{
 			h -= borderWidth * 2;
 			bw2 *= 2;
 		}
@@ -388,107 +419,118 @@ public class PushbuttonField extends BaseField {
 		float ht = box.getHeight() - 2 * offX;
 		float adj = (iconFitToBounds ? 0 : offX + 1);
 		int nlayout = layout;
-		if (image == null && template == null && iconReference == null)
+		if(image == null && template == null && iconReference == null)
 			nlayout = LAYOUT_LABEL_ONLY;
 		Rectangle iconBox = null;
-		while (true) {
-			switch (nlayout) {
-			case LAYOUT_LABEL_ONLY:
-			case LAYOUT_LABEL_OVER_ICON:
-				if (text != null && text.length() > 0 && wt > 0 && ht > 0) {
-					fsize = calculateFontSize(wt, ht);
+		while(true)
+		{
+			switch(nlayout)
+			{
+				case LAYOUT_LABEL_ONLY:
+				case LAYOUT_LABEL_OVER_ICON:
+					if(text != null && text.length() > 0 && wt > 0 && ht > 0)
+					{
+						fsize = calculateFontSize(wt, ht);
+						textX = (box.getWidth() - ufont.getWidthPoint(text, fsize)) / 2;
+						textY = (box.getHeight() - ufont.getFontDescriptor(BaseFont.ASCENT, fsize)) / 2;
+					}
+				case LAYOUT_ICON_ONLY:
+					if(nlayout == LAYOUT_LABEL_OVER_ICON || nlayout == LAYOUT_ICON_ONLY)
+						iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, box.getRight() - adj, box
+								.getTop()
+								- adj);
+					break;
+				case LAYOUT_ICON_TOP_LABEL_BOTTOM:
+					if(text == null || text.length() == 0 || wt <= 0 || ht <= 0)
+					{
+						nlayout = LAYOUT_ICON_ONLY;
+						continue;
+					}
+					float nht = box.getHeight() * 0.35f - offX;
+					if(nht > 0)
+						fsize = calculateFontSize(wt, nht);
+					else
+						fsize = 4;
 					textX = (box.getWidth() - ufont.getWidthPoint(text, fsize)) / 2;
+					textY = offX - ufont.getFontDescriptor(BaseFont.DESCENT, fsize);
+					iconBox = new Rectangle(box.getLeft() + adj, textY + fsize, box.getRight() - adj, box.getTop() - adj);
+					break;
+				case LAYOUT_LABEL_TOP_ICON_BOTTOM:
+					if(text == null || text.length() == 0 || wt <= 0 || ht <= 0)
+					{
+						nlayout = LAYOUT_ICON_ONLY;
+						continue;
+					}
+					nht = box.getHeight() * 0.35f - offX;
+					if(nht > 0)
+						fsize = calculateFontSize(wt, nht);
+					else
+						fsize = 4;
+					textX = (box.getWidth() - ufont.getWidthPoint(text, fsize)) / 2;
+					textY = box.getHeight() - offX - fsize;
+					if(textY < offX)
+						textY = offX;
+					iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, box.getRight() - adj, textY
+							+ ufont.getFontDescriptor(BaseFont.DESCENT, fsize));
+					break;
+				case LAYOUT_LABEL_LEFT_ICON_RIGHT:
+					if(text == null || text.length() == 0 || wt <= 0 || ht <= 0)
+					{
+						nlayout = LAYOUT_ICON_ONLY;
+						continue;
+					}
+					float nw = box.getWidth() * 0.35f - offX;
+					if(nw > 0)
+						fsize = calculateFontSize(wt, nw);
+					else
+						fsize = 4;
+					if(ufont.getWidthPoint(text, fsize) >= wt)
+					{
+						nlayout = LAYOUT_LABEL_ONLY;
+						fsize = fontSize;
+						continue;
+					}
+					textX = offX + 1;
 					textY = (box.getHeight() - ufont.getFontDescriptor(BaseFont.ASCENT, fsize)) / 2;
-				}
-			case LAYOUT_ICON_ONLY:
-				if (nlayout == LAYOUT_LABEL_OVER_ICON || nlayout == LAYOUT_ICON_ONLY)
-					iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, box.getRight() - adj, box
-							.getTop()
-							- adj);
-				break;
-			case LAYOUT_ICON_TOP_LABEL_BOTTOM:
-				if (text == null || text.length() == 0 || wt <= 0 || ht <= 0) {
-					nlayout = LAYOUT_ICON_ONLY;
-					continue;
-				}
-				float nht = box.getHeight() * 0.35f - offX;
-				if (nht > 0)
-					fsize = calculateFontSize(wt, nht);
-				else
-					fsize = 4;
-				textX = (box.getWidth() - ufont.getWidthPoint(text, fsize)) / 2;
-				textY = offX - ufont.getFontDescriptor(BaseFont.DESCENT, fsize);
-				iconBox = new Rectangle(box.getLeft() + adj, textY + fsize, box.getRight() - adj, box.getTop() - adj);
-				break;
-			case LAYOUT_LABEL_TOP_ICON_BOTTOM:
-				if (text == null || text.length() == 0 || wt <= 0 || ht <= 0) {
-					nlayout = LAYOUT_ICON_ONLY;
-					continue;
-				}
-				nht = box.getHeight() * 0.35f - offX;
-				if (nht > 0)
-					fsize = calculateFontSize(wt, nht);
-				else
-					fsize = 4;
-				textX = (box.getWidth() - ufont.getWidthPoint(text, fsize)) / 2;
-				textY = box.getHeight() - offX - fsize;
-				if (textY < offX)
-					textY = offX;
-				iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, box.getRight() - adj, textY
-						+ ufont.getFontDescriptor(BaseFont.DESCENT, fsize));
-				break;
-			case LAYOUT_LABEL_LEFT_ICON_RIGHT:
-				if (text == null || text.length() == 0 || wt <= 0 || ht <= 0) {
-					nlayout = LAYOUT_ICON_ONLY;
-					continue;
-				}
-				float nw = box.getWidth() * 0.35f - offX;
-				if (nw > 0)
-					fsize = calculateFontSize(wt, nw);
-				else
-					fsize = 4;
-				if (ufont.getWidthPoint(text, fsize) >= wt) {
-					nlayout = LAYOUT_LABEL_ONLY;
-					fsize = fontSize;
-					continue;
-				}
-				textX = offX + 1;
-				textY = (box.getHeight() - ufont.getFontDescriptor(BaseFont.ASCENT, fsize)) / 2;
-				iconBox = new Rectangle(textX + ufont.getWidthPoint(text, fsize), box.getBottom() + adj, box.getRight()
-						- adj, box.getTop() - adj);
-				break;
-			case LAYOUT_ICON_LEFT_LABEL_RIGHT:
-				if (text == null || text.length() == 0 || wt <= 0 || ht <= 0) {
-					nlayout = LAYOUT_ICON_ONLY;
-					continue;
-				}
-				nw = box.getWidth() * 0.35f - offX;
-				if (nw > 0)
-					fsize = calculateFontSize(wt, nw);
-				else
-					fsize = 4;
-				if (ufont.getWidthPoint(text, fsize) >= wt) {
-					nlayout = LAYOUT_LABEL_ONLY;
-					fsize = fontSize;
-					continue;
-				}
-				textX = box.getWidth() - ufont.getWidthPoint(text, fsize) - offX - 1;
-				textY = (box.getHeight() - ufont.getFontDescriptor(BaseFont.ASCENT, fsize)) / 2;
-				iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, textX - 1, box.getTop() - adj);
-				break;
+					iconBox = new Rectangle(textX + ufont.getWidthPoint(text, fsize), box.getBottom() + adj, box.getRight()
+							- adj, box.getTop() - adj);
+					break;
+				case LAYOUT_ICON_LEFT_LABEL_RIGHT:
+					if(text == null || text.length() == 0 || wt <= 0 || ht <= 0)
+					{
+						nlayout = LAYOUT_ICON_ONLY;
+						continue;
+					}
+					nw = box.getWidth() * 0.35f - offX;
+					if(nw > 0)
+						fsize = calculateFontSize(wt, nw);
+					else
+						fsize = 4;
+					if(ufont.getWidthPoint(text, fsize) >= wt)
+					{
+						nlayout = LAYOUT_LABEL_ONLY;
+						fsize = fontSize;
+						continue;
+					}
+					textX = box.getWidth() - ufont.getWidthPoint(text, fsize) - offX - 1;
+					textY = (box.getHeight() - ufont.getFontDescriptor(BaseFont.ASCENT, fsize)) / 2;
+					iconBox = new Rectangle(box.getLeft() + adj, box.getBottom() + adj, textX - 1, box.getTop() - adj);
+					break;
 			}
 			break;
 		}
-		if (textY < box.getBottom() + offX)
+		if(textY < box.getBottom() + offX)
 			textY = box.getBottom() + offX;
-		if (iconBox != null && (iconBox.getWidth() <= 0 || iconBox.getHeight() <= 0))
+		if(iconBox != null && (iconBox.getWidth() <= 0 || iconBox.getHeight() <= 0))
 			iconBox = null;
 		boolean haveIcon = false;
 		float boundingBoxWidth = 0;
 		float boundingBoxHeight = 0;
 		PdfArray matrix = null;
-		if (iconBox != null) {
-			if (image != null) {
+		if(iconBox != null)
+		{
+			if(image != null)
+			{
 				tp = new PdfTemplate(writer);
 				tp.setBoundingBox(new Rectangle(image));
 				writer.addDirectTemplateSimple(tp, PdfName.FRM);
@@ -496,7 +538,9 @@ public class PushbuttonField extends BaseField {
 				haveIcon = true;
 				boundingBoxWidth = tp.getBoundingBox().getWidth();
 				boundingBoxHeight = tp.getBoundingBox().getHeight();
-			} else if (template != null) {
+			}
+			else if(template != null)
+			{
 				tp = new PdfTemplate(writer);
 				tp.setBoundingBox(new Rectangle(template.getWidth(), template.getHeight()));
 				writer.addDirectTemplateSimple(tp, PdfName.FRM);
@@ -504,9 +548,12 @@ public class PushbuttonField extends BaseField {
 				haveIcon = true;
 				boundingBoxWidth = tp.getBoundingBox().getWidth();
 				boundingBoxHeight = tp.getBoundingBox().getHeight();
-			} else if (iconReference != null) {
+			}
+			else if(iconReference != null)
+			{
 				PdfDictionary dic = (PdfDictionary) PdfReader.getPdfObject(iconReference);
-				if (dic != null) {
+				if(dic != null)
+				{
 					Rectangle r2 = PdfReader.getNormalizedRectangle(dic.getAsArray(PdfName.BBOX));
 					matrix = dic.getAsArray(PdfName.MATRIX);
 					haveIcon = true;
@@ -515,42 +562,48 @@ public class PushbuttonField extends BaseField {
 				}
 			}
 		}
-		if (haveIcon) {
+		if(haveIcon)
+		{
 			float icx = iconBox.getWidth() / boundingBoxWidth;
 			float icy = iconBox.getHeight() / boundingBoxHeight;
-			if (proportionalIcon) {
-				switch (scaleIcon) {
-				case SCALE_ICON_IS_TOO_BIG:
-					icx = Math.min(icx, icy);
-					icx = Math.min(icx, 1);
-					break;
-				case SCALE_ICON_IS_TOO_SMALL:
-					icx = Math.min(icx, icy);
-					icx = Math.max(icx, 1);
-					break;
-				case SCALE_ICON_NEVER:
-					icx = 1;
-					break;
-				default:
-					icx = Math.min(icx, icy);
-					break;
+			if(proportionalIcon)
+			{
+				switch(scaleIcon)
+				{
+					case SCALE_ICON_IS_TOO_BIG:
+						icx = Math.min(icx, icy);
+						icx = Math.min(icx, 1);
+						break;
+					case SCALE_ICON_IS_TOO_SMALL:
+						icx = Math.min(icx, icy);
+						icx = Math.max(icx, 1);
+						break;
+					case SCALE_ICON_NEVER:
+						icx = 1;
+						break;
+					default:
+						icx = Math.min(icx, icy);
+						break;
 				}
 				icy = icx;
-			} else {
-				switch (scaleIcon) {
-				case SCALE_ICON_IS_TOO_BIG:
-					icx = Math.min(icx, 1);
-					icy = Math.min(icy, 1);
-					break;
-				case SCALE_ICON_IS_TOO_SMALL:
-					icx = Math.max(icx, 1);
-					icy = Math.max(icy, 1);
-					break;
-				case SCALE_ICON_NEVER:
-					icx = icy = 1;
-					break;
-				default:
-					break;
+			}
+			else
+			{
+				switch(scaleIcon)
+				{
+					case SCALE_ICON_IS_TOO_BIG:
+						icx = Math.min(icx, 1);
+						icy = Math.min(icy, 1);
+						break;
+					case SCALE_ICON_IS_TOO_SMALL:
+						icx = Math.max(icx, 1);
+						icy = Math.max(icy, 1);
+						break;
+					case SCALE_ICON_NEVER:
+						icx = icy = 1;
+						break;
+					default:
+						break;
 				}
 			}
 			float xpos = iconBox.getLeft() + (iconBox.getWidth() - (boundingBoxWidth * icx)) * iconHorizontalAdjustment;
@@ -560,17 +613,19 @@ public class PushbuttonField extends BaseField {
 			app.rectangle(iconBox.getLeft(), iconBox.getBottom(), iconBox.getWidth(), iconBox.getHeight());
 			app.clip();
 			app.newPath();
-			if (tp != null)
+			if(tp != null)
 				app.addTemplate(tp, icx, 0, 0, icy, xpos, ypos);
-			else {
+			else
+			{
 				float cox = 0;
 				float coy = 0;
-				if (matrix != null && matrix.size() == 6) {
+				if(matrix != null && matrix.size() == 6)
+				{
 					PdfNumber nm = matrix.getAsNumber(4);
-					if (nm != null)
+					if(nm != null)
 						cox = nm.floatValue();
 					nm = matrix.getAsNumber(5);
-					if (nm != null)
+					if(nm != null)
 						coy = nm.floatValue();
 				}
 				app
@@ -579,12 +634,13 @@ public class PushbuttonField extends BaseField {
 			}
 			app.restoreState();
 		}
-		if (!Float.isNaN(textX)) {
+		if(!Float.isNaN(textX))
+		{
 			app.saveState();
 			app.rectangle(offX, offX, box.getWidth() - 2 * offX, box.getHeight() - 2 * offX);
 			app.clip();
 			app.newPath();
-			if (textColor == null)
+			if(textColor == null)
 				app.resetGrayFill();
 			else
 				app.setColorFill(textColor);
@@ -600,63 +656,64 @@ public class PushbuttonField extends BaseField {
 
 	/**
 	 * Gets the pushbutton field.
-	 * 
-	 * @throws IOException
-	 *             on error
-	 * @throws DocumentException
-	 *             on error
+	 *
 	 * @return the pushbutton field
+	 * @throws IOException       on error
+	 * @throws DocumentException on error
 	 */
-	public PdfFormField getField() throws IOException, DocumentException {
+	public PdfFormField getField() throws IOException, DocumentException
+	{
 		PdfFormField field = PdfFormField.createPushButton(writer);
 		field.setWidget(box, PdfAnnotation.HIGHLIGHT_INVERT);
-		if (fieldName != null) {
+		if(fieldName != null)
+		{
 			field.setFieldName(fieldName);
-			if ((options & READ_ONLY) != 0)
+			if((options & READ_ONLY) != 0)
 				field.setFieldFlags(PdfFormField.FF_READ_ONLY);
-			if ((options & REQUIRED) != 0)
+			if((options & REQUIRED) != 0)
 				field.setFieldFlags(PdfFormField.FF_REQUIRED);
 		}
-		if (text != null)
+		if(text != null)
 			field.setMKNormalCaption(text);
-		if (rotation != 0)
+		if(rotation != 0)
 			field.setMKRotation(rotation);
 		field.setBorderStyle(new PdfBorderDictionary(borderWidth, borderStyle, new PdfDashPattern(3)));
 		PdfAppearance tpa = getAppearance();
 		field.setAppearance(PdfAnnotation.APPEARANCE_NORMAL, tpa);
 		PdfAppearance da = (PdfAppearance) tpa.getDuplicate();
 		da.setFontAndSize(getRealFont(), fontSize);
-		if (textColor == null)
+		if(textColor == null)
 			da.setGrayFill(0);
 		else
 			da.setColorFill(textColor);
 		field.setDefaultAppearanceString(da);
-		if (borderColor != null)
+		if(borderColor != null)
 			field.setMKBorderColor(borderColor);
-		if (backgroundColor != null)
+		if(backgroundColor != null)
 			field.setMKBackgroundColor(backgroundColor);
-		switch (visibility) {
-		case HIDDEN:
-			field.setFlags(PdfAnnotation.FLAGS_PRINT | PdfAnnotation.FLAGS_HIDDEN);
-			break;
-		case VISIBLE_BUT_DOES_NOT_PRINT:
-			break;
-		case HIDDEN_BUT_PRINTABLE:
-			field.setFlags(PdfAnnotation.FLAGS_PRINT | PdfAnnotation.FLAGS_NOVIEW);
-			break;
-		default:
-			field.setFlags(PdfAnnotation.FLAGS_PRINT);
-			break;
+		switch(visibility)
+		{
+			case HIDDEN:
+				field.setFlags(PdfAnnotation.FLAGS_PRINT | PdfAnnotation.FLAGS_HIDDEN);
+				break;
+			case VISIBLE_BUT_DOES_NOT_PRINT:
+				break;
+			case HIDDEN_BUT_PRINTABLE:
+				field.setFlags(PdfAnnotation.FLAGS_PRINT | PdfAnnotation.FLAGS_NOVIEW);
+				break;
+			default:
+				field.setFlags(PdfAnnotation.FLAGS_PRINT);
+				break;
 		}
-		if (tp != null)
+		if(tp != null)
 			field.setMKNormalIcon(tp);
 		field.setMKTextPosition(layout - 1);
 		PdfName scale = PdfName.A;
-		if (scaleIcon == SCALE_ICON_IS_TOO_BIG)
+		if(scaleIcon == SCALE_ICON_IS_TOO_BIG)
 			scale = PdfName.B;
-		else if (scaleIcon == SCALE_ICON_IS_TOO_SMALL)
+		else if(scaleIcon == SCALE_ICON_IS_TOO_SMALL)
 			scale = PdfName.S;
-		else if (scaleIcon == SCALE_ICON_NEVER)
+		else if(scaleIcon == SCALE_ICON_NEVER)
 			scale = PdfName.N;
 		field.setMKIconFit(scale, proportionalIcon ? PdfName.P : PdfName.A, iconHorizontalAdjustment,
 				iconVerticalAdjustment, iconFitToBounds);
@@ -665,10 +722,11 @@ public class PushbuttonField extends BaseField {
 
 	/**
 	 * Getter for property iconFitToBounds.
-	 * 
+	 *
 	 * @return Value of property iconFitToBounds.
 	 */
-	public boolean isIconFitToBounds() {
+	public boolean isIconFitToBounds()
+	{
 		return this.iconFitToBounds;
 	}
 
@@ -676,13 +734,13 @@ public class PushbuttonField extends BaseField {
 	 * If <CODE>true</CODE> the icon will be scaled to fit fully within the
 	 * bounds of the annotation, if <CODE>false</CODE> the border width will be
 	 * taken into account. The default is <CODE>false</CODE>.
-	 * 
-	 * @param iconFitToBounds
-	 *            if <CODE>true</CODE> the icon will be scaled to fit fully
-	 *            within the bounds of the annotation, if <CODE>false</CODE> the
-	 *            border width will be taken into account
+	 *
+	 * @param iconFitToBounds if <CODE>true</CODE> the icon will be scaled to fit fully
+	 *                        within the bounds of the annotation, if <CODE>false</CODE> the
+	 *                        border width will be taken into account
 	 */
-	public void setIconFitToBounds(boolean iconFitToBounds) {
+	public void setIconFitToBounds(boolean iconFitToBounds)
+	{
 		this.iconFitToBounds = iconFitToBounds;
 	}
 
@@ -693,20 +751,21 @@ public class PushbuttonField extends BaseField {
 
 	/**
 	 * Gets the reference to an existing icon.
-	 * 
+	 *
 	 * @return the reference to an existing icon.
 	 */
-	public PRIndirectReference getIconReference() {
+	public PRIndirectReference getIconReference()
+	{
 		return this.iconReference;
 	}
 
 	/**
 	 * Sets the reference to an existing icon.
-	 * 
-	 * @param iconReference
-	 *            the reference to an existing icon
+	 *
+	 * @param iconReference the reference to an existing icon
 	 */
-	public void setIconReference(PRIndirectReference iconReference) {
+	public void setIconReference(PRIndirectReference iconReference)
+	{
 		this.iconReference = iconReference;
 	}
 

@@ -18,21 +18,21 @@ import java.util.Enumeration;
  *       admissionAuthority GeneralName OPTIONAL,
  *       contentsOfAdmissions SEQUENCE OF Admissions
  *     }
- * <p/>
+ *
  *     Admissions ::= SEQUENCE
  *     {
  *       admissionAuthority [0] EXPLICIT GeneralName OPTIONAL
  *       namingAuthority [1] EXPLICIT NamingAuthority OPTIONAL
  *       professionInfos SEQUENCE OF ProfessionInfo
  *     }
- * <p/>
+ *
  *     NamingAuthority ::= SEQUENCE
  *     {
  *       namingAuthorityId OBJECT IDENTIFIER OPTIONAL,
  *       namingAuthorityUrl IA5String OPTIONAL,
  *       namingAuthorityText DirectoryString(SIZE(1..128)) OPTIONAL
  *     }
- * <p/>
+ *
  *     ProfessionInfo ::= SEQUENCE
  *     {
  *       namingAuthority [0] EXPLICIT NamingAuthority OPTIONAL,
@@ -118,163 +118,163 @@ import java.util.Enumeration;
  * @see repack.org.bouncycastle.asn1.isismtt.x509.NamingAuthority
  */
 public class AdmissionSyntax
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
 
-    private GeneralName admissionAuthority;
+	private GeneralName admissionAuthority;
 
-    private ASN1Sequence contentsOfAdmissions;
+	private ASN1Sequence contentsOfAdmissions;
 
-    public static AdmissionSyntax getInstance(Object obj)
-    {
-        if (obj == null || obj instanceof AdmissionSyntax)
-        {
-            return (AdmissionSyntax)obj;
-        }
+	public static AdmissionSyntax getInstance(Object obj)
+	{
+		if(obj == null || obj instanceof AdmissionSyntax)
+		{
+			return (AdmissionSyntax) obj;
+		}
 
-        if (obj instanceof ASN1Sequence)
-        {
-            return new AdmissionSyntax((ASN1Sequence)obj);
-        }
+		if(obj instanceof ASN1Sequence)
+		{
+			return new AdmissionSyntax((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("illegal object in getInstance: "
-            + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("illegal object in getInstance: "
+				+ obj.getClass().getName());
+	}
 
-    /**
-     * Constructor from ASN1Sequence.
-     * <p/>
-     * The sequence is of type ProcurationSyntax:
-     * <p/>
-     * <pre>
-     *     AdmissionSyntax ::= SEQUENCE
-     *     {
-     *       admissionAuthority GeneralName OPTIONAL,
-     *       contentsOfAdmissions SEQUENCE OF Admissions
-     *     }
-     * <p/>
-     *     Admissions ::= SEQUENCE
-     *     {
-     *       admissionAuthority [0] EXPLICIT GeneralName OPTIONAL
-     *       namingAuthority [1] EXPLICIT NamingAuthority OPTIONAL
-     *       professionInfos SEQUENCE OF ProfessionInfo
-     *     }
-     * <p/>
-     *     NamingAuthority ::= SEQUENCE
-     *     {
-     *       namingAuthorityId OBJECT IDENTIFIER OPTIONAL,
-     *       namingAuthorityUrl IA5String OPTIONAL,
-     *       namingAuthorityText DirectoryString(SIZE(1..128)) OPTIONAL
-     *     }
-     * <p/>
-     *     ProfessionInfo ::= SEQUENCE
-     *     {
-     *       namingAuthority [0] EXPLICIT NamingAuthority OPTIONAL,
-     *       professionItems SEQUENCE OF DirectoryString (SIZE(1..128)),
-     *       professionOIDs SEQUENCE OF OBJECT IDENTIFIER OPTIONAL,
-     *       registrationNumber PrintableString(SIZE(1..128)) OPTIONAL,
-     *       addProfessionInfo OCTET STRING OPTIONAL
-     *     }
-     * </pre>
-     *
-     * @param seq The ASN.1 sequence.
-     */
-    private AdmissionSyntax(ASN1Sequence seq)
-    {
-        switch (seq.size())
-        {
-        case 1:
-            contentsOfAdmissions = DERSequence.getInstance(seq.getObjectAt(0));
-            break;
-        case 2:
-            admissionAuthority = GeneralName.getInstance(seq.getObjectAt(0));
-            contentsOfAdmissions = DERSequence.getInstance(seq.getObjectAt(1));
-            break;
-        default:
-            throw new IllegalArgumentException("Bad sequence size: " + seq.size());
-        }
-    }
+	/**
+	 * Constructor from ASN1Sequence.
+	 * <p/>
+	 * The sequence is of type ProcurationSyntax:
+	 * <p/>
+	 * <pre>
+	 *     AdmissionSyntax ::= SEQUENCE
+	 *     {
+	 *       admissionAuthority GeneralName OPTIONAL,
+	 *       contentsOfAdmissions SEQUENCE OF Admissions
+	 *     }
+	 *
+	 *     Admissions ::= SEQUENCE
+	 *     {
+	 *       admissionAuthority [0] EXPLICIT GeneralName OPTIONAL
+	 *       namingAuthority [1] EXPLICIT NamingAuthority OPTIONAL
+	 *       professionInfos SEQUENCE OF ProfessionInfo
+	 *     }
+	 *
+	 *     NamingAuthority ::= SEQUENCE
+	 *     {
+	 *       namingAuthorityId OBJECT IDENTIFIER OPTIONAL,
+	 *       namingAuthorityUrl IA5String OPTIONAL,
+	 *       namingAuthorityText DirectoryString(SIZE(1..128)) OPTIONAL
+	 *     }
+	 *
+	 *     ProfessionInfo ::= SEQUENCE
+	 *     {
+	 *       namingAuthority [0] EXPLICIT NamingAuthority OPTIONAL,
+	 *       professionItems SEQUENCE OF DirectoryString (SIZE(1..128)),
+	 *       professionOIDs SEQUENCE OF OBJECT IDENTIFIER OPTIONAL,
+	 *       registrationNumber PrintableString(SIZE(1..128)) OPTIONAL,
+	 *       addProfessionInfo OCTET STRING OPTIONAL
+	 *     }
+	 * </pre>
+	 *
+	 * @param seq The ASN.1 sequence.
+	 */
+	private AdmissionSyntax(ASN1Sequence seq)
+	{
+		switch(seq.size())
+		{
+			case 1:
+				contentsOfAdmissions = DERSequence.getInstance(seq.getObjectAt(0));
+				break;
+			case 2:
+				admissionAuthority = GeneralName.getInstance(seq.getObjectAt(0));
+				contentsOfAdmissions = DERSequence.getInstance(seq.getObjectAt(1));
+				break;
+			default:
+				throw new IllegalArgumentException("Bad sequence size: " + seq.size());
+		}
+	}
 
-    /**
-     * Constructor from given details.
-     *
-     * @param admissionAuthority   The admission authority.
-     * @param contentsOfAdmissions The admissions.
-     */
-    public AdmissionSyntax(GeneralName admissionAuthority, ASN1Sequence contentsOfAdmissions)
-    {
-        this.admissionAuthority = admissionAuthority;
-        this.contentsOfAdmissions = contentsOfAdmissions;
-    }
+	/**
+	 * Constructor from given details.
+	 *
+	 * @param admissionAuthority   The admission authority.
+	 * @param contentsOfAdmissions The admissions.
+	 */
+	public AdmissionSyntax(GeneralName admissionAuthority, ASN1Sequence contentsOfAdmissions)
+	{
+		this.admissionAuthority = admissionAuthority;
+		this.contentsOfAdmissions = contentsOfAdmissions;
+	}
 
-    /**
-     * Produce an object suitable for an ASN1OutputStream.
-     * <p/>
-     * Returns:
-     * <p/>
-     * <pre>
-     *     AdmissionSyntax ::= SEQUENCE
-     *     {
-     *       admissionAuthority GeneralName OPTIONAL,
-     *       contentsOfAdmissions SEQUENCE OF Admissions
-     *     }
-     * <p/>
-     *     Admissions ::= SEQUENCE
-     *     {
-     *       admissionAuthority [0] EXPLICIT GeneralName OPTIONAL
-     *       namingAuthority [1] EXPLICIT NamingAuthority OPTIONAL
-     *       professionInfos SEQUENCE OF ProfessionInfo
-     *     }
-     * <p/>
-     *     NamingAuthority ::= SEQUENCE
-     *     {
-     *       namingAuthorityId OBJECT IDENTIFIER OPTIONAL,
-     *       namingAuthorityUrl IA5String OPTIONAL,
-     *       namingAuthorityText DirectoryString(SIZE(1..128)) OPTIONAL
-     *     }
-     * <p/>
-     *     ProfessionInfo ::= SEQUENCE
-     *     {
-     *       namingAuthority [0] EXPLICIT NamingAuthority OPTIONAL,
-     *       professionItems SEQUENCE OF DirectoryString (SIZE(1..128)),
-     *       professionOIDs SEQUENCE OF OBJECT IDENTIFIER OPTIONAL,
-     *       registrationNumber PrintableString(SIZE(1..128)) OPTIONAL,
-     *       addProfessionInfo OCTET STRING OPTIONAL
-     *     }
-     * </pre>
-     *
-     * @return a DERObject
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector vec = new ASN1EncodableVector();
-        if (admissionAuthority != null)
-        {
-            vec.add(admissionAuthority);
-        }
-        vec.add(contentsOfAdmissions);
-        return new DERSequence(vec);
-    }
+	/**
+	 * Produce an object suitable for an ASN1OutputStream.
+	 * <p/>
+	 * Returns:
+	 * <p/>
+	 * <pre>
+	 *     AdmissionSyntax ::= SEQUENCE
+	 *     {
+	 *       admissionAuthority GeneralName OPTIONAL,
+	 *       contentsOfAdmissions SEQUENCE OF Admissions
+	 *     }
+	 *
+	 *     Admissions ::= SEQUENCE
+	 *     {
+	 *       admissionAuthority [0] EXPLICIT GeneralName OPTIONAL
+	 *       namingAuthority [1] EXPLICIT NamingAuthority OPTIONAL
+	 *       professionInfos SEQUENCE OF ProfessionInfo
+	 *     }
+	 *
+	 *     NamingAuthority ::= SEQUENCE
+	 *     {
+	 *       namingAuthorityId OBJECT IDENTIFIER OPTIONAL,
+	 *       namingAuthorityUrl IA5String OPTIONAL,
+	 *       namingAuthorityText DirectoryString(SIZE(1..128)) OPTIONAL
+	 *     }
+	 *
+	 *     ProfessionInfo ::= SEQUENCE
+	 *     {
+	 *       namingAuthority [0] EXPLICIT NamingAuthority OPTIONAL,
+	 *       professionItems SEQUENCE OF DirectoryString (SIZE(1..128)),
+	 *       professionOIDs SEQUENCE OF OBJECT IDENTIFIER OPTIONAL,
+	 *       registrationNumber PrintableString(SIZE(1..128)) OPTIONAL,
+	 *       addProfessionInfo OCTET STRING OPTIONAL
+	 *     }
+	 * </pre>
+	 *
+	 * @return a DERObject
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector vec = new ASN1EncodableVector();
+		if(admissionAuthority != null)
+		{
+			vec.add(admissionAuthority);
+		}
+		vec.add(contentsOfAdmissions);
+		return new DERSequence(vec);
+	}
 
-    /**
-     * @return Returns the admissionAuthority if present, null otherwise.
-     */
-    public GeneralName getAdmissionAuthority()
-    {
-        return admissionAuthority;
-    }
+	/**
+	 * @return Returns the admissionAuthority if present, null otherwise.
+	 */
+	public GeneralName getAdmissionAuthority()
+	{
+		return admissionAuthority;
+	}
 
-    /**
-     * @return Returns the contentsOfAdmissions.
-     */
-    public Admissions[] getContentsOfAdmissions()
-    {
-        Admissions[] admissions = new Admissions[contentsOfAdmissions.size()];
-        int count = 0;
-        for (Enumeration e = contentsOfAdmissions.getObjects(); e.hasMoreElements();)
-        {
-            admissions[count++] = Admissions.getInstance(e.nextElement());
-        }
-        return admissions;
-    }
+	/**
+	 * @return Returns the contentsOfAdmissions.
+	 */
+	public Admissions[] getContentsOfAdmissions()
+	{
+		Admissions[] admissions = new Admissions[contentsOfAdmissions.size()];
+		int count = 0;
+		for(Enumeration e = contentsOfAdmissions.getObjects(); e.hasMoreElements(); )
+		{
+			admissions[count++] = Admissions.getInstance(e.nextElement());
+		}
+		return admissions;
+	}
 }

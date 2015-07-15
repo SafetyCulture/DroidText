@@ -5,23 +5,23 @@ package repack.org.bouncycastle.crypto;
  * or similar after x amount of bytes enciphered
  */
 public class MaxBytesExceededException
-    extends RuntimeCryptoException
+		extends RuntimeCryptoException
 {
-    /**
-     * base constructor.
-     */
-    public MaxBytesExceededException()
-    {
-    }
+	/**
+	 * base constructor.
+	 */
+	public MaxBytesExceededException()
+	{
+	}
 
-    /**
-     * create an with the given message.
-     *
-     * @param message the message to be carried with the exception.
-     */
-    public MaxBytesExceededException(
-        String  message)
-    {
-        super(message);
-    }
+	/**
+	 * create an with the given message.
+	 *
+	 * @param message the message to be carried with the exception.
+	 */
+	public MaxBytesExceededException(
+			String message)
+	{
+		super(message);
+	}
 }

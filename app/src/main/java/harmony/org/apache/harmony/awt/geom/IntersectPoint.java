@@ -17,7 +17,8 @@
 package org.apache.harmony.awt.geom;
 
 // the class represents the intersect point of two edges
-public class IntersectPoint {
+public class IntersectPoint
+{
 	// the edge begin number of first line
 	private int begIndex1;
 	// the edge end number of first line
@@ -43,7 +44,8 @@ public class IntersectPoint {
 	// the parameter value of edge2
 	private double param2;
 
-	public IntersectPoint(int begIndex1, int endIndex1, int begIndex2, int endIndex2, double x, double y) {
+	public IntersectPoint(int begIndex1, int endIndex1, int begIndex2, int endIndex2, double x, double y)
+	{
 		this.begIndex1 = begIndex1;
 		this.endIndex1 = endIndex1;
 		this.begIndex2 = begIndex2;
@@ -53,7 +55,8 @@ public class IntersectPoint {
 	}
 
 	public IntersectPoint(int begIndex1, int endIndex1, int rule1, int ruleIndex1, int begIndex2, int endIndex2,
-			int rule2, int ruleIndex2, double x, double y, double param1, double param2) {
+						  int rule2, int ruleIndex2, double x, double y, double param1, double param2)
+	{
 		this.begIndex1 = begIndex1;
 		this.endIndex1 = endIndex1;
 		this.rule1 = rule1;
@@ -68,47 +71,58 @@ public class IntersectPoint {
 		this.y = y;
 	}
 
-	public int getBegIndex(boolean isCurrentArea) {
+	public int getBegIndex(boolean isCurrentArea)
+	{
 		return isCurrentArea ? begIndex1 : begIndex2;
 	}
 
-	public int getEndIndex(boolean isCurrentArea) {
+	public int getEndIndex(boolean isCurrentArea)
+	{
 		return isCurrentArea ? endIndex1 : endIndex2;
 	}
 
-	public int getRuleIndex(boolean isCurrentArea) {
+	public int getRuleIndex(boolean isCurrentArea)
+	{
 		return isCurrentArea ? ruleIndex1 : ruleIndex2;
 	}
 
-	public double getParam(boolean isCurrentArea) {
+	public double getParam(boolean isCurrentArea)
+	{
 		return isCurrentArea ? param1 : param2;
 	}
 
-	public int getRule(boolean isCurrentArea) {
+	public int getRule(boolean isCurrentArea)
+	{
 		return isCurrentArea ? rule1 : rule2;
 	}
 
-	public double getX() {
+	public double getX()
+	{
 		return x;
 	}
 
-	public double getY() {
+	public double getY()
+	{
 		return y;
 	}
 
-	public void setBegIndex1(int begIndex) {
+	public void setBegIndex1(int begIndex)
+	{
 		this.begIndex1 = begIndex;
 	}
 
-	public void setEndIndex1(int endIndex) {
+	public void setEndIndex1(int endIndex)
+	{
 		this.endIndex1 = endIndex;
 	}
 
-	public void setBegIndex2(int begIndex) {
+	public void setBegIndex2(int begIndex)
+	{
 		this.begIndex2 = begIndex;
 	}
 
-	public void setEndIndex2(int endIndex) {
+	public void setEndIndex2(int endIndex)
+	{
 		this.endIndex2 = endIndex;
 	}
 }

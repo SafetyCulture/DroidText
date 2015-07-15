@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface PemObjectParser
 {
-    Object parseObject(PemObject obj)
-            throws IOException;
+	Object parseObject(PemObject obj)
+			throws IOException;
 }

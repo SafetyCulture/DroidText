@@ -54,48 +54,66 @@ import com.lowagie.text.Document;
 /**
  * An implementation of an XmpSchema.
  */
-public class PdfSchema extends XmpSchema {
+public class PdfSchema extends XmpSchema
+{
 
 	private static final long serialVersionUID = -1541148669123992185L;
-	/** default namespace identifier*/
+	/**
+	 * default namespace identifier
+	 */
 	public static final String DEFAULT_XPATH_ID = "pdf";
-	/** default namespace uri*/
+	/**
+	 * default namespace uri
+	 */
 	public static final String DEFAULT_XPATH_URI = "http://ns.adobe.com/pdf/1.3/";
-	
-	/** Keywords. */
+
+	/**
+	 * Keywords.
+	 */
 	public static final String KEYWORDS = "pdf:keywords";
-	/** The PDF file version (for example: 1.0, 1.3, and so on). */
+	/**
+	 * The PDF file version (for example: 1.0, 1.3, and so on).
+	 */
 	public static final String VERSION = "pdf:PDFVersion";
-	/** The Producer. */
+	/**
+	 * The Producer.
+	 */
 	public static final String PRODUCER = "pdf:Producer";
 
 
-	public PdfSchema() {
+	public PdfSchema()
+	{
 		super("xmlns:" + DEFAULT_XPATH_ID + "=\"" + DEFAULT_XPATH_URI + "\"");
 		addProducer(Document.getVersion());
 	}
-	
+
 	/**
 	 * Adds keywords.
+	 *
 	 * @param keywords
 	 */
-	public void addKeywords(String keywords) {
+	public void addKeywords(String keywords)
+	{
 		setProperty(KEYWORDS, keywords);
 	}
-	
+
 	/**
 	 * Adds the producer.
+	 *
 	 * @param producer
 	 */
-	public void addProducer(String producer) {
+	public void addProducer(String producer)
+	{
 		setProperty(PRODUCER, producer);
 	}
 
 	/**
 	 * Adds the version.
+	 *
 	 * @param version
 	 */
-	public void addVersion(String version) {
+	public void addVersion(String version)
+	{
 		setProperty(VERSION, version);
 	}
 }

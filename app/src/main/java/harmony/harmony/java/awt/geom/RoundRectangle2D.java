@@ -19,13 +19,15 @@
  */
 package harmony.java.awt.geom;
 
-import java.util.NoSuchElementException;
-
 import org.apache.harmony.awt.internal.nls.Messages;
 
-public abstract class RoundRectangle2D extends RectangularShape {
+import java.util.NoSuchElementException;
 
-	public static class Float extends RoundRectangle2D {
+public abstract class RoundRectangle2D extends RectangularShape
+{
+
+	public static class Float extends RoundRectangle2D
+	{
 
 		public float x;
 		public float y;
@@ -34,49 +36,59 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		public float arcwidth;
 		public float archeight;
 
-		public Float() {
+		public Float()
+		{
 		}
 
-		public Float(float x, float y, float width, float height, float arcwidth, float archeight) {
+		public Float(float x, float y, float width, float height, float arcwidth, float archeight)
+		{
 			setRoundRect(x, y, width, height, arcwidth, archeight);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public double getArcWidth() {
+		public double getArcWidth()
+		{
 			return arcwidth;
 		}
 
 		@Override
-		public double getArcHeight() {
+		public double getArcHeight()
+		{
 			return archeight;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0f || height <= 0.0f;
 		}
 
-		public void setRoundRect(float x, float y, float width, float height, float arcwidth, float archeight) {
+		public void setRoundRect(float x, float y, float width, float height, float arcwidth, float archeight)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -86,7 +98,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRoundRect(double x, double y, double width, double height, double arcwidth, double archeight) {
+		public void setRoundRect(double x, double y, double width, double height, double arcwidth, double archeight)
+		{
 			this.x = (float) x;
 			this.y = (float) y;
 			this.width = (float) width;
@@ -96,7 +109,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRoundRect(RoundRectangle2D rr) {
+		public void setRoundRect(RoundRectangle2D rr)
+		{
 			this.x = (float) rr.getX();
 			this.y = (float) rr.getY();
 			this.width = (float) rr.getWidth();
@@ -105,12 +119,14 @@ public abstract class RoundRectangle2D extends RectangularShape {
 			this.archeight = (float) rr.getArcHeight();
 		}
 
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Rectangle2D.Float(x, y, width, height);
 		}
 	}
 
-	public static class Double extends RoundRectangle2D {
+	public static class Double extends RoundRectangle2D
+	{
 
 		public double x;
 		public double y;
@@ -119,50 +135,60 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		public double arcwidth;
 		public double archeight;
 
-		public Double() {
+		public Double()
+		{
 		}
 
-		public Double(double x, double y, double width, double height, double arcwidth, double archeight) {
+		public Double(double x, double y, double width, double height, double arcwidth, double archeight)
+		{
 			setRoundRect(x, y, width, height, arcwidth, archeight);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public double getArcWidth() {
+		public double getArcWidth()
+		{
 			return arcwidth;
 		}
 
 		@Override
-		public double getArcHeight() {
+		public double getArcHeight()
+		{
 			return archeight;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0 || height <= 0.0;
 		}
 
 		@Override
-		public void setRoundRect(double x, double y, double width, double height, double arcwidth, double archeight) {
+		public void setRoundRect(double x, double y, double width, double height, double arcwidth, double archeight)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -172,7 +198,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		}
 
 		@Override
-		public void setRoundRect(RoundRectangle2D rr) {
+		public void setRoundRect(RoundRectangle2D rr)
+		{
 			this.x = rr.getX();
 			this.y = rr.getY();
 			this.width = rr.getWidth();
@@ -181,7 +208,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 			this.archeight = rr.getArcHeight();
 		}
 
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Rectangle2D.Double(x, y, width, height);
 		}
 	}
@@ -189,7 +217,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 	/*
 	 * RoundRectangle2D path iterator
 	 */
-	class Iterator implements PathIterator {
+	class Iterator implements PathIterator
+	{
 
 		/*
 		 * Path for round corners generated the same way as Ellipse2D
@@ -203,22 +232,22 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		/**
 		 * The points coordinates calculation table.
 		 */
-		double points[][] = { { 0.0, 0.5, 0.0, 0.0 }, // MOVETO
-				{ 1.0, -0.5, 0.0, 0.0 }, // LINETO
-				{ 1.0, -u, 0.0, 0.0, // CUBICTO
-						1.0, 0.0, 0.0, u, 1.0, 0.0, 0.0, 0.5 }, { 1.0, 0.0, 1.0, -0.5 }, // LINETO
-				{ 1.0, 0.0, 1.0, -u, // CUBICTO
-						1.0, -u, 1.0, 0.0, 1.0, -0.5, 1.0, 0.0 }, { 0.0, 0.5, 1.0, 0.0 }, // LINETO
-				{ 0.0, u, 1.0, 0.0, // CUBICTO
-						0.0, 0.0, 1.0, -u, 0.0, 0.0, 1.0, -0.5 }, { 0.0, 0.0, 0.0, 0.5 }, // LINETO
-				{ 0.0, 0.0, 0.0, u, // CUBICTO
-						0.0, u, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0 } };
+		double points[][] = {{0.0, 0.5, 0.0, 0.0}, // MOVETO
+				{1.0, -0.5, 0.0, 0.0}, // LINETO
+				{1.0, -u, 0.0, 0.0, // CUBICTO
+						1.0, 0.0, 0.0, u, 1.0, 0.0, 0.0, 0.5}, {1.0, 0.0, 1.0, -0.5}, // LINETO
+				{1.0, 0.0, 1.0, -u, // CUBICTO
+						1.0, -u, 1.0, 0.0, 1.0, -0.5, 1.0, 0.0}, {0.0, 0.5, 1.0, 0.0}, // LINETO
+				{0.0, u, 1.0, 0.0, // CUBICTO
+						0.0, 0.0, 1.0, -u, 0.0, 0.0, 1.0, -0.5}, {0.0, 0.0, 0.0, 0.5}, // LINETO
+				{0.0, 0.0, 0.0, u, // CUBICTO
+						0.0, u, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0}};
 
 		/**
 		 * The segment types correspond to points array
 		 */
-		int types[] = { SEG_MOVETO, SEG_LINETO, SEG_CUBICTO, SEG_LINETO, SEG_CUBICTO, SEG_LINETO, SEG_CUBICTO,
-				SEG_LINETO, SEG_CUBICTO };
+		int types[] = {SEG_MOVETO, SEG_LINETO, SEG_CUBICTO, SEG_LINETO, SEG_CUBICTO, SEG_LINETO, SEG_CUBICTO,
+				SEG_LINETO, SEG_CUBICTO};
 
 		/**
 		 * The x coordinate of left-upper corner of the round rectangle bounds
@@ -263,13 +292,12 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		/**
 		 * Constructs a new RoundRectangle2D.Iterator for given round rectangle
 		 * and transformation.
-		 * 
-		 * @param rr
-		 *            - the source RoundRectangle2D object
-		 * @param at
-		 *            - the AffineTransform object to apply rectangle path
+		 *
+		 * @param rr - the source RoundRectangle2D object
+		 * @param at - the AffineTransform object to apply rectangle path
 		 */
-		Iterator(RoundRectangle2D rr, AffineTransform at) {
+		Iterator(RoundRectangle2D rr, AffineTransform at)
+		{
 			this.x = rr.getX();
 			this.y = rr.getY();
 			this.width = rr.getWidth();
@@ -277,58 +305,72 @@ public abstract class RoundRectangle2D extends RectangularShape {
 			this.aw = Math.min(width, rr.getArcWidth());
 			this.ah = Math.min(height, rr.getArcHeight());
 			this.t = at;
-			if (width < 0.0 || height < 0.0 || aw < 0.0 || ah < 0.0) {
+			if(width < 0.0 || height < 0.0 || aw < 0.0 || ah < 0.0)
+			{
 				index = points.length;
 			}
 		}
 
-		public int getWindingRule() {
+		public int getWindingRule()
+		{
 			return WIND_NON_ZERO;
 		}
 
-		public boolean isDone() {
+		public boolean isDone()
+		{
 			return index > points.length;
 		}
 
-		public void next() {
+		public void next()
+		{
 			index++;
 		}
 
-		public int currentSegment(double[] coords) {
-			if (isDone()) {
+		public int currentSegment(double[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == points.length) {
+			if(index == points.length)
+			{
 				return SEG_CLOSE;
 			}
 			int j = 0;
 			double p[] = points[index];
-			for (int i = 0; i < p.length; i += 4) {
+			for(int i = 0; i < p.length; i += 4)
+			{
 				coords[j++] = x + p[i + 0] * width + p[i + 1] * aw;
 				coords[j++] = y + p[i + 2] * height + p[i + 3] * ah;
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, j / 2);
 			}
 			return types[index];
 		}
 
-		public int currentSegment(float[] coords) {
-			if (isDone()) {
+		public int currentSegment(float[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == points.length) {
+			if(index == points.length)
+			{
 				return SEG_CLOSE;
 			}
 			int j = 0;
 			double p[] = points[index];
-			for (int i = 0; i < p.length; i += 4) {
+			for(int i = 0; i < p.length; i += 4)
+			{
 				coords[j++] = (float) (x + p[i + 0] * width + p[i + 1] * aw);
 				coords[j++] = (float) (y + p[i + 2] * height + p[i + 3] * ah);
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, j / 2);
 			}
 			return types[index];
@@ -336,7 +378,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 
 	}
 
-	protected RoundRectangle2D() {
+	protected RoundRectangle2D()
+	{
 	}
 
 	public abstract double getArcWidth();
@@ -345,17 +388,21 @@ public abstract class RoundRectangle2D extends RectangularShape {
 
 	public abstract void setRoundRect(double x, double y, double width, double height, double arcWidth, double arcHeight);
 
-	public void setRoundRect(RoundRectangle2D rr) {
+	public void setRoundRect(RoundRectangle2D rr)
+	{
 		setRoundRect(rr.getX(), rr.getY(), rr.getWidth(), rr.getHeight(), rr.getArcWidth(), rr.getArcHeight());
 	}
 
 	@Override
-	public void setFrame(double x, double y, double width, double height) {
+	public void setFrame(double x, double y, double width, double height)
+	{
 		setRoundRect(x, y, width, height, getArcWidth(), getArcHeight());
 	}
 
-	public boolean contains(double px, double py) {
-		if (isEmpty()) {
+	public boolean contains(double px, double py)
+	{
+		if(isEmpty())
+		{
 			return false;
 		}
 
@@ -364,7 +411,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		double rx2 = rx1 + getWidth();
 		double ry2 = ry1 + getHeight();
 
-		if (px < rx1 || px >= rx2 || py < ry1 || py >= ry2) {
+		if(px < rx1 || px >= rx2 || py < ry1 || py >= ry2)
+		{
 			return false;
 		}
 
@@ -373,19 +421,29 @@ public abstract class RoundRectangle2D extends RectangularShape {
 
 		double cx, cy;
 
-		if (px < rx1 + aw) {
+		if(px < rx1 + aw)
+		{
 			cx = rx1 + aw;
-		} else if (px > rx2 - aw) {
+		}
+		else if(px > rx2 - aw)
+		{
 			cx = rx2 - aw;
-		} else {
+		}
+		else
+		{
 			return true;
 		}
 
-		if (py < ry1 + ah) {
+		if(py < ry1 + ah)
+		{
 			cy = ry1 + ah;
-		} else if (py > ry2 - ah) {
+		}
+		else if(py > ry2 - ah)
+		{
 			cy = ry2 - ah;
-		} else {
+		}
+		else
+		{
 			return true;
 		}
 
@@ -394,8 +452,10 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		return px * px + py * py <= 1.0;
 	}
 
-	public boolean intersects(double rx, double ry, double rw, double rh) {
-		if (isEmpty() || rw <= 0.0 || rh <= 0.0) {
+	public boolean intersects(double rx, double ry, double rw, double rh)
+	{
+		if(isEmpty() || rw <= 0.0 || rh <= 0.0)
+		{
 			return false;
 		}
 
@@ -409,7 +469,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		double rx2 = rx + rw;
 		double ry2 = ry + rh;
 
-		if (rx2 < x1 || x2 < rx1 || ry2 < y1 || y2 < ry1) {
+		if(rx2 < x1 || x2 < rx1 || ry2 < y1 || y2 < ry1)
+		{
 			return false;
 		}
 
@@ -422,8 +483,10 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		return contains(nx, ny);
 	}
 
-	public boolean contains(double rx, double ry, double rw, double rh) {
-		if (isEmpty() || rw <= 0.0 || rh <= 0.0) {
+	public boolean contains(double rx, double ry, double rw, double rh)
+	{
+		if(isEmpty() || rw <= 0.0 || rh <= 0.0)
+		{
 			return false;
 		}
 
@@ -435,7 +498,8 @@ public abstract class RoundRectangle2D extends RectangularShape {
 		return contains(rx1, ry1) && contains(rx2, ry1) && contains(rx2, ry2) && contains(rx1, ry2);
 	}
 
-	public PathIterator getPathIterator(AffineTransform at) {
+	public PathIterator getPathIterator(AffineTransform at)
+	{
 		return new Iterator(this, at);
 	}
 

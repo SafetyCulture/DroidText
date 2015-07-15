@@ -6,15 +6,15 @@ import repack.org.bouncycastle.asn1.DERObjectIdentifier;
 /**
  * CertPolicyId, used in the CertificatePolicies and PolicyMappings
  * X509V3 Extensions.
- *
+ * <p/>
  * <pre>
  *     CertPolicyId ::= OBJECT IDENTIFIER
  * </pre>
  */
-public class CertPolicyId extends DERObjectIdentifier 
+public class CertPolicyId extends DERObjectIdentifier
 {
-   public CertPolicyId (String id) 
-   {
-     super(id);
-   }
+	public CertPolicyId(String id)
+	{
+		super(id);
+	}
 }

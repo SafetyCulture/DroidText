@@ -9,122 +9,122 @@ import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.DERTaggedObject;
 
 public class V2Form
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    GeneralNames        issuerName;
-    IssuerSerial        baseCertificateID;
-    ObjectDigestInfo    objectDigestInfo;
+	GeneralNames issuerName;
+	IssuerSerial baseCertificateID;
+	ObjectDigestInfo objectDigestInfo;
 
-    public static V2Form getInstance(
-        ASN1TaggedObject obj,
-        boolean          explicit)
-    {
-        return getInstance(ASN1Sequence.getInstance(obj, explicit));
-    }
+	public static V2Form getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		return getInstance(ASN1Sequence.getInstance(obj, explicit));
+	}
 
-    public static V2Form getInstance(
-        Object  obj)
-    {
-        if (obj == null || obj instanceof V2Form)
-        {
-            return (V2Form)obj;
-        }
-        else if (obj instanceof ASN1Sequence)
-        {
-            return new V2Form((ASN1Sequence)obj);
-        }
+	public static V2Form getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof V2Form)
+		{
+			return (V2Form) obj;
+		}
+		else if(obj instanceof ASN1Sequence)
+		{
+			return new V2Form((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
-    
-    public V2Form(
-        GeneralNames    issuerName)
-    {
-        this.issuerName = issuerName;
-    }
-    
-    public V2Form(
-        ASN1Sequence seq)
-    {
-        if (seq.size() > 3)
-        {
-            throw new IllegalArgumentException("Bad sequence size: " + seq.size());
-        }
-        
-        int    index = 0;
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-        if (!(seq.getObjectAt(0) instanceof ASN1TaggedObject))
-        {
-            index++;
-            this.issuerName = GeneralNames.getInstance(seq.getObjectAt(0));
-        }
+	public V2Form(
+			GeneralNames issuerName)
+	{
+		this.issuerName = issuerName;
+	}
 
-        for (int i = index; i != seq.size(); i++)
-        {
-            ASN1TaggedObject o = ASN1TaggedObject.getInstance(seq.getObjectAt(i));
-            if (o.getTagNo() == 0)
-            {
-                baseCertificateID = IssuerSerial.getInstance(o, false);
-            }
-            else if (o.getTagNo() == 1)
-            {
-                objectDigestInfo = ObjectDigestInfo.getInstance(o, false);
-            }
-            else 
-            {
-                throw new IllegalArgumentException("Bad tag number: "
-                        + o.getTagNo());
-            }
-        }
-    }
-    
-    public GeneralNames getIssuerName()
-    {
-        return issuerName;
-    }
+	public V2Form(
+			ASN1Sequence seq)
+	{
+		if(seq.size() > 3)
+		{
+			throw new IllegalArgumentException("Bad sequence size: " + seq.size());
+		}
 
-    public IssuerSerial getBaseCertificateID()
-    {
-        return baseCertificateID;
-    }
+		int index = 0;
 
-    public ObjectDigestInfo getObjectDigestInfo()
-    {
-        return objectDigestInfo;
-    }
+		if(!(seq.getObjectAt(0) instanceof ASN1TaggedObject))
+		{
+			index++;
+			this.issuerName = GeneralNames.getInstance(seq.getObjectAt(0));
+		}
 
-    /**
-     * Produce an object suitable for an ASN1OutputStream.
-     * <pre>
-     *  V2Form ::= SEQUENCE {
-     *       issuerName            GeneralNames  OPTIONAL,
-     *       baseCertificateID     [0] IssuerSerial  OPTIONAL,
-     *       objectDigestInfo      [1] ObjectDigestInfo  OPTIONAL
-     *         -- issuerName MUST be present in this profile
-     *         -- baseCertificateID and objectDigestInfo MUST NOT
-     *         -- be present in this profile
-     *  }
-     * </pre>
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+		for(int i = index; i != seq.size(); i++)
+		{
+			ASN1TaggedObject o = ASN1TaggedObject.getInstance(seq.getObjectAt(i));
+			if(o.getTagNo() == 0)
+			{
+				baseCertificateID = IssuerSerial.getInstance(o, false);
+			}
+			else if(o.getTagNo() == 1)
+			{
+				objectDigestInfo = ObjectDigestInfo.getInstance(o, false);
+			}
+			else
+			{
+				throw new IllegalArgumentException("Bad tag number: "
+						+ o.getTagNo());
+			}
+		}
+	}
 
-        if (issuerName != null)
-        {
-            v.add(issuerName);
-        }
+	public GeneralNames getIssuerName()
+	{
+		return issuerName;
+	}
 
-        if (baseCertificateID != null)
-        {
-            v.add(new DERTaggedObject(false, 0, baseCertificateID));
-        }
+	public IssuerSerial getBaseCertificateID()
+	{
+		return baseCertificateID;
+	}
 
-        if (objectDigestInfo != null)
-        {
-            v.add(new DERTaggedObject(false, 1, objectDigestInfo));
-        }
+	public ObjectDigestInfo getObjectDigestInfo()
+	{
+		return objectDigestInfo;
+	}
 
-        return new DERSequence(v);
-    }
+	/**
+	 * Produce an object suitable for an ASN1OutputStream.
+	 * <pre>
+	 *  V2Form ::= SEQUENCE {
+	 *       issuerName            GeneralNames  OPTIONAL,
+	 *       baseCertificateID     [0] IssuerSerial  OPTIONAL,
+	 *       objectDigestInfo      [1] ObjectDigestInfo  OPTIONAL
+	 *         -- issuerName MUST be present in this profile
+	 *         -- baseCertificateID and objectDigestInfo MUST NOT
+	 *         -- be present in this profile
+	 *  }
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
+
+		if(issuerName != null)
+		{
+			v.add(issuerName);
+		}
+
+		if(baseCertificateID != null)
+		{
+			v.add(new DERTaggedObject(false, 0, baseCertificateID));
+		}
+
+		if(objectDigestInfo != null)
+		{
+			v.add(new DERTaggedObject(false, 1, objectDigestInfo));
+		}
+
+		return new DERSequence(v);
+	}
 }

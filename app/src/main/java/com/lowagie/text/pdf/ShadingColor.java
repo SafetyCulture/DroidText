@@ -47,38 +47,46 @@
 
 package com.lowagie.text.pdf;
 
-/** Implements a shading pattern as a <code>Color</code>.
+/**
+ * Implements a shading pattern as a <code>Color</code>.
  *
  * @author Paulo Soares (psoares@consiste.pt)
  */
-public class ShadingColor extends ExtendedColor {
+public class ShadingColor extends ExtendedColor
+{
 
-    private static final long serialVersionUID = 4817929454941328671L;
+	private static final long serialVersionUID = 4817929454941328671L;
 	PdfShadingPattern shadingPattern;
 
-    /**
-     * Creates a shading color.
-     * @param shadingPattern
-     */
-    public ShadingColor(PdfShadingPattern shadingPattern) {
-        super(TYPE_SHADING, .5f, .5f, .5f);
-        this.shadingPattern = shadingPattern;
-    }
+	/**
+	 * Creates a shading color.
+	 *
+	 * @param shadingPattern
+	 */
+	public ShadingColor(PdfShadingPattern shadingPattern)
+	{
+		super(TYPE_SHADING, .5f, .5f, .5f);
+		this.shadingPattern = shadingPattern;
+	}
 
-    /**
-     * Gets the shading pattern.
-     * @return a shading pattern.
-     */
-    public PdfShadingPattern getPdfShadingPattern() {
-        return shadingPattern;
-    }
-    
-    public boolean equals(Object obj) {
-        return this == obj;
-    }
-    
-    public int hashCode() {
-        return shadingPattern.hashCode();
-    }
-    
+	/**
+	 * Gets the shading pattern.
+	 *
+	 * @return a shading pattern.
+	 */
+	public PdfShadingPattern getPdfShadingPattern()
+	{
+		return shadingPattern;
+	}
+
+	public boolean equals(Object obj)
+	{
+		return this == obj;
+	}
+
+	public int hashCode()
+	{
+		return shadingPattern.hashCode();
+	}
+
 }

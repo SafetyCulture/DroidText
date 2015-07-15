@@ -52,16 +52,17 @@
 
 package com.lowagie.text.html;
 
-import java.util.HashMap;
-
 import com.lowagie.text.ElementTags;
 import com.lowagie.text.FontFactory;
+
+import java.util.HashMap;
 
 /**
  * The <CODE>Tags</CODE>-class maps several XHTML-tags to iText-objects.
  */
 
-public class HtmlTagMap extends HashMap {
+public class HtmlTagMap extends HashMap
+{
 
 	private static final long serialVersionUID = 5287430058473705350L;
 
@@ -69,7 +70,8 @@ public class HtmlTagMap extends HashMap {
 	 * Constructs an HtmlTagMap.
 	 */
 
-	public HtmlTagMap() {
+	public HtmlTagMap()
+	{
 		super();
 		HtmlPeer peer;
 
@@ -232,70 +234,84 @@ public class HtmlTagMap extends HashMap {
 
 	/**
 	 * Checks if this is the root tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is HTML or html
 	 */
 
-	public static boolean isHtml(String tag) {
+	public static boolean isHtml(String tag)
+	{
 		return HtmlTags.HTML.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is the head tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is HEAD or head
 	 */
 
-	public static boolean isHead(String tag) {
+	public static boolean isHead(String tag)
+	{
 		return HtmlTags.HEAD.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is the meta tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is META or meta
 	 */
 
-	public static boolean isMeta(String tag) {
+	public static boolean isMeta(String tag)
+	{
 		return HtmlTags.META.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is the link tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is LINK or link
 	 */
 
-	public static boolean isLink(String tag) {
+	public static boolean isLink(String tag)
+	{
 		return HtmlTags.LINK.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is the title tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is TITLE or title
 	 */
 
-	public static boolean isTitle(String tag) {
+	public static boolean isTitle(String tag)
+	{
 		return HtmlTags.TITLE.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is the root tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is BODY or body
 	 */
 
-	public static boolean isBody(String tag) {
+	public static boolean isBody(String tag)
+	{
 		return HtmlTags.BODY.equalsIgnoreCase(tag);
 	}
 
 	/**
 	 * Checks if this is a special tag.
+	 *
 	 * @param tag a tagvalue
 	 * @return true if tag is a HTML, HEAD, META, LINK or BODY tag (case insensitive)
 	 */
-	public static boolean isSpecialTag(String tag) {
+	public static boolean isSpecialTag(String tag)
+	{
 		return isHtml(tag) || isHead(tag) || isMeta(tag) || isLink(tag)
 				|| isBody(tag);
 	}

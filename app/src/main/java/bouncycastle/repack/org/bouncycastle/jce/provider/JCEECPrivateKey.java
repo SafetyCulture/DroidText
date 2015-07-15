@@ -1,14 +1,5 @@
 package repack.org.bouncycastle.jce.provider;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import repack.org.bouncycastle.asn1.ASN1Object;
 import repack.org.bouncycastle.asn1.ASN1Sequence;
 import repack.org.bouncycastle.asn1.DERBitString;
@@ -23,7 +14,6 @@ import repack.org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import repack.org.bouncycastle.asn1.sec.ECPrivateKeyStructure;
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import repack.org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import repack.org.bouncycastle.asn1.x9.X962NamedCurves;
 import repack.org.bouncycastle.asn1.x9.X962Parameters;
 import repack.org.bouncycastle.asn1.x9.X9ECParameters;
 import repack.org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
@@ -39,342 +29,349 @@ import repack.org.bouncycastle.jce.spec.ECPrivateKeySpec;
 import repack.org.bouncycastle.math.ec.ECCurve;
 import repack.org.bouncycastle.math.ec.ECPoint;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+import java.util.Enumeration;
+
 public class JCEECPrivateKey
-    implements ECPrivateKey, PKCS12BagAttributeCarrier, ECPointEncoder
+		implements ECPrivateKey, PKCS12BagAttributeCarrier, ECPointEncoder
 {
-    private String          algorithm = "EC";
-    private BigInteger      d;
-    private ECParameterSpec ecSpec;
-    private boolean         withCompression;
+	private String algorithm = "EC";
+	private BigInteger d;
+	private ECParameterSpec ecSpec;
+	private boolean withCompression;
 
-    private DERBitString publicKey;
+	private DERBitString publicKey;
 
-    private PKCS12BagAttributeCarrierImpl attrCarrier = new PKCS12BagAttributeCarrierImpl();
+	private PKCS12BagAttributeCarrierImpl attrCarrier = new PKCS12BagAttributeCarrierImpl();
 
-    protected JCEECPrivateKey()
-    {
-    }
+	protected JCEECPrivateKey()
+	{
+	}
 
-    JCEECPrivateKey(
-        ECPrivateKey    key)
-    {
-        this.d = key.getD();
-        this.algorithm = key.getAlgorithm();
-        this.ecSpec = key.getParameters();
-    }
+	JCEECPrivateKey(
+			ECPrivateKey key)
+	{
+		this.d = key.getD();
+		this.algorithm = key.getAlgorithm();
+		this.ecSpec = key.getParameters();
+	}
 
-    public JCEECPrivateKey(
-        String              algorithm,
-        ECPrivateKeySpec    spec)
-    {
-        this.algorithm = algorithm;
-        this.d = spec.getD();
-        this.ecSpec = spec.getParams();
-    }
+	public JCEECPrivateKey(
+			String algorithm,
+			ECPrivateKeySpec spec)
+	{
+		this.algorithm = algorithm;
+		this.d = spec.getD();
+		this.ecSpec = spec.getParams();
+	}
 
-    public JCEECPrivateKey(
-        String                  algorithm,
-        ECPrivateKeyParameters  params,
-        JCEECPublicKey          pubKey,
-        ECParameterSpec         spec)
-    {
-        ECDomainParameters      dp = params.getParameters();
+	public JCEECPrivateKey(
+			String algorithm,
+			ECPrivateKeyParameters params,
+			JCEECPublicKey pubKey,
+			ECParameterSpec spec)
+	{
+		ECDomainParameters dp = params.getParameters();
 
-        this.algorithm = algorithm;
-        this.d = params.getD();
+		this.algorithm = algorithm;
+		this.d = params.getD();
 
-        if (spec == null)
-        {
-            this.ecSpec = new ECParameterSpec(
-                            dp.getCurve(),
-                            dp.getG(),
-                            dp.getN(),
-                            dp.getH(),
-                            dp.getSeed());
-        }
-        else
-        {
-            this.ecSpec = spec;
-        }
+		if(spec == null)
+		{
+			this.ecSpec = new ECParameterSpec(
+					dp.getCurve(),
+					dp.getG(),
+					dp.getN(),
+					dp.getH(),
+					dp.getSeed());
+		}
+		else
+		{
+			this.ecSpec = spec;
+		}
 
-        publicKey = getPublicKeyDetails(pubKey);
-    }
+		publicKey = getPublicKeyDetails(pubKey);
+	}
 
-    public JCEECPrivateKey(
-        String                  algorithm,
-        ECPrivateKeyParameters  params)
-    {
-        this.algorithm = algorithm;
-        this.d = params.getD();
-        this.ecSpec = null;
-    }
+	public JCEECPrivateKey(
+			String algorithm,
+			ECPrivateKeyParameters params)
+	{
+		this.algorithm = algorithm;
+		this.d = params.getD();
+		this.ecSpec = null;
+	}
 
-    public JCEECPrivateKey(
-        String             algorithm,
-        JCEECPrivateKey    key)
-    {
-        this.algorithm = algorithm;
-        this.d = key.d;
-        this.ecSpec = key.ecSpec;
-        this.withCompression = key.withCompression;
-        this.publicKey = key.publicKey;
-        this.attrCarrier = key.attrCarrier;
-    }
+	public JCEECPrivateKey(
+			String algorithm,
+			JCEECPrivateKey key)
+	{
+		this.algorithm = algorithm;
+		this.d = key.d;
+		this.ecSpec = key.ecSpec;
+		this.withCompression = key.withCompression;
+		this.publicKey = key.publicKey;
+		this.attrCarrier = key.attrCarrier;
+	}
 
-    JCEECPrivateKey(
-        PrivateKeyInfo      info)
-    {
-        populateFromPrivKeyInfo(info);
-    }
+	JCEECPrivateKey(
+			PrivateKeyInfo info)
+	{
+		populateFromPrivKeyInfo(info);
+	}
 
-    private void populateFromPrivKeyInfo(PrivateKeyInfo info)
-    {
-        X962Parameters      params = new X962Parameters((DERObject)info.getAlgorithmId().getParameters());
+	private void populateFromPrivKeyInfo(PrivateKeyInfo info)
+	{
+		X962Parameters params = new X962Parameters((DERObject) info.getAlgorithmId().getParameters());
 
-        if (params.isNamedCurve())
-        {
-            DERObjectIdentifier oid = (DERObjectIdentifier)params.getParameters();
-            X9ECParameters      ecP = ECUtil.getNamedCurveByOid(oid);
+		if(params.isNamedCurve())
+		{
+			DERObjectIdentifier oid = (DERObjectIdentifier) params.getParameters();
+			X9ECParameters ecP = ECUtil.getNamedCurveByOid(oid);
 
-            ecSpec = new ECNamedCurveParameterSpec(
-                                        ECUtil.getCurveName(oid),
-                                        ecP.getCurve(),
-                                        ecP.getG(),
-                                        ecP.getN(),
-                                        ecP.getH(),
-                                        ecP.getSeed());
-        }
-        else if (params.isImplicitlyCA())
-        {
-            ecSpec = null;
-        }
-        else
-        {
-            X9ECParameters          ecP = new X9ECParameters((ASN1Sequence)params.getParameters());
-            ecSpec = new ECParameterSpec(ecP.getCurve(),
-                                            ecP.getG(),
-                                            ecP.getN(),
-                                            ecP.getH(),
-                                            ecP.getSeed());
-        }
+			ecSpec = new ECNamedCurveParameterSpec(
+					ECUtil.getCurveName(oid),
+					ecP.getCurve(),
+					ecP.getG(),
+					ecP.getN(),
+					ecP.getH(),
+					ecP.getSeed());
+		}
+		else if(params.isImplicitlyCA())
+		{
+			ecSpec = null;
+		}
+		else
+		{
+			X9ECParameters ecP = new X9ECParameters((ASN1Sequence) params.getParameters());
+			ecSpec = new ECParameterSpec(ecP.getCurve(),
+					ecP.getG(),
+					ecP.getN(),
+					ecP.getH(),
+					ecP.getSeed());
+		}
 
-        if (info.getPrivateKey() instanceof DERInteger)
-        {
-            DERInteger          derD = (DERInteger)info.getPrivateKey();
+		if(info.getPrivateKey() instanceof DERInteger)
+		{
+			DERInteger derD = (DERInteger) info.getPrivateKey();
 
-            this.d = derD.getValue();
-        }
-        else
-        {
-            ECPrivateKeyStructure   ec = new ECPrivateKeyStructure((ASN1Sequence)info.getPrivateKey());
+			this.d = derD.getValue();
+		}
+		else
+		{
+			ECPrivateKeyStructure ec = new ECPrivateKeyStructure((ASN1Sequence) info.getPrivateKey());
 
-            this.d = ec.getKey();
-            this.publicKey = ec.getPublicKey();
-        }
-    }
+			this.d = ec.getKey();
+			this.publicKey = ec.getPublicKey();
+		}
+	}
 
-    public String getAlgorithm()
-    {
-        return algorithm;
-    }
+	public String getAlgorithm()
+	{
+		return algorithm;
+	}
 
-    /**
-     * return the encoding format we produce in getEncoded().
-     *
-     * @return the string "PKCS#8"
-     */
-    public String getFormat()
-    {
-        return "PKCS#8";
-    }
+	/**
+	 * return the encoding format we produce in getEncoded().
+	 *
+	 * @return the string "PKCS#8"
+	 */
+	public String getFormat()
+	{
+		return "PKCS#8";
+	}
 
-    /**
-     * Return a PKCS8 representation of the key. The sequence returned
-     * represents a full PrivateKeyInfo object.
-     *
-     * @return a PKCS8 representation of the key.
-     */
-    public byte[] getEncoded()
-    {
-        ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-        DEROutputStream         dOut = new DEROutputStream(bOut);
-        X962Parameters          params = null;
+	/**
+	 * Return a PKCS8 representation of the key. The sequence returned
+	 * represents a full PrivateKeyInfo object.
+	 *
+	 * @return a PKCS8 representation of the key.
+	 */
+	public byte[] getEncoded()
+	{
+		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+		DEROutputStream dOut = new DEROutputStream(bOut);
+		X962Parameters params = null;
 
-        if (ecSpec instanceof ECNamedCurveParameterSpec)
-        {
-            DERObjectIdentifier curveOid = ECUtil.getNamedCurveOid(((ECNamedCurveParameterSpec)ecSpec).getName());
-            
-            params = new X962Parameters(curveOid);
-        }
-        else if (ecSpec == null)
-        {
-            params = new X962Parameters(DERNull.INSTANCE);
-        }
-        else
-        {
-            ECParameterSpec         p = (ECParameterSpec)ecSpec;
-            ECCurve curve = p.getG().getCurve();
-            ECPoint generator;
-            
-            if (curve instanceof ECCurve.Fp) 
-            {
-                generator = new ECPoint.Fp(curve, p.getG().getX(), p.getG().getY(), withCompression);
-            } 
-            else if (curve instanceof ECCurve.F2m) 
-            {
-                generator = new ECPoint.F2m(curve, p.getG().getX(), p.getG().getY(), withCompression);
-            }
-            else 
-            {
-                throw new UnsupportedOperationException("Subclass of ECPoint " + curve.getClass().toString() + "not supported");
-            }
-            
-            X9ECParameters ecP = new X9ECParameters(
-                  p.getCurve(),
-                  generator,
-                  p.getN(),
-                  p.getH(),
-                  p.getSeed());
+		if(ecSpec instanceof ECNamedCurveParameterSpec)
+		{
+			DERObjectIdentifier curveOid = ECUtil.getNamedCurveOid(((ECNamedCurveParameterSpec) ecSpec).getName());
 
-            params = new X962Parameters(ecP);
-        }
+			params = new X962Parameters(curveOid);
+		}
+		else if(ecSpec == null)
+		{
+			params = new X962Parameters(DERNull.INSTANCE);
+		}
+		else
+		{
+			ECParameterSpec p = (ECParameterSpec) ecSpec;
+			ECCurve curve = p.getG().getCurve();
+			ECPoint generator;
 
-        PrivateKeyInfo        info;
-        ECPrivateKeyStructure keyStructure;
+			if(curve instanceof ECCurve.Fp)
+			{
+				generator = new ECPoint.Fp(curve, p.getG().getX(), p.getG().getY(), withCompression);
+			}
+			else if(curve instanceof ECCurve.F2m)
+			{
+				generator = new ECPoint.F2m(curve, p.getG().getX(), p.getG().getY(), withCompression);
+			}
+			else
+			{
+				throw new UnsupportedOperationException("Subclass of ECPoint " + curve.getClass().toString() + "not supported");
+			}
 
-        if (publicKey != null)
-        {
-            keyStructure = new ECPrivateKeyStructure(this.getD(), publicKey, params);
-        }
-        else
-        {
-            keyStructure = new ECPrivateKeyStructure(this.getD(), params);
-        }
+			X9ECParameters ecP = new X9ECParameters(
+					p.getCurve(),
+					generator,
+					p.getN(),
+					p.getH(),
+					p.getSeed());
 
-        if (algorithm.equals("ECGOST3410"))
-        {
-            info = new PrivateKeyInfo(new AlgorithmIdentifier(CryptoProObjectIdentifiers.gostR3410_2001, params.getDERObject()), keyStructure.getDERObject());
-        }
-        else
-        {
-            info = new PrivateKeyInfo(new AlgorithmIdentifier(X9ObjectIdentifiers.id_ecPublicKey, params.getDERObject()), keyStructure.getDERObject());
-        }
-        
-        try
-        {
-            dOut.writeObject(info);
-            dOut.close();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Error encoding EC private key");
-        }
+			params = new X962Parameters(ecP);
+		}
 
-        return bOut.toByteArray();
-    }
+		PrivateKeyInfo info;
+		ECPrivateKeyStructure keyStructure;
 
-    public ECParameterSpec getParams()
-    {
-        return (ECParameterSpec)ecSpec;
-    }
+		if(publicKey != null)
+		{
+			keyStructure = new ECPrivateKeyStructure(this.getD(), publicKey, params);
+		}
+		else
+		{
+			keyStructure = new ECPrivateKeyStructure(this.getD(), params);
+		}
 
-    public ECParameterSpec getParameters()
-    {
-        return (ECParameterSpec)ecSpec;
-    }
-    
-    public BigInteger getD()
-    {
-        return d;
-    }
+		if(algorithm.equals("ECGOST3410"))
+		{
+			info = new PrivateKeyInfo(new AlgorithmIdentifier(CryptoProObjectIdentifiers.gostR3410_2001, params.getDERObject()), keyStructure.getDERObject());
+		}
+		else
+		{
+			info = new PrivateKeyInfo(new AlgorithmIdentifier(X9ObjectIdentifiers.id_ecPublicKey, params.getDERObject()), keyStructure.getDERObject());
+		}
 
-    public void setBagAttribute(
-        DERObjectIdentifier oid,
-        DEREncodable        attribute)
-    {
-        attrCarrier.setBagAttribute(oid, attribute);
-    }
+		try
+		{
+			dOut.writeObject(info);
+			dOut.close();
+		}
+		catch(IOException e)
+		{
+			throw new RuntimeException("Error encoding EC private key");
+		}
 
-    public DEREncodable getBagAttribute(
-        DERObjectIdentifier oid)
-    {
-        return attrCarrier.getBagAttribute(oid);
-    }
+		return bOut.toByteArray();
+	}
 
-    public Enumeration getBagAttributeKeys()
-    {
-        return attrCarrier.getBagAttributeKeys();
-    }
-    
-    public void setPointFormat(String style)
-    {
-       withCompression = !("UNCOMPRESSED".equalsIgnoreCase(style));
-    }
+	public ECParameterSpec getParams()
+	{
+		return (ECParameterSpec) ecSpec;
+	}
 
-    ECParameterSpec engineGetSpec()
-    {
-        if (ecSpec != null)
-        {
-            return ecSpec;
-        }
+	public ECParameterSpec getParameters()
+	{
+		return (ECParameterSpec) ecSpec;
+	}
 
-        return ProviderUtil.getEcImplicitlyCa();
-    }
+	public BigInteger getD()
+	{
+		return d;
+	}
 
-    public boolean equals(Object o)
-    {
-        if (!(o instanceof JCEECPrivateKey))
-        {
-            return false;
-        }
+	public void setBagAttribute(
+			DERObjectIdentifier oid,
+			DEREncodable attribute)
+	{
+		attrCarrier.setBagAttribute(oid, attribute);
+	}
 
-        JCEECPrivateKey other = (JCEECPrivateKey)o;
+	public DEREncodable getBagAttribute(
+			DERObjectIdentifier oid)
+	{
+		return attrCarrier.getBagAttribute(oid);
+	}
 
-        return getD().equals(other.getD()) && (engineGetSpec().equals(other.engineGetSpec()));
-    }
+	public Enumeration getBagAttributeKeys()
+	{
+		return attrCarrier.getBagAttributeKeys();
+	}
 
-    public int hashCode()
-    {
-        return getD().hashCode() ^ engineGetSpec().hashCode();
-    }
+	public void setPointFormat(String style)
+	{
+		withCompression = !("UNCOMPRESSED".equalsIgnoreCase(style));
+	}
 
-    private DERBitString getPublicKeyDetails(JCEECPublicKey   pub)
-    {
-        try
-        {
-            SubjectPublicKeyInfo info = SubjectPublicKeyInfo.getInstance(ASN1Object.fromByteArray(pub.getEncoded()));
+	ECParameterSpec engineGetSpec()
+	{
+		if(ecSpec != null)
+		{
+			return ecSpec;
+		}
 
-            return info.getPublicKeyData();
-        }
-        catch (IOException e)
-        {   // should never happen
-            return null;
-        }
-    }
+		return ProviderUtil.getEcImplicitlyCa();
+	}
 
-    private void readObject(
-        ObjectInputStream in)
-        throws IOException, ClassNotFoundException
-    {
-        byte[] enc = (byte[])in.readObject();
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof JCEECPrivateKey))
+		{
+			return false;
+		}
 
-        populateFromPrivKeyInfo(PrivateKeyInfo.getInstance(ASN1Object.fromByteArray(enc)));
+		JCEECPrivateKey other = (JCEECPrivateKey) o;
 
-        this.algorithm = (String)in.readObject();
-        this.withCompression = in.readBoolean();
-        this.attrCarrier = new PKCS12BagAttributeCarrierImpl();
+		return getD().equals(other.getD()) && (engineGetSpec().equals(other.engineGetSpec()));
+	}
 
-        attrCarrier.readObject(in);
-    }
+	public int hashCode()
+	{
+		return getD().hashCode() ^ engineGetSpec().hashCode();
+	}
 
-    private void writeObject(
-        ObjectOutputStream out)
-        throws IOException
-    {
-        out.writeObject(this.getEncoded());
-        out.writeObject(algorithm);
-        out.writeBoolean(withCompression);
+	private DERBitString getPublicKeyDetails(JCEECPublicKey pub)
+	{
+		try
+		{
+			SubjectPublicKeyInfo info = SubjectPublicKeyInfo.getInstance(ASN1Object.fromByteArray(pub.getEncoded()));
 
-        attrCarrier.writeObject(out);
-    }
+			return info.getPublicKeyData();
+		}
+		catch(IOException e)
+		{   // should never happen
+			return null;
+		}
+	}
+
+	private void readObject(
+			ObjectInputStream in)
+			throws IOException, ClassNotFoundException
+	{
+		byte[] enc = (byte[]) in.readObject();
+
+		populateFromPrivKeyInfo(PrivateKeyInfo.getInstance(ASN1Object.fromByteArray(enc)));
+
+		this.algorithm = (String) in.readObject();
+		this.withCompression = in.readBoolean();
+		this.attrCarrier = new PKCS12BagAttributeCarrierImpl();
+
+		attrCarrier.readObject(in);
+	}
+
+	private void writeObject(
+			ObjectOutputStream out)
+			throws IOException
+	{
+		out.writeObject(this.getEncoded());
+		out.writeObject(algorithm);
+		out.writeBoolean(withCompression);
+
+		attrCarrier.writeObject(out);
+	}
 }

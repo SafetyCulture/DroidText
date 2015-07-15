@@ -31,115 +31,115 @@ import repack.org.bouncycastle.asn1.x509.X509Name;
  * </pre>
  */
 public class CertificationRequestInfo
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    DERInteger              version = new DERInteger(0);
-    X509Name                subject;
-    SubjectPublicKeyInfo    subjectPKInfo;
-    ASN1Set                 attributes = null;
+	DERInteger version = new DERInteger(0);
+	X509Name subject;
+	SubjectPublicKeyInfo subjectPKInfo;
+	ASN1Set attributes = null;
 
-    public static CertificationRequestInfo getInstance(
-        Object  obj)
-    {
-        if (obj instanceof CertificationRequestInfo)
-        {
-            return (CertificationRequestInfo)obj;
-        }
-        else if (obj instanceof ASN1Sequence)
-        {
-            return new CertificationRequestInfo((ASN1Sequence)obj);
-        }
+	public static CertificationRequestInfo getInstance(
+			Object obj)
+	{
+		if(obj instanceof CertificationRequestInfo)
+		{
+			return (CertificationRequestInfo) obj;
+		}
+		else if(obj instanceof ASN1Sequence)
+		{
+			return new CertificationRequestInfo((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-    public CertificationRequestInfo(
-        X500Name subject,
-        SubjectPublicKeyInfo    pkInfo,
-        ASN1Set                 attributes)
-    {
-        this.subject = X509Name.getInstance(subject.getDERObject());
-        this.subjectPKInfo = pkInfo;
-        this.attributes = attributes;
+	public CertificationRequestInfo(
+			X500Name subject,
+			SubjectPublicKeyInfo pkInfo,
+			ASN1Set attributes)
+	{
+		this.subject = X509Name.getInstance(subject.getDERObject());
+		this.subjectPKInfo = pkInfo;
+		this.attributes = attributes;
 
-        if ((subject == null) || (version == null) || (subjectPKInfo == null))
-        {
-            throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
-        }
-    }
+		if((subject == null) || (version == null) || (subjectPKInfo == null))
+		{
+			throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
+		}
+	}
 
-    public CertificationRequestInfo(
-        X509Name                subject,
-        SubjectPublicKeyInfo    pkInfo,
-        ASN1Set                 attributes)
-    {
-        this.subject = subject;
-        this.subjectPKInfo = pkInfo;
-        this.attributes = attributes;
+	public CertificationRequestInfo(
+			X509Name subject,
+			SubjectPublicKeyInfo pkInfo,
+			ASN1Set attributes)
+	{
+		this.subject = subject;
+		this.subjectPKInfo = pkInfo;
+		this.attributes = attributes;
 
-        if ((subject == null) || (version == null) || (subjectPKInfo == null))
-        {
-            throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
-        }
-    }
+		if((subject == null) || (version == null) || (subjectPKInfo == null))
+		{
+			throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
+		}
+	}
 
-    public CertificationRequestInfo(
-        ASN1Sequence  seq)
-    {
-        version = (DERInteger)seq.getObjectAt(0);
+	public CertificationRequestInfo(
+			ASN1Sequence seq)
+	{
+		version = (DERInteger) seq.getObjectAt(0);
 
-        subject = X509Name.getInstance(seq.getObjectAt(1));
-        subjectPKInfo = SubjectPublicKeyInfo.getInstance(seq.getObjectAt(2));
+		subject = X509Name.getInstance(seq.getObjectAt(1));
+		subjectPKInfo = SubjectPublicKeyInfo.getInstance(seq.getObjectAt(2));
 
-        //
-        // some CertificationRequestInfo objects seem to treat this field
-        // as optional.
-        //
-        if (seq.size() > 3)
-        {
-            DERTaggedObject tagobj = (DERTaggedObject)seq.getObjectAt(3);
-            attributes = ASN1Set.getInstance(tagobj, false);
-        }
+		//
+		// some CertificationRequestInfo objects seem to treat this field
+		// as optional.
+		//
+		if(seq.size() > 3)
+		{
+			DERTaggedObject tagobj = (DERTaggedObject) seq.getObjectAt(3);
+			attributes = ASN1Set.getInstance(tagobj, false);
+		}
 
-        if ((subject == null) || (version == null) || (subjectPKInfo == null))
-        {
-            throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
-        }
-    }
+		if((subject == null) || (version == null) || (subjectPKInfo == null))
+		{
+			throw new IllegalArgumentException("Not all mandatory fields set in CertificationRequestInfo generator.");
+		}
+	}
 
-    public DERInteger getVersion()
-    {
-        return version;
-    }
+	public DERInteger getVersion()
+	{
+		return version;
+	}
 
-    public X509Name getSubject()
-    {
-        return subject;
-    }
+	public X509Name getSubject()
+	{
+		return subject;
+	}
 
-    public SubjectPublicKeyInfo getSubjectPublicKeyInfo()
-    {
-        return subjectPKInfo;
-    }
+	public SubjectPublicKeyInfo getSubjectPublicKeyInfo()
+	{
+		return subjectPKInfo;
+	}
 
-    public ASN1Set getAttributes()
-    {
-        return attributes;
-    }
+	public ASN1Set getAttributes()
+	{
+		return attributes;
+	}
 
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(version);
-        v.add(subject);
-        v.add(subjectPKInfo);
+		v.add(version);
+		v.add(subject);
+		v.add(subjectPKInfo);
 
-        if (attributes != null)
-        {
-            v.add(new DERTaggedObject(false, 0, attributes));
-        }
+		if(attributes != null)
+		{
+			v.add(new DERTaggedObject(false, 0, attributes));
+		}
 
-        return new DERSequence(v);
-    }
+		return new DERSequence(v);
+	}
 }

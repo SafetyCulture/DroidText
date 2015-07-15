@@ -9,74 +9,74 @@ import repack.org.bouncycastle.asn1.DERObjectIdentifier;
 import repack.org.bouncycastle.asn1.DERSequence;
 
 public class Attribute
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private DERObjectIdentifier attrType;
-    private ASN1Set             attrValues;
+	private DERObjectIdentifier attrType;
+	private ASN1Set attrValues;
 
-    /**
-     * return an Attribute object from the given object.
-     *
-     * @param o the object we want converted.
-     * @exception IllegalArgumentException if the object cannot be converted.
-     */
-    public static Attribute getInstance(
-        Object o)
-    {
-        if (o == null || o instanceof Attribute)
-        {
-            return (Attribute)o;
-        }
-        
-        if (o instanceof ASN1Sequence)
-        {
-            return new Attribute((ASN1Sequence)o);
-        }
+	/**
+	 * return an Attribute object from the given object.
+	 *
+	 * @param o the object we want converted.
+	 * @throws IllegalArgumentException if the object cannot be converted.
+	 */
+	public static Attribute getInstance(
+			Object o)
+	{
+		if(o == null || o instanceof Attribute)
+		{
+			return (Attribute) o;
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + o.getClass().getName());
-    }
-    
-    public Attribute(
-        ASN1Sequence seq)
-    {
-        attrType = (DERObjectIdentifier)seq.getObjectAt(0);
-        attrValues = (ASN1Set)seq.getObjectAt(1);
-    }
+		if(o instanceof ASN1Sequence)
+		{
+			return new Attribute((ASN1Sequence) o);
+		}
 
-    public Attribute(
-        DERObjectIdentifier attrType,
-        ASN1Set             attrValues)
-    {
-        this.attrType = attrType;
-        this.attrValues = attrValues;
-    }
+		throw new IllegalArgumentException("unknown object in factory: " + o.getClass().getName());
+	}
 
-    public DERObjectIdentifier getAttrType()
-    {
-        return attrType;
-    }
-    
-    public ASN1Set getAttrValues()
-    {
-        return attrValues;
-    }
+	public Attribute(
+			ASN1Sequence seq)
+	{
+		attrType = (DERObjectIdentifier) seq.getObjectAt(0);
+		attrValues = (ASN1Set) seq.getObjectAt(1);
+	}
 
-    /** 
-     * Produce an object suitable for an ASN1OutputStream.
-     * <pre>
-     * Attribute ::= SEQUENCE {
-     *     attrType OBJECT IDENTIFIER,
-     *     attrValues SET OF AttributeValue
-     * }
-     * </pre>
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	public Attribute(
+			DERObjectIdentifier attrType,
+			ASN1Set attrValues)
+	{
+		this.attrType = attrType;
+		this.attrValues = attrValues;
+	}
 
-        v.add(attrType);
-        v.add(attrValues);
+	public DERObjectIdentifier getAttrType()
+	{
+		return attrType;
+	}
 
-        return new DERSequence(v);
-    }
+	public ASN1Set getAttrValues()
+	{
+		return attrValues;
+	}
+
+	/**
+	 * Produce an object suitable for an ASN1OutputStream.
+	 * <pre>
+	 * Attribute ::= SEQUENCE {
+	 *     attrType OBJECT IDENTIFIER,
+	 *     attrValues SET OF AttributeValue
+	 * }
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
+
+		v.add(attrType);
+		v.add(attrValues);
+
+		return new DERSequence(v);
+	}
 }

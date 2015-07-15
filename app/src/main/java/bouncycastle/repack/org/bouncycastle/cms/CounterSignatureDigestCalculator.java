@@ -6,24 +6,24 @@ import java.security.Provider;
 
 
 class CounterSignatureDigestCalculator
-    implements IntDigestCalculator
+		implements IntDigestCalculator
 {
-    private final String alg;
-    private final Provider provider;
-    private final byte[] data;
+	private final String alg;
+	private final Provider provider;
+	private final byte[] data;
 
-    CounterSignatureDigestCalculator(String alg, Provider provider, byte[] data)
-    {
-        this.alg = alg;
-        this.provider = provider;
-        this.data = data;
-    }
+	CounterSignatureDigestCalculator(String alg, Provider provider, byte[] data)
+	{
+		this.alg = alg;
+		this.provider = provider;
+		this.data = data;
+	}
 
-    public byte[] getDigest()
-        throws NoSuchAlgorithmException
-    {
-        MessageDigest digest = CMSSignedHelper.INSTANCE.getDigestInstance(alg, provider);
+	public byte[] getDigest()
+			throws NoSuchAlgorithmException
+	{
+		MessageDigest digest = CMSSignedHelper.INSTANCE.getDigestInstance(alg, provider);
 
-        return digest.digest(data);
-    }
+		return digest.digest(data);
+	}
 }

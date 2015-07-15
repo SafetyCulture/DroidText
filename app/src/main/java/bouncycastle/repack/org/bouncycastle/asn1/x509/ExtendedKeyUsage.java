@@ -19,110 +19,111 @@ import java.util.Vector;
  * </pre>
  */
 public class ExtendedKeyUsage
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    Hashtable     usageTable = new Hashtable();
-    ASN1Sequence  seq;
+	Hashtable usageTable = new Hashtable();
+	ASN1Sequence seq;
 
-    public static ExtendedKeyUsage getInstance(
-        ASN1TaggedObject obj,
-        boolean          explicit)
-    {
-        return getInstance(ASN1Sequence.getInstance(obj, explicit));
-    }
+	public static ExtendedKeyUsage getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		return getInstance(ASN1Sequence.getInstance(obj, explicit));
+	}
 
-    public static ExtendedKeyUsage getInstance(
-        Object obj)
-    {
-        if (obj instanceof ExtendedKeyUsage) 
-        {
-            return (ExtendedKeyUsage)obj;
-        }
-        
-        if(obj instanceof ASN1Sequence) 
-        {
-            return new ExtendedKeyUsage((ASN1Sequence)obj);
-        }
+	public static ExtendedKeyUsage getInstance(
+			Object obj)
+	{
+		if(obj instanceof ExtendedKeyUsage)
+		{
+			return (ExtendedKeyUsage) obj;
+		}
 
-        if (obj instanceof X509Extension)
-        {
-            return getInstance(X509Extension.convertValueToObject((X509Extension)obj));
-        }
+		if(obj instanceof ASN1Sequence)
+		{
+			return new ExtendedKeyUsage((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("Invalid ExtendedKeyUsage: " + obj.getClass().getName());
-    }
+		if(obj instanceof X509Extension)
+		{
+			return getInstance(X509Extension.convertValueToObject((X509Extension) obj));
+		}
 
-    public ExtendedKeyUsage(
-        KeyPurposeId  usage)
-    {
-        this.seq = new DERSequence(usage);
+		throw new IllegalArgumentException("Invalid ExtendedKeyUsage: " + obj.getClass().getName());
+	}
 
-        this.usageTable.put(usage, usage);
-    }
-    
-    public ExtendedKeyUsage(
-        ASN1Sequence  seq)
-    {
-        this.seq = seq;
+	public ExtendedKeyUsage(
+			KeyPurposeId usage)
+	{
+		this.seq = new DERSequence(usage);
 
-        Enumeration e = seq.getObjects();
+		this.usageTable.put(usage, usage);
+	}
 
-        while (e.hasMoreElements())
-        {
-            Object  o = e.nextElement();
-            if (!(o instanceof DERObjectIdentifier))
-            {
-                throw new IllegalArgumentException("Only DERObjectIdentifiers allowed in ExtendedKeyUsage.");
-            }
-            this.usageTable.put(o, o);
-        }
-    }
+	public ExtendedKeyUsage(
+			ASN1Sequence seq)
+	{
+		this.seq = seq;
 
-    public ExtendedKeyUsage(
-        Vector  usages)
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
-        Enumeration         e = usages.elements();
+		Enumeration e = seq.getObjects();
 
-        while (e.hasMoreElements())
-        {
-            DERObject  o = (DERObject)e.nextElement();
+		while(e.hasMoreElements())
+		{
+			Object o = e.nextElement();
+			if(!(o instanceof DERObjectIdentifier))
+			{
+				throw new IllegalArgumentException("Only DERObjectIdentifiers allowed in ExtendedKeyUsage.");
+			}
+			this.usageTable.put(o, o);
+		}
+	}
 
-            v.add(o);
-            this.usageTable.put(o, o);
-        }
+	public ExtendedKeyUsage(
+			Vector usages)
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
+		Enumeration e = usages.elements();
 
-        this.seq = new DERSequence(v);
-    }
+		while(e.hasMoreElements())
+		{
+			DERObject o = (DERObject) e.nextElement();
 
-    public boolean hasKeyPurposeId(
-        KeyPurposeId keyPurposeId)
-    {
-        return (usageTable.get(keyPurposeId) != null);
-    }
-    
-    /**
-     * Returns all extended key usages.
-     * The returned vector contains DERObjectIdentifiers.
-     * @return A vector with all key purposes.
-     */
-    public Vector getUsages()
-    {
-        Vector temp = new Vector();
-        for (Enumeration it = usageTable.elements(); it.hasMoreElements();)
-        {
-            temp.addElement(it.nextElement());
-        }
-        return temp;
-    }
+			v.add(o);
+			this.usageTable.put(o, o);
+		}
 
-    public int size()
-    {
-        return usageTable.size();
-    }
-    
-    public DERObject toASN1Object()
-    {
-        return seq;
-    }
+		this.seq = new DERSequence(v);
+	}
+
+	public boolean hasKeyPurposeId(
+			KeyPurposeId keyPurposeId)
+	{
+		return (usageTable.get(keyPurposeId) != null);
+	}
+
+	/**
+	 * Returns all extended key usages.
+	 * The returned vector contains DERObjectIdentifiers.
+	 *
+	 * @return A vector with all key purposes.
+	 */
+	public Vector getUsages()
+	{
+		Vector temp = new Vector();
+		for(Enumeration it = usageTable.elements(); it.hasMoreElements(); )
+		{
+			temp.addElement(it.nextElement());
+		}
+		return temp;
+	}
+
+	public int size()
+	{
+		return usageTable.size();
+	}
+
+	public DERObject toASN1Object()
+	{
+		return seq;
+	}
 }

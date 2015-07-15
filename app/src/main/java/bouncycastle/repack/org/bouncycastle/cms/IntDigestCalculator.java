@@ -4,6 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 interface IntDigestCalculator
 {
-    byte[] getDigest()
-        throws NoSuchAlgorithmException;
+	byte[] getDigest()
+			throws NoSuchAlgorithmException;
 }

@@ -6,6 +6,6 @@ import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 interface SignerIntInfoGenerator
 {
-    SignerInfo generate(DERObjectIdentifier contentType, AlgorithmIdentifier digestAlgorithm,
-        byte[] calculatedDigest) throws CMSStreamException;
+	SignerInfo generate(DERObjectIdentifier contentType, AlgorithmIdentifier digestAlgorithm,
+						byte[] calculatedDigest) throws CMSStreamException;
 }

@@ -49,64 +49,79 @@
 
 package com.lowagie.text;
 
-import harmony.java.awt.Color;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lowagie.text.pdf.HyphenationEvent;
 import com.lowagie.text.pdf.PdfAction;
 import com.lowagie.text.pdf.PdfAnnotation;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.draw.DrawInterface;
+import harmony.java.awt.Color;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This is the smallest significant part of text that can be added to a
  * document.
- * <P>
+ * <p/>
  * Most elements can be divided in one or more <CODE>Chunk</CODE>s. A chunk
  * is a <CODE>String</CODE> with a certain <CODE>Font</CODE>. All other
  * layout parameters should be defined in the object to which this chunk of text
  * is added.
- * <P>
+ * <p/>
  * Example: <BLOCKQUOTE>
- * 
+ * <p/>
  * <PRE>
- * 
+ * <p/>
  * <STRONG>Chunk chunk = new Chunk("Hello world",
  * FontFactory.getFont(FontFactory.COURIER, 20, Font.ITALIC, new Color(255, 0,
  * 0))); </STRONG> document.add(chunk);
- * 
+ * <p/>
  * </PRE>
- * 
+ * <p/>
  * </BLOCKQUOTE>
  */
 
-public class Chunk implements Element {
+public class Chunk implements Element
+{
 
 	// public static membervariables
 
-	/** The character stand in for an image or a separator. */
+	/**
+	 * The character stand in for an image or a separator.
+	 */
 	public static final String OBJECT_REPLACEMENT_CHARACTER = "\ufffc";
 
-	/** This is a Chunk containing a newline. */
+	/**
+	 * This is a Chunk containing a newline.
+	 */
 	public static final Chunk NEWLINE = new Chunk("\n");
 
-	/** This is a Chunk containing a newpage. */
+	/**
+	 * This is a Chunk containing a newpage.
+	 */
 	public static final Chunk NEXTPAGE = new Chunk("");
-	static {
+
+	static
+	{
 		NEXTPAGE.setNewPage();
 	}
 
 	// member variables
 
-	/** This is the content of this chunk of text. */
+	/**
+	 * This is the content of this chunk of text.
+	 */
 	protected StringBuffer content = null;
 
-	/** This is the <CODE>Font</CODE> of this chunk of text. */
+	/**
+	 * This is the <CODE>Font</CODE> of this chunk of text.
+	 */
 	protected Font font = null;
 
-	/** Contains some of the attributes for this Chunk. */
+	/**
+	 * Contains some of the attributes for this Chunk.
+	 */
 	protected HashMap attributes = null;
 
 	// constructors
@@ -114,37 +129,42 @@ public class Chunk implements Element {
 	/**
 	 * Empty constructor.
 	 */
-	public Chunk() {
+	public Chunk()
+	{
 		this.content = new StringBuffer();
 		this.font = new Font();
 	}
 
-    /**
-     * A <CODE>Chunk</CODE> copy constructor.
-     * @param ck the <CODE>Chunk</CODE> to be copied
-     */    
-    public Chunk(Chunk ck) {
-        if (ck.content != null) {
-            content = new StringBuffer(ck.content.toString());
-        }
-        if (ck.font != null) {
-            font = new Font(ck.font);
-        }
-        if (ck.attributes != null) {
-            attributes = new HashMap(ck.attributes);
-        }
-    }
-    
+	/**
+	 * A <CODE>Chunk</CODE> copy constructor.
+	 *
+	 * @param ck the <CODE>Chunk</CODE> to be copied
+	 */
+	public Chunk(Chunk ck)
+	{
+		if(ck.content != null)
+		{
+			content = new StringBuffer(ck.content.toString());
+		}
+		if(ck.font != null)
+		{
+			font = new Font(ck.font);
+		}
+		if(ck.attributes != null)
+		{
+			attributes = new HashMap(ck.attributes);
+		}
+	}
+
 	/**
 	 * Constructs a chunk of text with a certain content and a certain <CODE>
 	 * Font</CODE>.
-	 * 
-	 * @param content
-	 *            the content
-	 * @param font
-	 *            the font
+	 *
+	 * @param content the content
+	 * @param font    the font
 	 */
-	public Chunk(String content, Font font) {
+	public Chunk(String content, Font font)
+	{
 		this.content = new StringBuffer(content);
 		this.font = font;
 	}
@@ -152,23 +172,22 @@ public class Chunk implements Element {
 	/**
 	 * Constructs a chunk of text with a certain content, without specifying a
 	 * <CODE>Font</CODE>.
-	 * 
-	 * @param content
-	 *            the content
+	 *
+	 * @param content the content
 	 */
-	public Chunk(String content) {
+	public Chunk(String content)
+	{
 		this(content, new Font());
 	}
 
 	/**
 	 * Constructs a chunk of text with a char and a certain <CODE>Font</CODE>.
-	 * 
-	 * @param c
-	 *            the content
-	 * @param font
-	 *            the font
+	 *
+	 * @param c    the content
+	 * @param font the font
 	 */
-	public Chunk(char c, Font font) {
+	public Chunk(char c, Font font)
+	{
 		this.content = new StringBuffer();
 		this.content.append(c);
 		this.font = font;
@@ -177,110 +196,116 @@ public class Chunk implements Element {
 	/**
 	 * Constructs a chunk of text with a char, without specifying a <CODE>Font
 	 * </CODE>.
-	 * 
-	 * @param c
-	 *            the content
+	 *
+	 * @param c the content
 	 */
-	public Chunk(char c) {
+	public Chunk(char c)
+	{
 		this(c, new Font());
 	}
 
 	/**
 	 * Constructs a chunk containing an <CODE>Image</CODE>.
-	 * 
-	 * @param image
-	 *            the image
-	 * @param offsetX
-	 *            the image offset in the x direction
-	 * @param offsetY
-	 *            the image offset in the y direction
+	 *
+	 * @param image   the image
+	 * @param offsetX the image offset in the x direction
+	 * @param offsetY the image offset in the y direction
 	 */
-	public Chunk(Image image, float offsetX, float offsetY) {
+	public Chunk(Image image, float offsetX, float offsetY)
+	{
 		this(OBJECT_REPLACEMENT_CHARACTER, new Font());
 		Image copyImage = Image.getInstance(image);
 		copyImage.setAbsolutePosition(Float.NaN, Float.NaN);
-		setAttribute(IMAGE, new Object[] { copyImage, new Float(offsetX),
-				new Float(offsetY), Boolean.FALSE });
+		setAttribute(IMAGE, new Object[]{copyImage, new Float(offsetX),
+				new Float(offsetY), Boolean.FALSE});
 	}
 
 	/**
 	 * Key for drawInterface of the Separator.
-	 * @since	2.1.2
+	 *
+	 * @since 2.1.2
 	 */
 	public static final String SEPARATOR = "SEPARATOR";
-	
+
 	/**
 	 * Creates a separator Chunk.
-     * Note that separator chunks can't be used in combination with tab chunks!
-	 * @param	separator	the drawInterface to use to draw the separator.
-	 * @since	2.1.2
+	 * Note that separator chunks can't be used in combination with tab chunks!
+	 *
+	 * @param separator the drawInterface to use to draw the separator.
+	 * @since 2.1.2
 	 */
-	public Chunk(DrawInterface separator) {
+	public Chunk(DrawInterface separator)
+	{
 		this(separator, false);
-	}	
-	
+	}
+
 	/**
 	 * Creates a separator Chunk.
-     * Note that separator chunks can't be used in combination with tab chunks!
-	 * @param	separator	the drawInterface to use to draw the separator.
-	 * @param	vertical	true if this is a vertical separator
-	 * @since	2.1.2
+	 * Note that separator chunks can't be used in combination with tab chunks!
+	 *
+	 * @param separator the drawInterface to use to draw the separator.
+	 * @param vertical  true if this is a vertical separator
+	 * @since 2.1.2
 	 */
-	public Chunk(DrawInterface separator, boolean vertical) {
+	public Chunk(DrawInterface separator, boolean vertical)
+	{
 		this(OBJECT_REPLACEMENT_CHARACTER, new Font());
-		setAttribute(SEPARATOR, new Object[] {separator, Boolean.valueOf(vertical)});
+		setAttribute(SEPARATOR, new Object[]{separator, Boolean.valueOf(vertical)});
 	}
 
 	/**
 	 * Key for drawInterface of the tab.
-	 * @since	2.1.2
+	 *
+	 * @since 2.1.2
 	 */
 	public static final String TAB = "TAB";
-	
+
 	/**
 	 * Creates a tab Chunk.
-     * Note that separator chunks can't be used in combination with tab chunks!
-	 * @param	separator	the drawInterface to use to draw the tab.
-	 * @param	tabPosition	an X coordinate that will be used as start position for the next Chunk.
-	 * @since	2.1.2
+	 * Note that separator chunks can't be used in combination with tab chunks!
+	 *
+	 * @param separator   the drawInterface to use to draw the tab.
+	 * @param tabPosition an X coordinate that will be used as start position for the next Chunk.
+	 * @since 2.1.2
 	 */
-	public Chunk(DrawInterface separator, float tabPosition) {
+	public Chunk(DrawInterface separator, float tabPosition)
+	{
 		this(separator, tabPosition, false);
 	}
-	
+
 	/**
 	 * Creates a tab Chunk.
-     * Note that separator chunks can't be used in combination with tab chunks!
-	 * @param	separator	the drawInterface to use to draw the tab.
-	 * @param	tabPosition	an X coordinate that will be used as start position for the next Chunk.
-	 * @param	newline		if true, a newline will be added if the tabPosition has already been reached.
-	 * @since	2.1.2
+	 * Note that separator chunks can't be used in combination with tab chunks!
+	 *
+	 * @param separator   the drawInterface to use to draw the tab.
+	 * @param tabPosition an X coordinate that will be used as start position for the next Chunk.
+	 * @param newline     if true, a newline will be added if the tabPosition has already been reached.
+	 * @since 2.1.2
 	 */
-	public Chunk(DrawInterface separator, float tabPosition, boolean newline) {
+	public Chunk(DrawInterface separator, float tabPosition, boolean newline)
+	{
 		this(OBJECT_REPLACEMENT_CHARACTER, new Font());
-		if (tabPosition < 0) {
+		if(tabPosition < 0)
+		{
 			throw new IllegalArgumentException("A tab position may not be lower than 0; yours is " + tabPosition);
 		}
-		setAttribute(TAB, new Object[] {separator, new Float(tabPosition), Boolean.valueOf(newline), new Float(0)});
+		setAttribute(TAB, new Object[]{separator, new Float(tabPosition), Boolean.valueOf(newline), new Float(0)});
 	}
 
 	/**
 	 * Constructs a chunk containing an <CODE>Image</CODE>.
-	 * 
-	 * @param image
-	 *            the image
-	 * @param offsetX
-	 *            the image offset in the x direction
-	 * @param offsetY
-	 *            the image offset in the y direction
-	 * @param changeLeading
-	 *            true if the leading has to be adapted to the image
+	 *
+	 * @param image         the image
+	 * @param offsetX       the image offset in the x direction
+	 * @param offsetY       the image offset in the y direction
+	 * @param changeLeading true if the leading has to be adapted to the image
 	 */
 	public Chunk(Image image, float offsetX, float offsetY,
-			boolean changeLeading) {
+				 boolean changeLeading)
+	{
 		this(OBJECT_REPLACEMENT_CHARACTER, new Font());
-		setAttribute(IMAGE, new Object[] { image, new Float(offsetX),
-				new Float(offsetY), Boolean.valueOf(changeLeading) });
+		setAttribute(IMAGE, new Object[]{image, new Float(offsetX),
+				new Float(offsetY), Boolean.valueOf(changeLeading)});
 	}
 
 	// implementation of the Element-methods
@@ -288,34 +313,39 @@ public class Chunk implements Element {
 	/**
 	 * Processes the element by adding it (or the different parts) to an <CODE>
 	 * ElementListener</CODE>.
-	 * 
-	 * @param listener
-	 *            an <CODE>ElementListener</CODE>
+	 *
+	 * @param listener an <CODE>ElementListener</CODE>
 	 * @return <CODE>true</CODE> if the element was processed successfully
 	 */
-	public boolean process(ElementListener listener) {
-		try {
+	public boolean process(ElementListener listener)
+	{
+		try
+		{
 			return listener.add(this);
-		} catch (DocumentException de) {
+		}
+		catch(DocumentException de)
+		{
 			return false;
 		}
 	}
 
 	/**
 	 * Gets the type of the text element.
-	 * 
+	 *
 	 * @return a type
 	 */
-	public int type() {
+	public int type()
+	{
 		return Element.CHUNK;
 	}
 
 	/**
 	 * Gets all the chunks in this element.
-	 * 
+	 *
 	 * @return an <CODE>ArrayList</CODE>
 	 */
-	public ArrayList getChunks() {
+	public ArrayList getChunks()
+	{
 		ArrayList tmp = new ArrayList();
 		tmp.add(this);
 		return tmp;
@@ -325,22 +355,22 @@ public class Chunk implements Element {
 
 	/**
 	 * appends some text to this <CODE>Chunk</CODE>.
-	 * 
-	 * @param string
-	 *            <CODE>String</CODE>
+	 *
+	 * @param string <CODE>String</CODE>
 	 * @return a <CODE>StringBuffer</CODE>
 	 */
-	public StringBuffer append(String string) {
+	public StringBuffer append(String string)
+	{
 		return content.append(string);
 	}
 
 	/**
 	 * Sets the font of this <CODE>Chunk</CODE>.
-	 * 
-	 * @param font
-	 *            a <CODE>Font</CODE>
+	 *
+	 * @param font a <CODE>Font</CODE>
 	 */
-	public void setFont(Font font) {
+	public void setFont(Font font)
+	{
 		this.font = font;
 	}
 
@@ -348,38 +378,42 @@ public class Chunk implements Element {
 
 	/**
 	 * Gets the font of this <CODE>Chunk</CODE>.
-	 * 
+	 *
 	 * @return a <CODE>Font</CODE>
 	 */
-	public Font getFont() {
+	public Font getFont()
+	{
 		return font;
 	}
 
 	/**
 	 * Returns the content of this <CODE>Chunk</CODE>.
-	 * 
+	 *
 	 * @return a <CODE>String</CODE>
 	 */
-	public String getContent() {
+	public String getContent()
+	{
 		return content.toString();
 	}
 
 	/**
 	 * Returns the content of this <CODE>Chunk</CODE>.
-	 * 
+	 *
 	 * @return a <CODE>String</CODE>
 	 */
-	public String toString() {
+	public String toString()
+	{
 		return getContent();
 	}
 
 	/**
 	 * Checks is this <CODE>Chunk</CODE> is empty.
-	 * 
+	 *
 	 * @return <CODE>false</CODE> if the Chunk contains other characters than
-	 *         space.
+	 * space.
 	 */
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
 		return (content.toString().trim().length() == 0)
 				&& (content.toString().indexOf("\n") == -1)
 				&& (attributes == null);
@@ -387,11 +421,13 @@ public class Chunk implements Element {
 
 	/**
 	 * Gets the width of the Chunk in points.
-	 * 
+	 *
 	 * @return a width in points
 	 */
-	public float getWidthPoint() {
-		if (getImage() != null) {
+	public float getWidthPoint()
+	{
+		if(getImage() != null)
+		{
 			return getImage().getScaledWidth();
 		}
 		return font.getCalculatedBaseFont(true).getWidthPoint(getContent(),
@@ -403,46 +439,49 @@ public class Chunk implements Element {
 
 	/**
 	 * Checks the attributes of this <CODE>Chunk</CODE>.
-	 * 
+	 *
 	 * @return false if there aren't any.
 	 */
 
-	public boolean hasAttributes() {
+	public boolean hasAttributes()
+	{
 		return attributes != null;
 	}
 
 	/**
 	 * Gets the attributes for this <CODE>Chunk</CODE>.
-	 * <P>
+	 * <p/>
 	 * It may be null.
-	 * 
+	 *
 	 * @return the attributes for this <CODE>Chunk</CODE>
 	 */
 
-	public HashMap getAttributes() {
+	public HashMap getAttributes()
+	{
 		return attributes;
 	}
 
 	/**
 	 * Sets the attributes all at once.
-	 * @param	attributes	the attributes of a Chunk
+	 *
+	 * @param attributes the attributes of a Chunk
 	 */
-	public void setAttributes(HashMap attributes) {
+	public void setAttributes(HashMap attributes)
+	{
 		this.attributes = attributes;
 	}
 
 	/**
 	 * Sets an arbitrary attribute.
-	 * 
-	 * @param name
-	 *            the key for the attribute
-	 * @param obj
-	 *            the value of the attribute
+	 *
+	 * @param name the key for the attribute
+	 * @param obj  the value of the attribute
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	private Chunk setAttribute(String name, Object obj) {
-		if (attributes == null)
+	private Chunk setAttribute(String name, Object obj)
+	{
+		if(attributes == null)
 			attributes = new HashMap();
 		attributes.put(name, obj);
 		return this;
@@ -450,36 +489,41 @@ public class Chunk implements Element {
 
 	// the attributes are ordered as they appear in the book 'iText in Action'
 
-	/** Key for text horizontal scaling. */
+	/**
+	 * Key for text horizontal scaling.
+	 */
 	public static final String HSCALE = "HSCALE";
 
 	/**
 	 * Sets the text horizontal scaling. A value of 1 is normal and a value of
 	 * 0.5f shrinks the text to half it's width.
-	 * 
-	 * @param scale
-	 *            the horizontal scaling factor
+	 *
+	 * @param scale the horizontal scaling factor
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setHorizontalScaling(float scale) {
+	public Chunk setHorizontalScaling(float scale)
+	{
 		return setAttribute(HSCALE, new Float(scale));
 	}
 
 	/**
 	 * Gets the horizontal scaling.
-	 * 
+	 *
 	 * @return a percentage in float
 	 */
-	public float getHorizontalScaling() {
-		if (attributes == null)
+	public float getHorizontalScaling()
+	{
+		if(attributes == null)
 			return 1f;
 		Float f = (Float) attributes.get(HSCALE);
-		if (f == null)
+		if(f == null)
 			return 1f;
 		return f.floatValue();
 	}
 
-	/** Key for underline. */
+	/**
+	 * Key for underline.
+	 */
 	public static final String UNDERLINE = "UNDERLINE";
 
 	/**
@@ -487,14 +531,13 @@ public class Chunk implements Element {
 	 * Actually, the line can be anywhere vertically and has always the <CODE>
 	 * Chunk</CODE> width. Multiple call to this method will produce multiple
 	 * lines.
-	 * 
-	 * @param thickness
-	 *            the absolute thickness of the line
-	 * @param yPosition
-	 *            the absolute y position relative to the baseline
+	 *
+	 * @param thickness the absolute thickness of the line
+	 * @param yPosition the absolute y position relative to the baseline
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setUnderline(float thickness, float yPosition) {
+	public Chunk setUnderline(float thickness, float yPosition)
+	{
 		return setUnderline(null, thickness, 0f, yPosition, 0f,
 				PdfContentByte.LINE_CAP_BUTT);
 	}
@@ -504,375 +547,402 @@ public class Chunk implements Element {
 	 * Actually, the line can be anywhere vertically and has always the <CODE>
 	 * Chunk</CODE> width. Multiple call to this method will produce multiple
 	 * lines.
-	 * 
-	 * @param color
-	 *            the color of the line or <CODE>null</CODE> to follow the
-	 *            text color
-	 * @param thickness
-	 *            the absolute thickness of the line
-	 * @param thicknessMul
-	 *            the thickness multiplication factor with the font size
-	 * @param yPosition
-	 *            the absolute y position relative to the baseline
-	 * @param yPositionMul
-	 *            the position multiplication factor with the font size
-	 * @param cap
-	 *            the end line cap. Allowed values are
-	 *            PdfContentByte.LINE_CAP_BUTT, PdfContentByte.LINE_CAP_ROUND
-	 *            and PdfContentByte.LINE_CAP_PROJECTING_SQUARE
+	 *
+	 * @param color        the color of the line or <CODE>null</CODE> to follow the
+	 *                     text color
+	 * @param thickness    the absolute thickness of the line
+	 * @param thicknessMul the thickness multiplication factor with the font size
+	 * @param yPosition    the absolute y position relative to the baseline
+	 * @param yPositionMul the position multiplication factor with the font size
+	 * @param cap          the end line cap. Allowed values are
+	 *                     PdfContentByte.LINE_CAP_BUTT, PdfContentByte.LINE_CAP_ROUND
+	 *                     and PdfContentByte.LINE_CAP_PROJECTING_SQUARE
 	 * @return this <CODE>Chunk</CODE>
 	 */
 	public Chunk setUnderline(Color color, float thickness, float thicknessMul,
-			float yPosition, float yPositionMul, int cap) {
-		if (attributes == null)
+							  float yPosition, float yPositionMul, int cap)
+	{
+		if(attributes == null)
 			attributes = new HashMap();
 		Object obj[] = {
 				color,
-				new float[] { thickness, thicknessMul, yPosition, yPositionMul, cap } };
+				new float[]{thickness, thicknessMul, yPosition, yPositionMul, cap}};
 		Object unders[][] = Utilities.addToArray((Object[][]) attributes.get(UNDERLINE),
 				obj);
 		return setAttribute(UNDERLINE, unders);
 	}
-	
-	/** Key for sub/superscript. */
+
+	/**
+	 * Key for sub/superscript.
+	 */
 	public static final String SUBSUPSCRIPT = "SUBSUPSCRIPT";
-	
+
 	/**
 	 * Sets the text displacement relative to the baseline. Positive values rise
 	 * the text, negative values lower the text.
-	 * <P>
+	 * <p/>
 	 * It can be used to implement sub/superscript.
-	 * 
-	 * @param rise
-	 *            the displacement in points
+	 *
+	 * @param rise the displacement in points
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setTextRise(float rise) {
+	public Chunk setTextRise(float rise)
+	{
 		return setAttribute(SUBSUPSCRIPT, new Float(rise));
 	}
 
 	/**
 	 * Gets the text displacement relative to the baseline.
-	 * 
+	 *
 	 * @return a displacement in points
 	 */
-	public float getTextRise() {
-		if (attributes != null && attributes.containsKey(SUBSUPSCRIPT)) {
+	public float getTextRise()
+	{
+		if(attributes != null && attributes.containsKey(SUBSUPSCRIPT))
+		{
 			Float f = (Float) attributes.get(SUBSUPSCRIPT);
 			return f.floatValue();
 		}
 		return 0.0f;
 	}
 
-	/** Key for text skewing. */
+	/**
+	 * Key for text skewing.
+	 */
 	public static final String SKEW = "SKEW";
 
 	/**
 	 * Skews the text to simulate italic and other effects. Try <CODE>alpha=0
 	 * </CODE> and <CODE>beta=12</CODE>.
-	 * 
-	 * @param alpha
-	 *            the first angle in degrees
-	 * @param beta
-	 *            the second angle in degrees
+	 *
+	 * @param alpha the first angle in degrees
+	 * @param beta  the second angle in degrees
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setSkew(float alpha, float beta) {
+	public Chunk setSkew(float alpha, float beta)
+	{
 		alpha = (float) Math.tan(alpha * Math.PI / 180);
 		beta = (float) Math.tan(beta * Math.PI / 180);
-		return setAttribute(SKEW, new float[] { alpha, beta });
+		return setAttribute(SKEW, new float[]{alpha, beta});
 	}
 
-	/** Key for background. */
+	/**
+	 * Key for background.
+	 */
 	public static final String BACKGROUND = "BACKGROUND";
 
 	/**
 	 * Sets the color of the background <CODE>Chunk</CODE>.
-	 * 
-	 * @param color
-	 *            the color of the background
+	 *
+	 * @param color the color of the background
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setBackground(Color color) {
+	public Chunk setBackground(Color color)
+	{
 		return setBackground(color, 0, 0, 0, 0);
 	}
 
 	/**
 	 * Sets the color and the size of the background <CODE>Chunk</CODE>.
-	 * 
-	 * @param color
-	 *            the color of the background
-	 * @param extraLeft
-	 *            increase the size of the rectangle in the left
-	 * @param extraBottom
-	 *            increase the size of the rectangle in the bottom
-	 * @param extraRight
-	 *            increase the size of the rectangle in the right
-	 * @param extraTop
-	 *            increase the size of the rectangle in the top
+	 *
+	 * @param color       the color of the background
+	 * @param extraLeft   increase the size of the rectangle in the left
+	 * @param extraBottom increase the size of the rectangle in the bottom
+	 * @param extraRight  increase the size of the rectangle in the right
+	 * @param extraTop    increase the size of the rectangle in the top
 	 * @return this <CODE>Chunk</CODE>
 	 */
 	public Chunk setBackground(Color color, float extraLeft, float extraBottom,
-			float extraRight, float extraTop) {
-		return setAttribute(BACKGROUND, new Object[] { color,
-				new float[] { extraLeft, extraBottom, extraRight, extraTop } });
+							   float extraRight, float extraTop)
+	{
+		return setAttribute(BACKGROUND, new Object[]{color,
+				new float[]{extraLeft, extraBottom, extraRight, extraTop}});
 	}
 
-	/** Key for text rendering mode. */
+	/**
+	 * Key for text rendering mode.
+	 */
 	public static final String TEXTRENDERMODE = "TEXTRENDERMODE";
 
 	/**
 	 * Sets the text rendering mode. It can outline text, simulate bold and make
 	 * text invisible.
-	 * 
-	 * @param mode
-	 *            the text rendering mode. It can be <CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_FILL</CODE>,<CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_STROKE</CODE>,<CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE</CODE> and <CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_INVISIBLE</CODE>.
-	 * @param strokeWidth
-	 *            the stroke line width for the modes <CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_STROKE</CODE> and <CODE>
-	 *            PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE</CODE>.
-	 * @param strokeColor
-	 *            the stroke color or <CODE>null</CODE> to follow the text
-	 *            color
+	 *
+	 * @param mode        the text rendering mode. It can be <CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_FILL</CODE>,<CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_STROKE</CODE>,<CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE</CODE> and <CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_INVISIBLE</CODE>.
+	 * @param strokeWidth the stroke line width for the modes <CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_STROKE</CODE> and <CODE>
+	 *                    PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE</CODE>.
+	 * @param strokeColor the stroke color or <CODE>null</CODE> to follow the text
+	 *                    color
 	 * @return this <CODE>Chunk</CODE>
 	 */
 	public Chunk setTextRenderMode(int mode, float strokeWidth,
-			Color strokeColor) {
-		return setAttribute(TEXTRENDERMODE, new Object[] { new Integer(mode),
-				new Float(strokeWidth), strokeColor });
+								   Color strokeColor)
+	{
+		return setAttribute(TEXTRENDERMODE, new Object[]{new Integer(mode),
+				new Float(strokeWidth), strokeColor});
 	}
 
-	/** Key for split character. */
+	/**
+	 * Key for split character.
+	 */
 	public static final String SPLITCHARACTER = "SPLITCHARACTER";
 
 	/**
 	 * Sets the split characters.
-	 * 
-	 * @param splitCharacter
-	 *            the <CODE>SplitCharacter</CODE> interface
+	 *
+	 * @param splitCharacter the <CODE>SplitCharacter</CODE> interface
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setSplitCharacter(SplitCharacter splitCharacter) {
+	public Chunk setSplitCharacter(SplitCharacter splitCharacter)
+	{
 		return setAttribute(SPLITCHARACTER, splitCharacter);
 	}
 
-	/** Key for hyphenation. */
+	/**
+	 * Key for hyphenation.
+	 */
 	public static final String HYPHENATION = "HYPHENATION";
-	
+
 	/**
 	 * sets the hyphenation engine to this <CODE>Chunk</CODE>.
-	 * 
-	 * @param hyphenation
-	 *            the hyphenation engine
+	 *
+	 * @param hyphenation the hyphenation engine
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setHyphenation(HyphenationEvent hyphenation) {
+	public Chunk setHyphenation(HyphenationEvent hyphenation)
+	{
 		return setAttribute(HYPHENATION, hyphenation);
 	}
 
-	/** Key for remote goto. */
+	/**
+	 * Key for remote goto.
+	 */
 	public static final String REMOTEGOTO = "REMOTEGOTO";
 
 	/**
 	 * Sets a goto for a remote destination for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param filename
-	 *            the file name of the destination document
-	 * @param name
-	 *            the name of the destination to go to
+	 *
+	 * @param filename the file name of the destination document
+	 * @param name     the name of the destination to go to
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setRemoteGoto(String filename, String name) {
-		return setAttribute(REMOTEGOTO, new Object[] { filename, name });
+	public Chunk setRemoteGoto(String filename, String name)
+	{
+		return setAttribute(REMOTEGOTO, new Object[]{filename, name});
 	}
 
 	/**
 	 * Sets a goto for a remote destination for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param filename
-	 *            the file name of the destination document
-	 * @param page
-	 *            the page of the destination to go to. First page is 1
+	 *
+	 * @param filename the file name of the destination document
+	 * @param page     the page of the destination to go to. First page is 1
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setRemoteGoto(String filename, int page) {
-		return setAttribute(REMOTEGOTO, new Object[] { filename,
-				new Integer(page) });
+	public Chunk setRemoteGoto(String filename, int page)
+	{
+		return setAttribute(REMOTEGOTO, new Object[]{filename,
+				new Integer(page)});
 	}
 
-	/** Key for local goto. */
+	/**
+	 * Key for local goto.
+	 */
 	public static final String LOCALGOTO = "LOCALGOTO";
-	
+
 	/**
 	 * Sets a local goto for this <CODE>Chunk</CODE>.
-	 * <P>
+	 * <p/>
 	 * There must be a local destination matching the name.
-	 * 
-	 * @param name
-	 *            the name of the destination to go to
+	 *
+	 * @param name the name of the destination to go to
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setLocalGoto(String name) {
+	public Chunk setLocalGoto(String name)
+	{
 		return setAttribute(LOCALGOTO, name);
 	}
 
-	/** Key for local destination. */
+	/**
+	 * Key for local destination.
+	 */
 	public static final String LOCALDESTINATION = "LOCALDESTINATION";
 
 	/**
 	 * Sets a local destination for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param name
-	 *            the name for this destination
+	 *
+	 * @param name the name for this destination
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setLocalDestination(String name) {
+	public Chunk setLocalDestination(String name)
+	{
 		return setAttribute(LOCALDESTINATION, name);
 	}
 
-	/** Key for generic tag. */
+	/**
+	 * Key for generic tag.
+	 */
 	public static final String GENERICTAG = "GENERICTAG";
 
 	/**
 	 * Sets the generic tag <CODE>Chunk</CODE>.
-	 * <P>
+	 * <p/>
 	 * The text for this tag can be retrieved with <CODE>PdfPageEvent</CODE>.
-	 * 
-	 * @param text
-	 *            the text for the tag
+	 *
+	 * @param text the text for the tag
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setGenericTag(String text) {
+	public Chunk setGenericTag(String text)
+	{
 		return setAttribute(GENERICTAG, text);
 	}
-	
-	/** Key for image. */
+
+	/**
+	 * Key for image.
+	 */
 	public static final String IMAGE = "IMAGE";
 
 	/**
 	 * Returns the image.
-	 * 
+	 *
 	 * @return the image
 	 */
 
-	public Image getImage() {
-		if (attributes == null)
+	public Image getImage()
+	{
+		if(attributes == null)
 			return null;
 		Object obj[] = (Object[]) attributes.get(Chunk.IMAGE);
-		if (obj == null)
+		if(obj == null)
 			return null;
-		else {
+		else
+		{
 			return (Image) obj[0];
 		}
 	}
-	
-	/** Key for Action. */
+
+	/**
+	 * Key for Action.
+	 */
 	public static final String ACTION = "ACTION";
 
 	/**
 	 * Sets an action for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param action
-	 *            the action
+	 *
+	 * @param action the action
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setAction(PdfAction action) {
+	public Chunk setAction(PdfAction action)
+	{
 		return setAttribute(ACTION, action);
 	}
 
 	/**
 	 * Sets an anchor for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param url
-	 *            the <CODE>URL</CODE> to link to
+	 *
+	 * @param url the <CODE>URL</CODE> to link to
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setAnchor(URL url) {
+	public Chunk setAnchor(URL url)
+	{
 		return setAttribute(ACTION, new PdfAction(url.toExternalForm()));
 	}
 
 	/**
 	 * Sets an anchor for this <CODE>Chunk</CODE>.
-	 * 
-	 * @param url
-	 *            the url to link to
+	 *
+	 * @param url the url to link to
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setAnchor(String url) {
+	public Chunk setAnchor(String url)
+	{
 		return setAttribute(ACTION, new PdfAction(url));
 	}
-	
-	/** Key for newpage. */
+
+	/**
+	 * Key for newpage.
+	 */
 	public static final String NEWPAGE = "NEWPAGE";
 
 	/**
 	 * Sets a new page tag..
-	 * 
+	 *
 	 * @return this <CODE>Chunk</CODE>
 	 */
 
-	public Chunk setNewPage() {
+	public Chunk setNewPage()
+	{
 		return setAttribute(NEWPAGE, null);
 	}
 
-	/** Key for annotation. */
+	/**
+	 * Key for annotation.
+	 */
 	public static final String PDFANNOTATION = "PDFANNOTATION";
 
 	/**
 	 * Sets a generic annotation to this <CODE>Chunk</CODE>.
-	 * 
-	 * @param annotation
-	 *            the annotation
+	 *
+	 * @param annotation the annotation
 	 * @return this <CODE>Chunk</CODE>
 	 */
-	public Chunk setAnnotation(PdfAnnotation annotation) {
+	public Chunk setAnnotation(PdfAnnotation annotation)
+	{
 		return setAttribute(PDFANNOTATION, annotation);
 	}
-	
+
 	/**
 	 * @see com.lowagie.text.Element#isContent()
-	 * @since	iText 2.0.8
+	 * @since iText 2.0.8
 	 */
-	public boolean isContent() {
+	public boolean isContent()
+	{
 		return true;
 	}
 
 	/**
 	 * @see com.lowagie.text.Element#isNestable()
-	 * @since	iText 2.0.8
+	 * @since iText 2.0.8
 	 */
-	public boolean isNestable() {
+	public boolean isNestable()
+	{
 		return true;
 	}
 
 	/**
-     * Returns the hyphenation (if present).
-     * @since	2.1.2
+	 * Returns the hyphenation (if present).
+	 *
+	 * @since 2.1.2
 	 */
-    public HyphenationEvent getHyphenation() {
-        if (attributes == null) return null;
-        return (HyphenationEvent) attributes.get(Chunk.HYPHENATION);
+	public HyphenationEvent getHyphenation()
+	{
+		if(attributes == null) return null;
+		return (HyphenationEvent) attributes.get(Chunk.HYPHENATION);
 	}
-	
+
 	// keys used in PdfChunk
-	
-	/** Key for color. */
+
+	/**
+	 * Key for color.
+	 */
 	public static final String COLOR = "COLOR";
 
-	/** Key for encoding. */
+	/**
+	 * Key for encoding.
+	 */
 	public static final String ENCODING = "ENCODING";
 
 }

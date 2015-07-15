@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public interface StreamParser
 {
-    Object read() throws StreamParsingException;
+	Object read() throws StreamParsingException;
 
-    Collection readAll() throws StreamParsingException;
+	Collection readAll() throws StreamParsingException;
 }

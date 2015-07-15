@@ -1,10 +1,5 @@
 package repack.org.bouncycastle.cms.jcajce;
 
-import java.security.Key;
-import java.security.Provider;
-
-import javax.crypto.SecretKey;
-
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import repack.org.bouncycastle.cms.CMSException;
 import repack.org.bouncycastle.cms.KEKRecipient;
@@ -14,85 +9,89 @@ import repack.org.bouncycastle.jcajce.ProviderJcaJceHelper;
 import repack.org.bouncycastle.operator.OperatorException;
 import repack.org.bouncycastle.operator.SymmetricKeyUnwrapper;
 
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.security.Provider;
+
 public abstract class JceKEKRecipient
-    implements KEKRecipient
+		implements KEKRecipient
 {
-    private SecretKey recipientKey;
+	private SecretKey recipientKey;
 
-    protected EnvelopedDataHelper helper = new EnvelopedDataHelper(new DefaultJcaJceHelper());
-    protected EnvelopedDataHelper contentHelper = helper;
+	protected EnvelopedDataHelper helper = new EnvelopedDataHelper(new DefaultJcaJceHelper());
+	protected EnvelopedDataHelper contentHelper = helper;
 
-    public JceKEKRecipient(SecretKey recipientKey)
-    {
-        this.recipientKey = recipientKey;
-    }
+	public JceKEKRecipient(SecretKey recipientKey)
+	{
+		this.recipientKey = recipientKey;
+	}
 
-    /**
-     * Set the provider to use for key recovery and content processing.
-     *
-     * @param provider provider to use.
-     * @return this recipient.
-     */
-    public JceKEKRecipient setProvider(Provider provider)
-    {
-        this.helper = new EnvelopedDataHelper(new ProviderJcaJceHelper(provider));
-        this.contentHelper = helper;
+	/**
+	 * Set the provider to use for key recovery and content processing.
+	 *
+	 * @param provider provider to use.
+	 * @return this recipient.
+	 */
+	public JceKEKRecipient setProvider(Provider provider)
+	{
+		this.helper = new EnvelopedDataHelper(new ProviderJcaJceHelper(provider));
+		this.contentHelper = helper;
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Set the provider to use for key recovery and content processing.
-     *
-     * @param providerName the name of the provider to use.
-     * @return this recipient.
-     */
-    public JceKEKRecipient setProvider(String providerName)
-    {
-        this.helper = new EnvelopedDataHelper(new NamedJcaJceHelper(providerName));
-        this.contentHelper = helper;
+	/**
+	 * Set the provider to use for key recovery and content processing.
+	 *
+	 * @param providerName the name of the provider to use.
+	 * @return this recipient.
+	 */
+	public JceKEKRecipient setProvider(String providerName)
+	{
+		this.helper = new EnvelopedDataHelper(new NamedJcaJceHelper(providerName));
+		this.contentHelper = helper;
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Set the provider to use for content processing.
-     *
-     * @param provider the provider to use.
-     * @return this recipient.
-     */
-    public JceKEKRecipient setContentProvider(Provider provider)
-    {
-        this.contentHelper = new EnvelopedDataHelper(new ProviderJcaJceHelper(provider));
+	/**
+	 * Set the provider to use for content processing.
+	 *
+	 * @param provider the provider to use.
+	 * @return this recipient.
+	 */
+	public JceKEKRecipient setContentProvider(Provider provider)
+	{
+		this.contentHelper = new EnvelopedDataHelper(new ProviderJcaJceHelper(provider));
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Set the provider to use for content processing.
-     *
-     * @param providerName the name of the provider to use.
-     * @return this recipient.
-     */
-    public JceKEKRecipient setContentProvider(String providerName)
-    {
-        this.contentHelper = new EnvelopedDataHelper(new NamedJcaJceHelper(providerName));
+	/**
+	 * Set the provider to use for content processing.
+	 *
+	 * @param providerName the name of the provider to use.
+	 * @return this recipient.
+	 */
+	public JceKEKRecipient setContentProvider(String providerName)
+	{
+		this.contentHelper = new EnvelopedDataHelper(new NamedJcaJceHelper(providerName));
 
-        return this;
-    }
+		return this;
+	}
 
-    protected Key extractSecretKey(AlgorithmIdentifier keyEncryptionAlgorithm, AlgorithmIdentifier contentEncryptionAlgorithm, byte[] encryptedContentEncryptionKey)
-        throws CMSException
-    {
-        SymmetricKeyUnwrapper unwrapper = helper.createSymmetricUnwrapper(keyEncryptionAlgorithm, recipientKey);
+	protected Key extractSecretKey(AlgorithmIdentifier keyEncryptionAlgorithm, AlgorithmIdentifier contentEncryptionAlgorithm, byte[] encryptedContentEncryptionKey)
+			throws CMSException
+	{
+		SymmetricKeyUnwrapper unwrapper = helper.createSymmetricUnwrapper(keyEncryptionAlgorithm, recipientKey);
 
-        try
-        {
-            return CMSUtils.getJceKey(unwrapper.generateUnwrappedKey(contentEncryptionAlgorithm, encryptedContentEncryptionKey));
-        }
-        catch (OperatorException e)
-        {
-            throw new CMSException("exception unwrapping key: " + e.getMessage(), e);
-        }
-    }
+		try
+		{
+			return CMSUtils.getJceKey(unwrapper.generateUnwrappedKey(contentEncryptionAlgorithm, encryptedContentEncryptionKey));
+		}
+		catch(OperatorException e)
+		{
+			throw new CMSException("exception unwrapping key: " + e.getMessage(), e);
+		}
+	}
 }

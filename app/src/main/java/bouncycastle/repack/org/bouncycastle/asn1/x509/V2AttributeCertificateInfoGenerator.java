@@ -24,125 +24,124 @@ import repack.org.bouncycastle.asn1.DERSet;
  *       extensions           Extensions OPTIONAL
  * }
  * </pre>
- *
  */
 public class V2AttributeCertificateInfoGenerator
 {
-    private DERInteger version;
-    private Holder holder;
-    private AttCertIssuer issuer;
-    private AlgorithmIdentifier signature;
-    private DERInteger serialNumber;
-    private ASN1EncodableVector attributes;
-    private DERBitString issuerUniqueID;
-    private X509Extensions extensions;
+	private DERInteger version;
+	private Holder holder;
+	private AttCertIssuer issuer;
+	private AlgorithmIdentifier signature;
+	private DERInteger serialNumber;
+	private ASN1EncodableVector attributes;
+	private DERBitString issuerUniqueID;
+	private X509Extensions extensions;
 
-    // Note: validity period start/end dates stored directly
-    //private AttCertValidityPeriod attrCertValidityPeriod;
-    private DERGeneralizedTime startDate, endDate; 
+	// Note: validity period start/end dates stored directly
+	//private AttCertValidityPeriod attrCertValidityPeriod;
+	private DERGeneralizedTime startDate, endDate;
 
-    public V2AttributeCertificateInfoGenerator()
-    {
-        this.version = new DERInteger(1);
-        attributes = new ASN1EncodableVector();
-    }
-    
-    public void setHolder(Holder holder)
-    {
-        this.holder = holder;
-    }
-    
-    public void addAttribute(String oid, ASN1Encodable value) 
-    {
-        attributes.add(new Attribute(new DERObjectIdentifier(oid), new DERSet(value)));
-    }
+	public V2AttributeCertificateInfoGenerator()
+	{
+		this.version = new DERInteger(1);
+		attributes = new ASN1EncodableVector();
+	}
 
-    /**
-     * @param attribute
-     */
-    public void addAttribute(Attribute attribute)
-    {
-        attributes.add(attribute);
-    }
-    
-    public void setSerialNumber(
-        DERInteger  serialNumber)
-    {
-        this.serialNumber = serialNumber;
-    }
+	public void setHolder(Holder holder)
+	{
+		this.holder = holder;
+	}
 
-    public void setSignature(
-        AlgorithmIdentifier    signature)
-    {
-        this.signature = signature;
-    }
+	public void addAttribute(String oid, ASN1Encodable value)
+	{
+		attributes.add(new Attribute(new DERObjectIdentifier(oid), new DERSet(value)));
+	}
 
-    public void setIssuer(
-        AttCertIssuer    issuer)
-    {
-        this.issuer = issuer;
-    }
+	/**
+	 * @param attribute
+	 */
+	public void addAttribute(Attribute attribute)
+	{
+		attributes.add(attribute);
+	}
 
-    public void setStartDate(
-        DERGeneralizedTime startDate)
-    {
-        this.startDate = startDate;
-    }
+	public void setSerialNumber(
+			DERInteger serialNumber)
+	{
+		this.serialNumber = serialNumber;
+	}
 
-    public void setEndDate(
-        DERGeneralizedTime endDate)
-    {
-        this.endDate = endDate;
-    }
+	public void setSignature(
+			AlgorithmIdentifier signature)
+	{
+		this.signature = signature;
+	}
 
-    public void setIssuerUniqueID(
-        DERBitString    issuerUniqueID)
-    {
-        this.issuerUniqueID = issuerUniqueID;
-    }
+	public void setIssuer(
+			AttCertIssuer issuer)
+	{
+		this.issuer = issuer;
+	}
 
-    public void setExtensions(
-        X509Extensions    extensions)
-    {
-        this.extensions = extensions;
-    }
+	public void setStartDate(
+			DERGeneralizedTime startDate)
+	{
+		this.startDate = startDate;
+	}
 
-    public AttributeCertificateInfo generateAttributeCertificateInfo()
-    {
-        if ((serialNumber == null) || (signature == null)
-            || (issuer == null) || (startDate == null) || (endDate == null)
-            || (holder == null) || (attributes == null))
-        {
-            throw new IllegalStateException("not all mandatory fields set in V2 AttributeCertificateInfo generator");
-        }
+	public void setEndDate(
+			DERGeneralizedTime endDate)
+	{
+		this.endDate = endDate;
+	}
 
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	public void setIssuerUniqueID(
+			DERBitString issuerUniqueID)
+	{
+		this.issuerUniqueID = issuerUniqueID;
+	}
 
-        v.add(version);
-        v.add(holder);
-        v.add(issuer);
-        v.add(signature);
-        v.add(serialNumber);
-    
-        //
-        // before and after dates => AttCertValidityPeriod
-        //
-        AttCertValidityPeriod validity = new AttCertValidityPeriod(startDate, endDate);
-        v.add(validity);
-        
-        // Attributes
-        v.add(new DERSequence(attributes));
-        
-        if (issuerUniqueID != null)
-        {
-            v.add(issuerUniqueID);
-        }
-    
-        if (extensions != null)
-        {
-            v.add(extensions);
-        }
+	public void setExtensions(
+			X509Extensions extensions)
+	{
+		this.extensions = extensions;
+	}
 
-        return new AttributeCertificateInfo(new DERSequence(v));
-    }
+	public AttributeCertificateInfo generateAttributeCertificateInfo()
+	{
+		if((serialNumber == null) || (signature == null)
+				|| (issuer == null) || (startDate == null) || (endDate == null)
+				|| (holder == null) || (attributes == null))
+		{
+			throw new IllegalStateException("not all mandatory fields set in V2 AttributeCertificateInfo generator");
+		}
+
+		ASN1EncodableVector v = new ASN1EncodableVector();
+
+		v.add(version);
+		v.add(holder);
+		v.add(issuer);
+		v.add(signature);
+		v.add(serialNumber);
+
+		//
+		// before and after dates => AttCertValidityPeriod
+		//
+		AttCertValidityPeriod validity = new AttCertValidityPeriod(startDate, endDate);
+		v.add(validity);
+
+		// Attributes
+		v.add(new DERSequence(attributes));
+
+		if(issuerUniqueID != null)
+		{
+			v.add(issuerUniqueID);
+		}
+
+		if(extensions != null)
+		{
+			v.add(extensions);
+		}
+
+		return new AttributeCertificateInfo(new DERSequence(v));
+	}
 }

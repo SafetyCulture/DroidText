@@ -19,7 +19,8 @@
  */
 package harmony.java.awt;
 
-public interface Transparency {
+public interface Transparency
+{
 
 	public static final int OPAQUE = 1;
 

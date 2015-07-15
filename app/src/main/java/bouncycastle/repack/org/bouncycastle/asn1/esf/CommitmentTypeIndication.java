@@ -8,76 +8,76 @@ import repack.org.bouncycastle.asn1.DERObjectIdentifier;
 import repack.org.bouncycastle.asn1.DERSequence;
 
 public class CommitmentTypeIndication
-    extends ASN1Encodable 
+		extends ASN1Encodable
 {
-    private DERObjectIdentifier   commitmentTypeId;
-    private ASN1Sequence          commitmentTypeQualifier;
-    
-    public CommitmentTypeIndication(
-        ASN1Sequence seq)
-    {
-        commitmentTypeId = (DERObjectIdentifier)seq.getObjectAt(0);
+	private DERObjectIdentifier commitmentTypeId;
+	private ASN1Sequence commitmentTypeQualifier;
 
-        if (seq.size() > 1)
-        {
-            commitmentTypeQualifier = (ASN1Sequence)seq.getObjectAt(1);
-        }
-    }
+	public CommitmentTypeIndication(
+			ASN1Sequence seq)
+	{
+		commitmentTypeId = (DERObjectIdentifier) seq.getObjectAt(0);
 
-    public CommitmentTypeIndication(
-        DERObjectIdentifier commitmentTypeId)
-    {
-        this.commitmentTypeId = commitmentTypeId;
-    }
+		if(seq.size() > 1)
+		{
+			commitmentTypeQualifier = (ASN1Sequence) seq.getObjectAt(1);
+		}
+	}
 
-    public CommitmentTypeIndication(
-        DERObjectIdentifier commitmentTypeId,
-        ASN1Sequence        commitmentTypeQualifier)
-    {
-        this.commitmentTypeId = commitmentTypeId;
-        this.commitmentTypeQualifier = commitmentTypeQualifier;
-    }
+	public CommitmentTypeIndication(
+			DERObjectIdentifier commitmentTypeId)
+	{
+		this.commitmentTypeId = commitmentTypeId;
+	}
 
-    public static CommitmentTypeIndication getInstance(
-        Object obj)
-    {
-        if (obj == null || obj instanceof CommitmentTypeIndication)
-        {
-            return (CommitmentTypeIndication)obj;
-        }
+	public CommitmentTypeIndication(
+			DERObjectIdentifier commitmentTypeId,
+			ASN1Sequence commitmentTypeQualifier)
+	{
+		this.commitmentTypeId = commitmentTypeId;
+		this.commitmentTypeQualifier = commitmentTypeQualifier;
+	}
 
-        return new CommitmentTypeIndication(ASN1Sequence.getInstance(obj));
-    }
+	public static CommitmentTypeIndication getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof CommitmentTypeIndication)
+		{
+			return (CommitmentTypeIndication) obj;
+		}
 
-    public DERObjectIdentifier getCommitmentTypeId()
-    {
-        return commitmentTypeId;
-    }
-    
-    public ASN1Sequence getCommitmentTypeQualifier()
-    {
-        return commitmentTypeQualifier;
-    }
-    
-    /**
-     * <pre>
-     * CommitmentTypeIndication ::= SEQUENCE {
-     *      commitmentTypeId   CommitmentTypeIdentifier,
-     *      commitmentTypeQualifier   SEQUENCE SIZE (1..MAX) OF
-     *              CommitmentTypeQualifier OPTIONAL }
-     * </pre>
-     */ 
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
-        
-        v.add(commitmentTypeId);
+		return new CommitmentTypeIndication(ASN1Sequence.getInstance(obj));
+	}
 
-        if (commitmentTypeQualifier != null)
-        {
-            v.add(commitmentTypeQualifier);
-        }
-        
-        return new DERSequence(v);
-    }
+	public DERObjectIdentifier getCommitmentTypeId()
+	{
+		return commitmentTypeId;
+	}
+
+	public ASN1Sequence getCommitmentTypeQualifier()
+	{
+		return commitmentTypeQualifier;
+	}
+
+	/**
+	 * <pre>
+	 * CommitmentTypeIndication ::= SEQUENCE {
+	 *      commitmentTypeId   CommitmentTypeIdentifier,
+	 *      commitmentTypeQualifier   SEQUENCE SIZE (1..MAX) OF
+	 *              CommitmentTypeQualifier OPTIONAL }
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
+
+		v.add(commitmentTypeId);
+
+		if(commitmentTypeQualifier != null)
+		{
+			v.add(commitmentTypeQualifier);
+		}
+
+		return new DERSequence(v);
+	}
 }

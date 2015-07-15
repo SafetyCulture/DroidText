@@ -19,21 +19,18 @@
  */
 package harmony.java.awt;
 
-import harmony.java.awt.Point;
-import harmony.java.awt.Rectangle;
-import harmony.java.awt.Shape;
 import harmony.java.awt.geom.AffineTransform;
 import harmony.java.awt.geom.PathIterator;
 import harmony.java.awt.geom.Point2D;
 import harmony.java.awt.geom.Rectangle2D;
+import org.apache.harmony.awt.gl.*;
+import org.apache.harmony.awt.internal.nls.Messages;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 
-import org.apache.harmony.awt.gl.*;
-import org.apache.harmony.awt.internal.nls.Messages;
-
-public class Polygon implements Shape, Serializable {
+public class Polygon implements Shape, Serializable
+{
 
 	private static final long serialVersionUID = -6460061437900069969L;
 
@@ -50,7 +47,8 @@ public class Polygon implements Shape, Serializable {
 	/*
 	 * Polygon path iterator
 	 */
-	class Iterator implements PathIterator {
+	class Iterator implements PathIterator
+	{
 
 		/**
 		 * The source Polygon object
@@ -70,76 +68,91 @@ public class Polygon implements Shape, Serializable {
 		/**
 		 * Constructs a new Polygon.Iterator for given polygon and
 		 * transformation
-		 * 
-		 * @param l
-		 *            - the source Line2D object
-		 * @param at
-		 *            - the AffineTransform object to apply rectangle path
+		 *
+		 * @param l  - the source Line2D object
+		 * @param at - the AffineTransform object to apply rectangle path
 		 */
-		public Iterator(AffineTransform at, Polygon p) {
+		public Iterator(AffineTransform at, Polygon p)
+		{
 			this.p = p;
 			this.t = at;
-			if (p.npoints == 0) {
+			if(p.npoints == 0)
+			{
 				index = 1;
 			}
 		}
 
-		public int getWindingRule() {
+		public int getWindingRule()
+		{
 			return WIND_EVEN_ODD;
 		}
 
-		public boolean isDone() {
+		public boolean isDone()
+		{
 			return index > p.npoints;
 		}
 
-		public void next() {
+		public void next()
+		{
 			index++;
 		}
 
-		public int currentSegment(double[] coords) {
-			if (isDone()) {
+		public int currentSegment(double[] coords)
+		{
+			if(isDone())
+			{
 				// awt.110=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.110")); //$NON-NLS-1$
 			}
-			if (index == p.npoints) {
+			if(index == p.npoints)
+			{
 				return SEG_CLOSE;
 			}
 			coords[0] = p.xpoints[index];
 			coords[1] = p.ypoints[index];
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, 1);
 			}
 			return index == 0 ? SEG_MOVETO : SEG_LINETO;
 		}
 
-		public int currentSegment(float[] coords) {
-			if (isDone()) {
+		public int currentSegment(float[] coords)
+		{
+			if(isDone())
+			{
 				// awt.110=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.110")); //$NON-NLS-1$
 			}
-			if (index == p.npoints) {
+			if(index == p.npoints)
+			{
 				return SEG_CLOSE;
 			}
 			coords[0] = p.xpoints[index];
 			coords[1] = p.ypoints[index];
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, 1);
 			}
 			return index == 0 ? SEG_MOVETO : SEG_LINETO;
 		}
 	}
 
-	public Polygon() {
+	public Polygon()
+	{
 		xpoints = new int[BUFFER_CAPACITY];
 		ypoints = new int[BUFFER_CAPACITY];
 	}
 
-	public Polygon(int[] xpoints, int[] ypoints, int npoints) {
-		if (npoints > xpoints.length || npoints > ypoints.length) {
+	public Polygon(int[] xpoints, int[] ypoints, int npoints)
+	{
+		if(npoints > xpoints.length || npoints > ypoints.length)
+		{
 			// awt.111=Parameter npoints is greater than array length
 			throw new IndexOutOfBoundsException(Messages.getString("awt.111")); //$NON-NLS-1$
 		}
-		if (npoints < 0) {
+		if(npoints < 0)
+		{
 			// awt.112=Negative number of points
 			throw new NegativeArraySizeException(Messages.getString("awt.112")); //$NON-NLS-1$
 		}
@@ -150,17 +163,21 @@ public class Polygon implements Shape, Serializable {
 		System.arraycopy(ypoints, 0, this.ypoints, 0, npoints);
 	}
 
-	public void reset() {
+	public void reset()
+	{
 		npoints = 0;
 		bounds = null;
 	}
 
-	public void invalidate() {
+	public void invalidate()
+	{
 		bounds = null;
 	}
 
-	public void addPoint(int px, int py) {
-		if (npoints == xpoints.length) {
+	public void addPoint(int px, int py)
+	{
+		if(npoints == xpoints.length)
+		{
 			int[] tmp;
 
 			tmp = new int[xpoints.length + BUFFER_CAPACITY];
@@ -176,17 +193,21 @@ public class Polygon implements Shape, Serializable {
 		ypoints[npoints] = py;
 		npoints++;
 
-		if (bounds != null) {
+		if(bounds != null)
+		{
 			bounds.setFrameFromDiagonal(Math.min(bounds.getMinX(), px), Math.min(bounds.getMinY(), py), Math.max(bounds
 					.getMaxX(), px), Math.max(bounds.getMaxY(), py));
 		}
 	}
 
-	public Rectangle getBounds() {
-		if (bounds != null) {
+	public Rectangle getBounds()
+	{
+		if(bounds != null)
+		{
 			return bounds;
 		}
-		if (npoints == 0) {
+		if(npoints == 0)
+		{
 			return new Rectangle();
 		}
 
@@ -195,17 +216,24 @@ public class Polygon implements Shape, Serializable {
 		int bx2 = bx1;
 		int by2 = by1;
 
-		for (int i = 1; i < npoints; i++) {
+		for(int i = 1; i < npoints; i++)
+		{
 			int x = xpoints[i];
 			int y = ypoints[i];
-			if (x < bx1) {
+			if(x < bx1)
+			{
 				bx1 = x;
-			} else if (x > bx2) {
+			}
+			else if(x > bx2)
+			{
 				bx2 = x;
 			}
-			if (y < by1) {
+			if(y < by1)
+			{
 				by1 = y;
-			} else if (y > by2) {
+			}
+			else if(y > by2)
+			{
 				by2 = y;
 			}
 		}
@@ -217,20 +245,25 @@ public class Polygon implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public Rectangle getBoundingBox() {
+	public Rectangle getBoundingBox()
+	{
 		return getBounds();
 	}
 
-	public Rectangle2D getBounds2D() {
+	public Rectangle2D getBounds2D()
+	{
 		return getBounds().getBounds2D();
 	}
 
-	public void translate(int mx, int my) {
-		for (int i = 0; i < npoints; i++) {
+	public void translate(int mx, int my)
+	{
+		for(int i = 0; i < npoints; i++)
+		{
 			xpoints[i] += mx;
 			ypoints[i] += my;
 		}
-		if (bounds != null) {
+		if(bounds != null)
+		{
 			bounds.translate(mx, my);
 		}
 	}
@@ -239,49 +272,60 @@ public class Polygon implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public boolean inside(int x, int y) {
+	public boolean inside(int x, int y)
+	{
 		return contains((double) x, (double) y);
 	}
 
-	public boolean contains(int x, int y) {
+	public boolean contains(int x, int y)
+	{
 		return contains((double) x, (double) y);
 	}
 
-	public boolean contains(double x, double y) {
+	public boolean contains(double x, double y)
+	{
 		return Crossing.isInsideEvenOdd(Crossing.crossShape(this, x, y));
 	}
 
-	public boolean contains(double x, double y, double width, double height) {
+	public boolean contains(double x, double y, double width, double height)
+	{
 		int cross = Crossing.intersectShape(this, x, y, width, height);
 		return cross != Crossing.CROSSING && Crossing.isInsideEvenOdd(cross);
 	}
 
-	public boolean intersects(double x, double y, double width, double height) {
+	public boolean intersects(double x, double y, double width, double height)
+	{
 		int cross = Crossing.intersectShape(this, x, y, width, height);
 		return cross == Crossing.CROSSING || Crossing.isInsideEvenOdd(cross);
 	}
 
-	public boolean contains(Rectangle2D rect) {
+	public boolean contains(Rectangle2D rect)
+	{
 		return contains(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 	}
 
-	public boolean contains(Point point) {
+	public boolean contains(Point point)
+	{
 		return contains(point.getX(), point.getY());
 	}
 
-	public boolean contains(Point2D point) {
+	public boolean contains(Point2D point)
+	{
 		return contains(point.getX(), point.getY());
 	}
 
-	public boolean intersects(Rectangle2D rect) {
+	public boolean intersects(Rectangle2D rect)
+	{
 		return intersects(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 	}
 
-	public PathIterator getPathIterator(AffineTransform t) {
+	public PathIterator getPathIterator(AffineTransform t)
+	{
 		return new Iterator(t, this);
 	}
 
-	public PathIterator getPathIterator(AffineTransform t, double flatness) {
+	public PathIterator getPathIterator(AffineTransform t, double flatness)
+	{
 		return new Iterator(t, this);
 	}
 

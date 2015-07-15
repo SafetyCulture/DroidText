@@ -1,17 +1,16 @@
 package repack.org.bouncycastle.crypto.agreement;
 
-import java.math.BigInteger;
-
-
 import repack.org.bouncycastle.crypto.BasicAgreement;
 import repack.org.bouncycastle.crypto.CipherParameters;
 import repack.org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import repack.org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import repack.org.bouncycastle.math.ec.ECPoint;
 
+import java.math.BigInteger;
+
 /**
  * P1363 7.2.1 ECSVDP-DH
- *
+ * <p/>
  * ECSVDP-DH is Elliptic Curve Secret Value Derivation Primitive,
  * Diffie-Hellman version. It is based on the work of [DH76], [Mil86],
  * and [Kob87]. This primitive derives a shared secret value from one
@@ -24,24 +23,24 @@ import repack.org.bouncycastle.math.ec.ECPoint;
  * Section 7.2.2).
  */
 public class ECDHBasicAgreement
-    implements BasicAgreement
+		implements BasicAgreement
 {
-    private ECPrivateKeyParameters key;
+	private ECPrivateKeyParameters key;
 
-    public void init(
-        CipherParameters key)
-    {
-        this.key = (ECPrivateKeyParameters)key;
-    }
+	public void init(
+			CipherParameters key)
+	{
+		this.key = (ECPrivateKeyParameters) key;
+	}
 
-    public BigInteger calculateAgreement(
-        CipherParameters pubKey)
-    {
-        ECPublicKeyParameters pub = (ECPublicKeyParameters)pubKey;
-        ECPoint P = pub.getQ().multiply(key.getD());
+	public BigInteger calculateAgreement(
+			CipherParameters pubKey)
+	{
+		ECPublicKeyParameters pub = (ECPublicKeyParameters) pubKey;
+		ECPoint P = pub.getQ().multiply(key.getD());
 
-        // if (p.isInfinity()) throw new RuntimeException("d*Q == infinity");
+		// if (p.isInfinity()) throw new RuntimeException("d*Q == infinity");
 
-        return P.getX().toBigInteger();
-    }
+		return P.getX().toBigInteger();
+	}
 }

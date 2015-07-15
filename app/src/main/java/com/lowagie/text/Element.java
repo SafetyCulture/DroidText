@@ -53,7 +53,7 @@ import java.util.ArrayList;
 
 /**
  * Interface for a text element.
- * <P>
+ * <p/>
  * Remark: I looked at the interface javax.swing.text.Element, but I decided to
  * write my own text-classes for two reasons:
  * <OL>
@@ -64,7 +64,7 @@ import java.util.ArrayList;
  * classes (I think they're really great). However, if I use the
  * javax.swing.text classes, it will become very difficult to downgrade rugPdf.
  * </OL>
- * 
+ *
  * @see Anchor
  * @see Cell
  * @see Chapter
@@ -83,109 +83,169 @@ import java.util.ArrayList;
  * @see Table
  */
 
-public interface Element {
+public interface Element
+{
 
 	// static membervariables (meta information)
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int HEADER = 0;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int TITLE = 1;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int SUBJECT = 2;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int KEYWORDS = 3;
 
-	/** This is a possible type of <CODE>Element </CIDE>. */
+	/**
+	 * This is a possible type of <CODE>Element </CIDE>.
+	 */
 	public static final int AUTHOR = 4;
 
-	/** This is a possible type of <CODE>Element </CIDE>. */
+	/**
+	 * This is a possible type of <CODE>Element </CIDE>.
+	 */
 	public static final int PRODUCER = 5;
 
-	/** This is a possible type of <CODE>Element </CIDE>. */
+	/**
+	 * This is a possible type of <CODE>Element </CIDE>.
+	 */
 	public static final int CREATIONDATE = 6;
 
-	/** This is a possible type of <CODE>Element </CIDE>. */
+	/**
+	 * This is a possible type of <CODE>Element </CIDE>.
+	 */
 	public static final int CREATOR = 7;
 
 	// static membervariables (content)
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int CHUNK = 10;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int PHRASE = 11;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int PARAGRAPH = 12;
 
-	/** This is a possible type of <CODE>Element</CODE> */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>
+	 */
 	public static final int SECTION = 13;
 
-	/** This is a possible type of <CODE>Element</CODE> */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>
+	 */
 	public static final int LIST = 14;
 
-	/** This is a possible type of <CODE>Element</CODE> */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>
+	 */
 	public static final int LISTITEM = 15;
 
-	/** This is a possible type of <CODE>Element</CODE> */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>
+	 */
 	public static final int CHAPTER = 16;
 
-	/** This is a possible type of <CODE>Element</CODE> */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>
+	 */
 	public static final int ANCHOR = 17;
 
 	// static membervariables (tables)
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int CELL = 20;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int ROW = 21;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int TABLE = 22;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int PTABLE = 23;
 
 	// static membervariables (annotations)
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int ANNOTATION = 29;
 
 	// static membervariables (geometric figures)
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int RECTANGLE = 30;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int JPEG = 32;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int JPEG2000 = 33;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int IMGRAW = 34;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int IMGTEMPLATE = 35;
 
 	/**
 	 * This is a possible type of <CODE>Element</CODE>.
-	 * @since	2.1.5
+	 *
+	 * @since 2.1.5
 	 */
 	public static final int JBIG2 = 36;
 
-	/** This is a possible type of <CODE>Element</CODE>. */
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int MULTI_COLUMN_TEXT = 40;
-	
-	/** This is a possible type of <CODE>Element</CODE>. */
+
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 */
 	public static final int MARKED = 50;
 
-	/** This is a possible type of <CODE>Element</CODE>.
+	/**
+	 * This is a possible type of <CODE>Element</CODE>.
+	 *
 	 * @since 2.1.2
 	 */
 	public static final int YMARK = 55;
@@ -303,9 +363,8 @@ public interface Element {
 	/**
 	 * Processes the element by adding it (or the different parts) to an <CODE>
 	 * ElementListener</CODE>.
-	 * 
-	 * @param listener
-	 *            an <CODE>ElementListener</CODE>
+	 *
+	 * @param listener an <CODE>ElementListener</CODE>
 	 * @return <CODE>true</CODE> if the element was processed successfully
 	 */
 
@@ -313,7 +372,7 @@ public interface Element {
 
 	/**
 	 * Gets the type of the text element.
-	 * 
+	 *
 	 * @return a type
 	 */
 
@@ -322,23 +381,25 @@ public interface Element {
 	/**
 	 * Checks if this element is a content object.
 	 * If not, it's a metadata object.
-	 * @since	iText 2.0.8
-	 * @return	true if this is a 'content' element; false if this is a 'metadata' element
+	 *
+	 * @return true if this is a 'content' element; false if this is a 'metadata' element
+	 * @since iText 2.0.8
 	 */
-	
+
 	public boolean isContent();
-	
+
 	/**
 	 * Checks if this element is nestable.
-	 * @since	iText 2.0.8
-	 * @return	true if this element can be nested inside other elements.
+	 *
+	 * @return true if this element can be nested inside other elements.
+	 * @since iText 2.0.8
 	 */
-	
+
 	public boolean isNestable();
-	
+
 	/**
 	 * Gets all the chunks in this element.
-	 * 
+	 *
 	 * @return an <CODE>ArrayList</CODE>
 	 */
 
@@ -346,7 +407,7 @@ public interface Element {
 
 	/**
 	 * Gets the content of the text element.
-	 * 
+	 *
 	 * @return a type
 	 */
 

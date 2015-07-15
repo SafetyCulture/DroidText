@@ -11,294 +11,294 @@ import repack.org.bouncycastle.crypto.params.ParametersWithIV;
 import repack.org.bouncycastle.util.Arrays;
 
 /**
- * A Two-Pass Authenticated-Encryption Scheme Optimized for Simplicity and 
+ * A Two-Pass Authenticated-Encryption Scheme Optimized for Simplicity and
  * Efficiency - by M. Bellare, P. Rogaway, D. Wagner.
- * 
+ * <p/>
  * http://www.cs.ucdavis.edu/~rogaway/papers/eax.pdf
- * 
- * EAX is an AEAD scheme based on CTR and OMAC1/CMAC, that uses a single block 
- * cipher to encrypt and authenticate data. It's on-line (the length of a 
+ * <p/>
+ * EAX is an AEAD scheme based on CTR and OMAC1/CMAC, that uses a single block
+ * cipher to encrypt and authenticate data. It's on-line (the length of a
  * message isn't needed to begin processing it), has good performances, it's
  * simple and provably secure (provided the underlying block cipher is secure).
- * 
+ * <p/>
  * Of course, this implementations is NOT thread-safe.
  */
 public class EAXBlockCipher
-    implements AEADBlockCipher
+		implements AEADBlockCipher
 {
-    private static final byte nTAG = 0x0;
+	private static final byte nTAG = 0x0;
 
-    private static final byte hTAG = 0x1;
+	private static final byte hTAG = 0x1;
 
-    private static final byte cTAG = 0x2;
+	private static final byte cTAG = 0x2;
 
-    private SICBlockCipher cipher;
+	private SICBlockCipher cipher;
 
-    private boolean forEncryption;
+	private boolean forEncryption;
 
-    private int blockSize;
+	private int blockSize;
 
-    private Mac mac;
+	private Mac mac;
 
-    private byte[] nonceMac;
-    private byte[] associatedTextMac;
-    private byte[] macBlock;
-    
-    private int macSize;
-    private byte[] bufBlock;
-    private int bufOff;
+	private byte[] nonceMac;
+	private byte[] associatedTextMac;
+	private byte[] macBlock;
 
-    /**
-     * Constructor that accepts an instance of a block cipher engine.
-     *
-     * @param cipher the engine to use
-     */
-    public EAXBlockCipher(BlockCipher cipher)
-    {
-        blockSize = cipher.getBlockSize();
-        mac = new CMac(cipher);
-        macBlock = new byte[blockSize];
-        bufBlock = new byte[blockSize * 2];
-        associatedTextMac = new byte[mac.getMacSize()];
-        nonceMac = new byte[mac.getMacSize()];
-        this.cipher = new SICBlockCipher(cipher);
-    }
+	private int macSize;
+	private byte[] bufBlock;
+	private int bufOff;
 
-    public String getAlgorithmName()
-    {
-        return cipher.getUnderlyingCipher().getAlgorithmName() + "/EAX";
-    }
+	/**
+	 * Constructor that accepts an instance of a block cipher engine.
+	 *
+	 * @param cipher the engine to use
+	 */
+	public EAXBlockCipher(BlockCipher cipher)
+	{
+		blockSize = cipher.getBlockSize();
+		mac = new CMac(cipher);
+		macBlock = new byte[blockSize];
+		bufBlock = new byte[blockSize * 2];
+		associatedTextMac = new byte[mac.getMacSize()];
+		nonceMac = new byte[mac.getMacSize()];
+		this.cipher = new SICBlockCipher(cipher);
+	}
 
-    public BlockCipher getUnderlyingCipher()
-    {
-        return cipher.getUnderlyingCipher();
-    }
+	public String getAlgorithmName()
+	{
+		return cipher.getUnderlyingCipher().getAlgorithmName() + "/EAX";
+	}
 
-    public int getBlockSize()
-    {
-        return cipher.getBlockSize();
-    }
+	public BlockCipher getUnderlyingCipher()
+	{
+		return cipher.getUnderlyingCipher();
+	}
 
-    public void init(boolean forEncryption, CipherParameters params)
-        throws IllegalArgumentException
-    {
-        this.forEncryption = forEncryption;
+	public int getBlockSize()
+	{
+		return cipher.getBlockSize();
+	}
 
-        byte[] nonce, associatedText;
-        CipherParameters keyParam;
+	public void init(boolean forEncryption, CipherParameters params)
+			throws IllegalArgumentException
+	{
+		this.forEncryption = forEncryption;
 
-        if (params instanceof AEADParameters)
-        {
-            AEADParameters param = (AEADParameters)params;
+		byte[] nonce, associatedText;
+		CipherParameters keyParam;
 
-            nonce = param.getNonce();
-            associatedText = param.getAssociatedText();
-            macSize = param.getMacSize() / 8;
-            keyParam = param.getKey();
-        }
-        else if (params instanceof ParametersWithIV)
-        {
-            ParametersWithIV param = (ParametersWithIV)params;
+		if(params instanceof AEADParameters)
+		{
+			AEADParameters param = (AEADParameters) params;
 
-            nonce = param.getIV();
-            associatedText = new byte[0];
-            macSize = mac.getMacSize() / 2;
-            keyParam = param.getParameters();
-        }
-        else
-        {
-            throw new IllegalArgumentException("invalid parameters passed to EAX");
-        }
+			nonce = param.getNonce();
+			associatedText = param.getAssociatedText();
+			macSize = param.getMacSize() / 8;
+			keyParam = param.getKey();
+		}
+		else if(params instanceof ParametersWithIV)
+		{
+			ParametersWithIV param = (ParametersWithIV) params;
 
-        byte[] tag = new byte[blockSize];
+			nonce = param.getIV();
+			associatedText = new byte[0];
+			macSize = mac.getMacSize() / 2;
+			keyParam = param.getParameters();
+		}
+		else
+		{
+			throw new IllegalArgumentException("invalid parameters passed to EAX");
+		}
 
-        mac.init(keyParam);
-        tag[blockSize - 1] = hTAG;
-        mac.update(tag, 0, blockSize);
-        mac.update(associatedText, 0, associatedText.length);
-        mac.doFinal(associatedTextMac, 0);
+		byte[] tag = new byte[blockSize];
 
-        tag[blockSize - 1] = nTAG;
-        mac.update(tag, 0, blockSize);
-        mac.update(nonce, 0, nonce.length);
-        mac.doFinal(nonceMac, 0);
+		mac.init(keyParam);
+		tag[blockSize - 1] = hTAG;
+		mac.update(tag, 0, blockSize);
+		mac.update(associatedText, 0, associatedText.length);
+		mac.doFinal(associatedTextMac, 0);
 
-        tag[blockSize - 1] = cTAG;
-        mac.update(tag, 0, blockSize);
+		tag[blockSize - 1] = nTAG;
+		mac.update(tag, 0, blockSize);
+		mac.update(nonce, 0, nonce.length);
+		mac.doFinal(nonceMac, 0);
 
-        cipher.init(true, new ParametersWithIV(keyParam, nonceMac));
-    }
+		tag[blockSize - 1] = cTAG;
+		mac.update(tag, 0, blockSize);
 
-    private void calculateMac()
-    {
-        byte[] outC = new byte[blockSize];
-        mac.doFinal(outC, 0);
+		cipher.init(true, new ParametersWithIV(keyParam, nonceMac));
+	}
 
-        for (int i = 0; i < macBlock.length; i++)
-        {
-            macBlock[i] = (byte)(nonceMac[i] ^ associatedTextMac[i] ^ outC[i]);
-        }
-    }
+	private void calculateMac()
+	{
+		byte[] outC = new byte[blockSize];
+		mac.doFinal(outC, 0);
 
-    public void reset()
-    {
-        reset(true);
-    }
+		for(int i = 0; i < macBlock.length; i++)
+		{
+			macBlock[i] = (byte) (nonceMac[i] ^ associatedTextMac[i] ^ outC[i]);
+		}
+	}
 
-    private void reset(
-        boolean clearMac)
-    {
-        cipher.reset();
-        mac.reset();
+	public void reset()
+	{
+		reset(true);
+	}
 
-        bufOff = 0;
-        Arrays.fill(bufBlock, (byte)0);
+	private void reset(
+			boolean clearMac)
+	{
+		cipher.reset();
+		mac.reset();
 
-        if (clearMac)
-        {
-            Arrays.fill(macBlock, (byte)0);
-        }
+		bufOff = 0;
+		Arrays.fill(bufBlock, (byte) 0);
 
-        byte[] tag = new byte[blockSize];
-        tag[blockSize - 1] = cTAG;
-        mac.update(tag, 0, blockSize);
-    }
+		if(clearMac)
+		{
+			Arrays.fill(macBlock, (byte) 0);
+		}
 
-    public int processByte(byte in, byte[] out, int outOff)
-        throws DataLengthException
-    {
-        return process(in, out, outOff);
-    }
+		byte[] tag = new byte[blockSize];
+		tag[blockSize - 1] = cTAG;
+		mac.update(tag, 0, blockSize);
+	}
 
-    public int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff)
-        throws DataLengthException
-    {
-        int resultLen = 0;
+	public int processByte(byte in, byte[] out, int outOff)
+			throws DataLengthException
+	{
+		return process(in, out, outOff);
+	}
 
-        for (int i = 0; i != len; i++)
-        {
-            resultLen += process(in[inOff + i], out, outOff + resultLen);
-        }
+	public int processBytes(byte[] in, int inOff, int len, byte[] out, int outOff)
+			throws DataLengthException
+	{
+		int resultLen = 0;
 
-        return resultLen;
-    }
+		for(int i = 0; i != len; i++)
+		{
+			resultLen += process(in[inOff + i], out, outOff + resultLen);
+		}
 
-    public int doFinal(byte[] out, int outOff)
-        throws IllegalStateException, InvalidCipherTextException
-    {
-        int extra = bufOff;
-        byte[] tmp = new byte[bufBlock.length];
+		return resultLen;
+	}
 
-        bufOff = 0;
+	public int doFinal(byte[] out, int outOff)
+			throws IllegalStateException, InvalidCipherTextException
+	{
+		int extra = bufOff;
+		byte[] tmp = new byte[bufBlock.length];
 
-        if (forEncryption)
-        {
-            cipher.processBlock(bufBlock, 0, tmp, 0);
-            cipher.processBlock(bufBlock, blockSize, tmp, blockSize);
+		bufOff = 0;
 
-            System.arraycopy(tmp, 0, out, outOff, extra);
+		if(forEncryption)
+		{
+			cipher.processBlock(bufBlock, 0, tmp, 0);
+			cipher.processBlock(bufBlock, blockSize, tmp, blockSize);
 
-            mac.update(tmp, 0, extra);
+			System.arraycopy(tmp, 0, out, outOff, extra);
 
-            calculateMac();
+			mac.update(tmp, 0, extra);
 
-            System.arraycopy(macBlock, 0, out, outOff + extra, macSize);
+			calculateMac();
 
-            reset(false);
+			System.arraycopy(macBlock, 0, out, outOff + extra, macSize);
 
-            return extra + macSize;
-        }
-        else
-        {
-            if (extra > macSize)
-            {
-                mac.update(bufBlock, 0, extra - macSize);
+			reset(false);
 
-                cipher.processBlock(bufBlock, 0, tmp, 0);
-                cipher.processBlock(bufBlock, blockSize, tmp, blockSize);
+			return extra + macSize;
+		}
+		else
+		{
+			if(extra > macSize)
+			{
+				mac.update(bufBlock, 0, extra - macSize);
 
-                System.arraycopy(tmp, 0, out, outOff, extra - macSize);
-            }
+				cipher.processBlock(bufBlock, 0, tmp, 0);
+				cipher.processBlock(bufBlock, blockSize, tmp, blockSize);
 
-            calculateMac();
+				System.arraycopy(tmp, 0, out, outOff, extra - macSize);
+			}
 
-            if (!verifyMac(bufBlock, extra - macSize))
-            {
-                throw new InvalidCipherTextException("mac check in EAX failed");
-            }
+			calculateMac();
 
-            reset(false);
+			if(!verifyMac(bufBlock, extra - macSize))
+			{
+				throw new InvalidCipherTextException("mac check in EAX failed");
+			}
 
-            return extra - macSize;
-        }
-    }
+			reset(false);
 
-    public byte[] getMac()
-    {
-        byte[] mac = new byte[macSize];
+			return extra - macSize;
+		}
+	}
 
-        System.arraycopy(macBlock, 0, mac, 0, macSize);
+	public byte[] getMac()
+	{
+		byte[] mac = new byte[macSize];
 
-        return mac;
-    }
+		System.arraycopy(macBlock, 0, mac, 0, macSize);
 
-    public int getUpdateOutputSize(int len)
-    {
-        return ((len + bufOff) / blockSize) * blockSize;
-    }
+		return mac;
+	}
 
-    public int getOutputSize(int len)
-    {
-        if (forEncryption)
-        {
-             return len + bufOff + macSize;
-        }
-        else
-        {
-             return len + bufOff - macSize;
-        }
-    }
+	public int getUpdateOutputSize(int len)
+	{
+		return ((len + bufOff) / blockSize) * blockSize;
+	}
 
-    private int process(byte b, byte[] out, int outOff)
-    {
-        bufBlock[bufOff++] = b;
+	public int getOutputSize(int len)
+	{
+		if(forEncryption)
+		{
+			return len + bufOff + macSize;
+		}
+		else
+		{
+			return len + bufOff - macSize;
+		}
+	}
 
-        if (bufOff == bufBlock.length)
-        {
-            int size;
+	private int process(byte b, byte[] out, int outOff)
+	{
+		bufBlock[bufOff++] = b;
 
-            if (forEncryption)
-            {
-                size = cipher.processBlock(bufBlock, 0, out, outOff);
+		if(bufOff == bufBlock.length)
+		{
+			int size;
 
-                mac.update(out, outOff, blockSize);
-            }
-            else
-            {
-                mac.update(bufBlock, 0, blockSize);
+			if(forEncryption)
+			{
+				size = cipher.processBlock(bufBlock, 0, out, outOff);
 
-                size = cipher.processBlock(bufBlock, 0, out, outOff);
-            }
+				mac.update(out, outOff, blockSize);
+			}
+			else
+			{
+				mac.update(bufBlock, 0, blockSize);
 
-            bufOff = blockSize;
-            System.arraycopy(bufBlock, blockSize, bufBlock, 0, blockSize);
+				size = cipher.processBlock(bufBlock, 0, out, outOff);
+			}
 
-            return size;
-        }
+			bufOff = blockSize;
+			System.arraycopy(bufBlock, blockSize, bufBlock, 0, blockSize);
 
-        return 0;
-    }
+			return size;
+		}
 
-    private boolean verifyMac(byte[] mac, int off)
-    {
-        for (int i = 0; i < macSize; i++)
-        {
-            if (macBlock[i] != mac[off + i])
-            {
-                return false;
-            }
-        }
+		return 0;
+	}
 
-        return true;
-    }
+	private boolean verifyMac(byte[] mac, int off)
+	{
+		for(int i = 0; i < macSize; i++)
+		{
+			if(macBlock[i] != mac[off + i])
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

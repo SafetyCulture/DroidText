@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface InMemoryRepresentable
 {
-    DERObject getLoadedObject()
-        throws IOException;
+	DERObject getLoadedObject()
+			throws IOException;
 }

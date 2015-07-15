@@ -3,17 +3,17 @@ package repack.org.bouncycastle.operator;
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public abstract class SymmetricKeyWrapper
-    implements KeyWrapper
+		implements KeyWrapper
 {
-    private AlgorithmIdentifier algorithmId;
+	private AlgorithmIdentifier algorithmId;
 
-    protected SymmetricKeyWrapper(AlgorithmIdentifier algorithmId)
-    {
-        this.algorithmId = algorithmId;
-    }
+	protected SymmetricKeyWrapper(AlgorithmIdentifier algorithmId)
+	{
+		this.algorithmId = algorithmId;
+	}
 
-    public AlgorithmIdentifier getAlgorithmIdentifier()
-    {
-        return algorithmId;
-    }
+	public AlgorithmIdentifier getAlgorithmIdentifier()
+	{
+		return algorithmId;
+	}
 }

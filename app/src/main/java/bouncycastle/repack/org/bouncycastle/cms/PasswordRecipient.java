@@ -3,15 +3,15 @@ package repack.org.bouncycastle.cms;
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 public interface PasswordRecipient
-    extends Recipient
+		extends Recipient
 {
-    public static final int PKCS5_SCHEME2 = 0;
-    public static final int PKCS5_SCHEME2_UTF8 = 1;
+	public static final int PKCS5_SCHEME2 = 0;
+	public static final int PKCS5_SCHEME2_UTF8 = 1;
 
-    RecipientOperator getRecipientOperator(AlgorithmIdentifier keyEncryptionAlgorithm, AlgorithmIdentifier contentEncryptionAlgorithm, byte[] derivedKey, byte[] encryptedEncryptedContentKey)
-        throws CMSException;
+	RecipientOperator getRecipientOperator(AlgorithmIdentifier keyEncryptionAlgorithm, AlgorithmIdentifier contentEncryptionAlgorithm, byte[] derivedKey, byte[] encryptedEncryptedContentKey)
+			throws CMSException;
 
-    int getPasswordConversionScheme();
+	int getPasswordConversionScheme();
 
-    char[] getPassword();
+	char[] getPassword();
 }

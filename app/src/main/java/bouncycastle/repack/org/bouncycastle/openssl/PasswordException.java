@@ -3,10 +3,10 @@ package repack.org.bouncycastle.openssl;
 import java.io.IOException;
 
 public class PasswordException
-    extends IOException
+		extends IOException
 {
-    public PasswordException(String msg)
-    {
-        super(msg);
-    }
+	public PasswordException(String msg)
+	{
+		super(msg);
+	}
 }

@@ -1,81 +1,81 @@
 package repack.org.bouncycastle.openssl;
 
+import repack.org.bouncycastle.util.io.pem.PemGenerationException;
+import repack.org.bouncycastle.util.io.pem.PemObjectGenerator;
+import repack.org.bouncycastle.util.io.pem.PemWriter;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
-import repack.org.bouncycastle.util.io.pem.PemGenerationException;
-import repack.org.bouncycastle.util.io.pem.PemObjectGenerator;
-import repack.org.bouncycastle.util.io.pem.PemWriter;
-
 /**
  * General purpose writer for OpenSSL PEM objects.
  */
 public class PEMWriter
-    extends PemWriter
+		extends PemWriter
 {
-    private String provider;
+	private String provider;
 
-    /**
-     * Base constructor.
-     * 
-     * @param out output stream to use.
-     */
-    public PEMWriter(Writer out)
-    {
-        this(out, "BC");
-    }
+	/**
+	 * Base constructor.
+	 *
+	 * @param out output stream to use.
+	 */
+	public PEMWriter(Writer out)
+	{
+		this(out, "BC");
+	}
 
-    public PEMWriter(
-        Writer  out,
-        String  provider)
-    {
-        super(out);
+	public PEMWriter(
+			Writer out,
+			String provider)
+	{
+		super(out);
 
-        this.provider = provider;
-    }
+		this.provider = provider;
+	}
 
-    public void writeObject(
-        Object  obj)
-        throws IOException
-    {
-        try
-        {
-            super.writeObject(new MiscPEMGenerator(obj));
-        }
-        catch (PemGenerationException e)
-        {
-            if (e.getCause() instanceof IOException)
-            {
-                throw (IOException)e.getCause();
-            }
+	public void writeObject(
+			Object obj)
+			throws IOException
+	{
+		try
+		{
+			super.writeObject(new MiscPEMGenerator(obj));
+		}
+		catch(PemGenerationException e)
+		{
+			if(e.getCause() instanceof IOException)
+			{
+				throw (IOException) e.getCause();
+			}
 
-            throw e;
-        }
-    }
+			throw e;
+		}
+	}
 
-    public void writeObject(
-        PemObjectGenerator obj)
-        throws IOException
-    {
-        super.writeObject(obj);
-    }
+	public void writeObject(
+			PemObjectGenerator obj)
+			throws IOException
+	{
+		super.writeObject(obj);
+	}
 
-    public void writeObject(
-        Object       obj,
-        String       algorithm,
-        char[]       password,
-        SecureRandom random)
-        throws IOException
-    {
-        try
-        {
-            super.writeObject(new MiscPEMGenerator(obj, algorithm, password, random, provider));
-        }
-        catch (NoSuchProviderException e)
-        {
-            throw new EncryptionException(e.getMessage(), e);
-        }
-    }
+	public void writeObject(
+			Object obj,
+			String algorithm,
+			char[] password,
+			SecureRandom random)
+			throws IOException
+	{
+		try
+		{
+			super.writeObject(new MiscPEMGenerator(obj, algorithm, password, random, provider));
+		}
+		catch(NoSuchProviderException e)
+		{
+			throw new EncryptionException(e.getMessage(), e);
+		}
+	}
 }

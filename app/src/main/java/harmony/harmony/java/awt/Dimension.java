@@ -20,32 +20,36 @@
 package harmony.java.awt;
 
 import harmony.java.awt.geom.Dimension2D;
+import org.apache.harmony.misc.HashCode;
 
 import java.io.Serializable;
 
-import org.apache.harmony.misc.HashCode;
-
-public class Dimension extends Dimension2D implements Serializable {
+public class Dimension extends Dimension2D implements Serializable
+{
 
 	private static final long serialVersionUID = 4723952579491349524L;
 
 	public int width;
 	public int height;
 
-	public Dimension(Dimension d) {
+	public Dimension(Dimension d)
+	{
 		this(d.width, d.height);
 	}
 
-	public Dimension() {
+	public Dimension()
+	{
 		this(0, 0);
 	}
 
-	public Dimension(int width, int height) {
+	public Dimension(int width, int height)
+	{
 		setSize(width, height);
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		HashCode hash = new HashCode();
 		hash.append(width);
 		hash.append(height);
@@ -53,11 +57,14 @@ public class Dimension extends Dimension2D implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
 			return true;
 		}
-		if (obj instanceof Dimension) {
+		if(obj instanceof Dimension)
+		{
 			Dimension d = (Dimension) obj;
 			return (d.width == width && d.height == height);
 		}
@@ -65,38 +72,45 @@ public class Dimension extends Dimension2D implements Serializable {
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		// The output format based on 1.5 release behaviour. It could be
 		// obtained in the following way
 		// System.out.println(new Dimension().toString())
 		return getClass().getName() + "[width=" + width + ",height=" + height + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	public void setSize(int width, int height) {
+	public void setSize(int width, int height)
+	{
 		this.width = width;
 		this.height = height;
 	}
 
-	public void setSize(Dimension d) {
+	public void setSize(Dimension d)
+	{
 		setSize(d.width, d.height);
 	}
 
 	@Override
-	public void setSize(double width, double height) {
+	public void setSize(double width, double height)
+	{
 		setSize((int) Math.ceil(width), (int) Math.ceil(height));
 	}
 
-	public Dimension getSize() {
+	public Dimension getSize()
+	{
 		return new Dimension(width, height);
 	}
 
 	@Override
-	public double getHeight() {
+	public double getHeight()
+	{
 		return height;
 	}
 
 	@Override
-	public double getWidth() {
+	public double getWidth()
+	{
 		return width;
 	}
 

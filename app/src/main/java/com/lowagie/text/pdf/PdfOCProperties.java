@@ -54,6 +54,7 @@ package com.lowagie.text.pdf;
  *
  * @author Paulo Soares (psoares@consiste.pt)
  */
-public class PdfOCProperties extends PdfDictionary {
-    
+public class PdfOCProperties extends PdfDictionary
+{
+
 }

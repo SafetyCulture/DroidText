@@ -1,8 +1,5 @@
 package repack.org.bouncycastle.crypto.agreement;
 
-import java.math.BigInteger;
-
-
 import repack.org.bouncycastle.crypto.BasicAgreement;
 import repack.org.bouncycastle.crypto.CipherParameters;
 import repack.org.bouncycastle.crypto.params.ECDomainParameters;
@@ -10,9 +7,11 @@ import repack.org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import repack.org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import repack.org.bouncycastle.math.ec.ECPoint;
 
+import java.math.BigInteger;
+
 /**
  * P1363 7.2.2 ECSVDP-DHC
- *
+ * <p/>
  * ECSVDP-DHC is Elliptic Curve Secret Value Derivation Primitive,
  * Diffie-Hellman version with cofactor multiplication. It is based on
  * the work of [DH76], [Mil86], [Kob87], [LMQ98] and [Kal98a]. This
@@ -23,32 +22,32 @@ import repack.org.bouncycastle.math.ec.ECPoint;
  * scheme to derive a shared secret key; specifically, it may be used
  * with the schemes ECKAS-DH1 and DL/ECKAS-DH2. It does not assume the
  * validity of the input public key (see also Section 7.2.1).
- * <p>
+ * <p/>
  * Note: As stated P1363 compatibility mode with ECDH can be preset, and
  * in this case the implementation doesn't have a ECDH compatibility mode
  * (if you want that just use ECDHBasicAgreement and note they both implement
  * BasicAgreement!).
  */
 public class ECDHCBasicAgreement
-    implements BasicAgreement
+		implements BasicAgreement
 {
-    ECPrivateKeyParameters key;
+	ECPrivateKeyParameters key;
 
-    public void init(
-        CipherParameters key)
-    {
-        this.key = (ECPrivateKeyParameters)key;
-    }
+	public void init(
+			CipherParameters key)
+	{
+		this.key = (ECPrivateKeyParameters) key;
+	}
 
-    public BigInteger calculateAgreement(
-        CipherParameters pubKey)
-    {
-        ECPublicKeyParameters   pub = (ECPublicKeyParameters)pubKey;
-        ECDomainParameters      params = pub.getParameters();
-        ECPoint P = pub.getQ().multiply(params.getH().multiply(key.getD()));
+	public BigInteger calculateAgreement(
+			CipherParameters pubKey)
+	{
+		ECPublicKeyParameters pub = (ECPublicKeyParameters) pubKey;
+		ECDomainParameters params = pub.getParameters();
+		ECPoint P = pub.getQ().multiply(params.getH().multiply(key.getD()));
 
-        // if (p.isInfinity()) throw new RuntimeException("Invalid public key");
+		// if (p.isInfinity()) throw new RuntimeException("Invalid public key");
 
-        return P.getX().toBigInteger();
-    }
+		return P.getX().toBigInteger();
+	}
 }

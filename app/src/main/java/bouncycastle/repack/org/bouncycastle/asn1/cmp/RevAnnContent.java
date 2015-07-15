@@ -10,94 +10,95 @@ import repack.org.bouncycastle.asn1.crmf.CertId;
 import repack.org.bouncycastle.asn1.x509.X509Extensions;
 
 public class RevAnnContent
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private PKIStatus status;
-    private CertId certId;
-    private DERGeneralizedTime willBeRevokedAt;
-    private DERGeneralizedTime badSinceDate;
-    private X509Extensions crlDetails;
-    
-    private RevAnnContent(ASN1Sequence seq)
-    {
-        status = PKIStatus.getInstance(seq.getObjectAt(0));
-        certId = CertId.getInstance(seq.getObjectAt(1));
-        willBeRevokedAt = DERGeneralizedTime.getInstance(seq.getObjectAt(2));
-        badSinceDate = DERGeneralizedTime.getInstance(seq.getObjectAt(3));
+	private PKIStatus status;
+	private CertId certId;
+	private DERGeneralizedTime willBeRevokedAt;
+	private DERGeneralizedTime badSinceDate;
+	private X509Extensions crlDetails;
 
-        if (seq.size() > 4)
-        {
-            crlDetails = X509Extensions.getInstance(seq.getObjectAt(4));
-        }
-    }
+	private RevAnnContent(ASN1Sequence seq)
+	{
+		status = PKIStatus.getInstance(seq.getObjectAt(0));
+		certId = CertId.getInstance(seq.getObjectAt(1));
+		willBeRevokedAt = DERGeneralizedTime.getInstance(seq.getObjectAt(2));
+		badSinceDate = DERGeneralizedTime.getInstance(seq.getObjectAt(3));
 
-    public static RevAnnContent getInstance(Object o)
-    {
-        if (o instanceof RevAnnContent)
-        {
-            return (RevAnnContent)o;
-        }
+		if(seq.size() > 4)
+		{
+			crlDetails = X509Extensions.getInstance(seq.getObjectAt(4));
+		}
+	}
 
-        if (o instanceof ASN1Sequence)
-        {
-            return new RevAnnContent((ASN1Sequence)o);
-        }
+	public static RevAnnContent getInstance(Object o)
+	{
+		if(o instanceof RevAnnContent)
+		{
+			return (RevAnnContent) o;
+		}
 
-        throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
-    }
+		if(o instanceof ASN1Sequence)
+		{
+			return new RevAnnContent((ASN1Sequence) o);
+		}
 
-    public PKIStatus getStatus()
-    {
-        return status;
-    }
+		throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
+	}
 
-    public CertId getCertId()
-    {
-        return certId;
-    }
+	public PKIStatus getStatus()
+	{
+		return status;
+	}
 
-    public DERGeneralizedTime getWillBeRevokedAt()
-    {
-        return willBeRevokedAt;
-    }
+	public CertId getCertId()
+	{
+		return certId;
+	}
 
-    public DERGeneralizedTime getBadSinceDate()
-    {
-        return badSinceDate;
-    }
+	public DERGeneralizedTime getWillBeRevokedAt()
+	{
+		return willBeRevokedAt;
+	}
 
-    public X509Extensions getCrlDetails()
-    {
-        return crlDetails;
-    }
+	public DERGeneralizedTime getBadSinceDate()
+	{
+		return badSinceDate;
+	}
 
-    /**
-     * <pre>
-     * RevAnnContent ::= SEQUENCE {
-     *       status              PKIStatus,
-     *       certId              CertId,
-     *       willBeRevokedAt     GeneralizedTime,
-     *       badSinceDate        GeneralizedTime,
-     *       crlDetails          Extensions  OPTIONAL
-     *        -- extra CRL details (e.g., crl number, reason, location, etc.)
-     * }
-     * </pre>
-     * @return a basic ASN.1 object representation.
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	public X509Extensions getCrlDetails()
+	{
+		return crlDetails;
+	}
 
-        v.add(status);
-        v.add(certId);
-        v.add(willBeRevokedAt);
-        v.add(badSinceDate);
+	/**
+	 * <pre>
+	 * RevAnnContent ::= SEQUENCE {
+	 *       status              PKIStatus,
+	 *       certId              CertId,
+	 *       willBeRevokedAt     GeneralizedTime,
+	 *       badSinceDate        GeneralizedTime,
+	 *       crlDetails          Extensions  OPTIONAL
+	 *        -- extra CRL details (e.g., crl number, reason, location, etc.)
+	 * }
+	 * </pre>
+	 *
+	 * @return a basic ASN.1 object representation.
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        if (crlDetails != null)
-        {
-            v.add(crlDetails);
-        }
+		v.add(status);
+		v.add(certId);
+		v.add(willBeRevokedAt);
+		v.add(badSinceDate);
 
-        return new DERSequence(v);
-    }
+		if(crlDetails != null)
+		{
+			v.add(crlDetails);
+		}
+
+		return new DERSequence(v);
+	}
 }

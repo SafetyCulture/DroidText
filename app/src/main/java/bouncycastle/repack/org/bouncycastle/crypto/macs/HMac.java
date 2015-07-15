@@ -1,199 +1,199 @@
 package repack.org.bouncycastle.crypto.macs;
 
-import java.util.Hashtable;
-
 import repack.org.bouncycastle.crypto.CipherParameters;
 import repack.org.bouncycastle.crypto.Digest;
 import repack.org.bouncycastle.crypto.ExtendedDigest;
 import repack.org.bouncycastle.crypto.Mac;
 import repack.org.bouncycastle.crypto.params.KeyParameter;
 
+import java.util.Hashtable;
+
 /**
  * HMAC implementation based on RFC2104
- *
+ * <p/>
  * H(K XOR opad, H(K XOR ipad, text))
  */
 public class HMac
-    implements Mac
+		implements Mac
 {
-    private final static byte IPAD = (byte)0x36;
-    private final static byte OPAD = (byte)0x5C;
+	private final static byte IPAD = (byte) 0x36;
+	private final static byte OPAD = (byte) 0x5C;
 
-    private Digest digest;
-    private int digestSize;
-    private int blockLength;
-    
-    private byte[] inputPad;
-    private byte[] outputPad;
+	private Digest digest;
+	private int digestSize;
+	private int blockLength;
 
-    private static Hashtable blockLengths;
-    
-    static
-    {
-        blockLengths = new Hashtable();
-        
-        blockLengths.put("GOST3411", new Integer(32));
-        
-        blockLengths.put("MD2", new Integer(16));
-        blockLengths.put("MD4", new Integer(64));
-        blockLengths.put("MD5", new Integer(64));
-        
-        blockLengths.put("RIPEMD128", new Integer(64));
-        blockLengths.put("RIPEMD160", new Integer(64));
-        
-        blockLengths.put("SHA-1", new Integer(64));
-        blockLengths.put("SHA-224", new Integer(64));
-        blockLengths.put("SHA-256", new Integer(64));
-        blockLengths.put("SHA-384", new Integer(128));
-        blockLengths.put("SHA-512", new Integer(128));
-        
-        blockLengths.put("Tiger", new Integer(64));
-        blockLengths.put("Whirlpool", new Integer(64));
-    }
-    
-    private static int getByteLength(
-        Digest digest)
-    {
-        if (digest instanceof ExtendedDigest)
-        {
-            return ((ExtendedDigest)digest).getByteLength();
-        }
-        
-        Integer  b = (Integer)blockLengths.get(digest.getAlgorithmName());
-        
-        if (b == null)
-        {       
-            throw new IllegalArgumentException("unknown digest passed: " + digest.getAlgorithmName());
-        }
-        
-        return b.intValue();
-    }
-    
-    /**
-     * Base constructor for one of the standard digest algorithms that the 
-     * byteLength of the algorithm is know for.
-     * 
-     * @param digest the digest.
-     */
-    public HMac(
-        Digest digest)
-    {
-        this(digest, getByteLength(digest));
-    }
+	private byte[] inputPad;
+	private byte[] outputPad;
 
-    private HMac(
-        Digest digest,
-        int    byteLength)
-    {
-        this.digest = digest;
-        digestSize = digest.getDigestSize();
+	private static Hashtable blockLengths;
 
-        this.blockLength = byteLength;
+	static
+	{
+		blockLengths = new Hashtable();
 
-        inputPad = new byte[blockLength];
-        outputPad = new byte[blockLength];
-    }
-    
-    public String getAlgorithmName()
-    {
-        return digest.getAlgorithmName() + "/HMAC";
-    }
+		blockLengths.put("GOST3411", new Integer(32));
 
-    public Digest getUnderlyingDigest()
-    {
-        return digest;
-    }
+		blockLengths.put("MD2", new Integer(16));
+		blockLengths.put("MD4", new Integer(64));
+		blockLengths.put("MD5", new Integer(64));
 
-    public void init(
-        CipherParameters params)
-    {
-        digest.reset();
+		blockLengths.put("RIPEMD128", new Integer(64));
+		blockLengths.put("RIPEMD160", new Integer(64));
 
-        byte[] key = ((KeyParameter)params).getKey();
+		blockLengths.put("SHA-1", new Integer(64));
+		blockLengths.put("SHA-224", new Integer(64));
+		blockLengths.put("SHA-256", new Integer(64));
+		blockLengths.put("SHA-384", new Integer(128));
+		blockLengths.put("SHA-512", new Integer(128));
 
-        if (key.length > blockLength)
-        {
-            digest.update(key, 0, key.length);
-            digest.doFinal(inputPad, 0);
-            for (int i = digestSize; i < inputPad.length; i++)
-            {
-                inputPad[i] = 0;
-            }
-        }
-        else
-        {
-            System.arraycopy(key, 0, inputPad, 0, key.length);
-            for (int i = key.length; i < inputPad.length; i++)
-            {
-                inputPad[i] = 0;
-            }
-        }
+		blockLengths.put("Tiger", new Integer(64));
+		blockLengths.put("Whirlpool", new Integer(64));
+	}
 
-        outputPad = new byte[inputPad.length];
-        System.arraycopy(inputPad, 0, outputPad, 0, inputPad.length);
+	private static int getByteLength(
+			Digest digest)
+	{
+		if(digest instanceof ExtendedDigest)
+		{
+			return ((ExtendedDigest) digest).getByteLength();
+		}
 
-        for (int i = 0; i < inputPad.length; i++)
-        {
-            inputPad[i] ^= IPAD;
-        }
+		Integer b = (Integer) blockLengths.get(digest.getAlgorithmName());
 
-        for (int i = 0; i < outputPad.length; i++)
-        {
-            outputPad[i] ^= OPAD;
-        }
+		if(b == null)
+		{
+			throw new IllegalArgumentException("unknown digest passed: " + digest.getAlgorithmName());
+		}
 
-        digest.update(inputPad, 0, inputPad.length);
-    }
+		return b.intValue();
+	}
 
-    public int getMacSize()
-    {
-        return digestSize;
-    }
+	/**
+	 * Base constructor for one of the standard digest algorithms that the
+	 * byteLength of the algorithm is know for.
+	 *
+	 * @param digest the digest.
+	 */
+	public HMac(
+			Digest digest)
+	{
+		this(digest, getByteLength(digest));
+	}
 
-    public void update(
-        byte in)
-    {
-        digest.update(in);
-    }
+	private HMac(
+			Digest digest,
+			int byteLength)
+	{
+		this.digest = digest;
+		digestSize = digest.getDigestSize();
 
-    public void update(
-        byte[] in,
-        int inOff,
-        int len)
-    {
-        digest.update(in, inOff, len);
-    }
+		this.blockLength = byteLength;
 
-    public int doFinal(
-        byte[] out,
-        int outOff)
-    {
-        byte[] tmp = new byte[digestSize];
-        digest.doFinal(tmp, 0);
+		inputPad = new byte[blockLength];
+		outputPad = new byte[blockLength];
+	}
 
-        digest.update(outputPad, 0, outputPad.length);
-        digest.update(tmp, 0, tmp.length);
+	public String getAlgorithmName()
+	{
+		return digest.getAlgorithmName() + "/HMAC";
+	}
 
-        int     len = digest.doFinal(out, outOff);
+	public Digest getUnderlyingDigest()
+	{
+		return digest;
+	}
 
-        reset();
+	public void init(
+			CipherParameters params)
+	{
+		digest.reset();
 
-        return len;
-    }
+		byte[] key = ((KeyParameter) params).getKey();
 
-    /**
-     * Reset the mac generator.
-     */
-    public void reset()
-    {
-        /*
-         * reset the underlying digest.
+		if(key.length > blockLength)
+		{
+			digest.update(key, 0, key.length);
+			digest.doFinal(inputPad, 0);
+			for(int i = digestSize; i < inputPad.length; i++)
+			{
+				inputPad[i] = 0;
+			}
+		}
+		else
+		{
+			System.arraycopy(key, 0, inputPad, 0, key.length);
+			for(int i = key.length; i < inputPad.length; i++)
+			{
+				inputPad[i] = 0;
+			}
+		}
+
+		outputPad = new byte[inputPad.length];
+		System.arraycopy(inputPad, 0, outputPad, 0, inputPad.length);
+
+		for(int i = 0; i < inputPad.length; i++)
+		{
+			inputPad[i] ^= IPAD;
+		}
+
+		for(int i = 0; i < outputPad.length; i++)
+		{
+			outputPad[i] ^= OPAD;
+		}
+
+		digest.update(inputPad, 0, inputPad.length);
+	}
+
+	public int getMacSize()
+	{
+		return digestSize;
+	}
+
+	public void update(
+			byte in)
+	{
+		digest.update(in);
+	}
+
+	public void update(
+			byte[] in,
+			int inOff,
+			int len)
+	{
+		digest.update(in, inOff, len);
+	}
+
+	public int doFinal(
+			byte[] out,
+			int outOff)
+	{
+		byte[] tmp = new byte[digestSize];
+		digest.doFinal(tmp, 0);
+
+		digest.update(outputPad, 0, outputPad.length);
+		digest.update(tmp, 0, tmp.length);
+
+		int len = digest.doFinal(out, outOff);
+
+		reset();
+
+		return len;
+	}
+
+	/**
+	 * Reset the mac generator.
+	 */
+	public void reset()
+	{
+		/*
+		 * reset the underlying digest.
          */
-        digest.reset();
+		digest.reset();
 
         /*
          * reinitialize the digest.
          */
-        digest.update(inputPad, 0, inputPad.length);
-    }
+		digest.update(inputPad, 0, inputPad.length);
+	}
 }

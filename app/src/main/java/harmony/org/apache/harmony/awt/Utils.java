@@ -22,36 +22,49 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
-public final class Utils {
+public final class Utils
+{
 
-	public static String getSystemProperty(final String name) {
+	public static String getSystemProperty(final String name)
+	{
 		return getSystemProperty(name, null);
 	}
 
-	public static String getSystemProperty(final String name, final String value) {
-		return AccessController.doPrivileged(new PrivilegedAction<String>() {
-			public String run() {
+	public static String getSystemProperty(final String name, final String value)
+	{
+		return AccessController.doPrivileged(new PrivilegedAction<String>()
+		{
+			public String run()
+			{
 				return System.getProperty(name, value);
 			}
 		});
 	}
 
-	public static void loadLibrary(final String name) throws UnsatisfiedLinkError, NullPointerException {
-		try {
-			AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-				public Object run() {
+	public static void loadLibrary(final String name) throws UnsatisfiedLinkError, NullPointerException
+	{
+		try
+		{
+			AccessController.doPrivileged(new PrivilegedExceptionAction<Object>()
+			{
+				public Object run()
+				{
 					System.loadLibrary(name);
 					return null;
 				}
 			});
-		} catch (final PrivilegedActionException ex) {
+		}
+		catch(final PrivilegedActionException ex)
+		{
 			final Throwable cause = ex.getCause();
 
-			if (cause instanceof UnsatisfiedLinkError) {
+			if(cause instanceof UnsatisfiedLinkError)
+			{
 				throw (UnsatisfiedLinkError) cause;
 			}
 
-			if (cause instanceof NullPointerException) {
+			if(cause instanceof NullPointerException)
+			{
 				throw (NullPointerException) cause;
 			}
 		}

@@ -4,47 +4,47 @@ import repack.org.bouncycastle.util.Arrays;
 
 public class DSAValidationParameters
 {
-    private byte[]  seed;
-    private int     counter;
+	private byte[] seed;
+	private int counter;
 
-    public DSAValidationParameters(
-        byte[]  seed,
-        int     counter)
-    {
-        this.seed = seed;
-        this.counter = counter;
-    }
+	public DSAValidationParameters(
+			byte[] seed,
+			int counter)
+	{
+		this.seed = seed;
+		this.counter = counter;
+	}
 
-    public int getCounter()
-    {
-        return counter;
-    }
+	public int getCounter()
+	{
+		return counter;
+	}
 
-    public byte[] getSeed()
-    {
-        return seed;
-    }
+	public byte[] getSeed()
+	{
+		return seed;
+	}
 
-    public int hashCode()
-    {
-        return counter ^ Arrays.hashCode(seed);
-    }
-    
-    public boolean equals(
-        Object o)
-    {
-        if (!(o instanceof DSAValidationParameters))
-        {
-            return false;
-        }
+	public int hashCode()
+	{
+		return counter ^ Arrays.hashCode(seed);
+	}
 
-        DSAValidationParameters  other = (DSAValidationParameters)o;
+	public boolean equals(
+			Object o)
+	{
+		if(!(o instanceof DSAValidationParameters))
+		{
+			return false;
+		}
 
-        if (other.counter != this.counter)
-        {
-            return false;
-        }
+		DSAValidationParameters other = (DSAValidationParameters) o;
 
-        return Arrays.areEqual(this.seed, other.seed);
-    }
+		if(other.counter != this.counter)
+		{
+			return false;
+		}
+
+		return Arrays.areEqual(this.seed, other.seed);
+	}
 }

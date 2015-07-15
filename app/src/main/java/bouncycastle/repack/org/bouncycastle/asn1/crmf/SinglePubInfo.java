@@ -9,64 +9,65 @@ import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.x509.GeneralName;
 
 public class SinglePubInfo
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private DERInteger pubMethod;
-    private GeneralName pubLocation;
+	private DERInteger pubMethod;
+	private GeneralName pubLocation;
 
-    private SinglePubInfo(ASN1Sequence seq)
-    {
-        pubMethod = DERInteger.getInstance(seq.getObjectAt(0));
+	private SinglePubInfo(ASN1Sequence seq)
+	{
+		pubMethod = DERInteger.getInstance(seq.getObjectAt(0));
 
-        if (seq.size() == 2)
-        {
-            pubLocation = GeneralName.getInstance(seq.getObjectAt(1));
-        }
-    }
+		if(seq.size() == 2)
+		{
+			pubLocation = GeneralName.getInstance(seq.getObjectAt(1));
+		}
+	}
 
-    public static SinglePubInfo getInstance(Object o)
-    {
-        if (o instanceof SinglePubInfo)
-        {
-            return (SinglePubInfo)o;
-        }
+	public static SinglePubInfo getInstance(Object o)
+	{
+		if(o instanceof SinglePubInfo)
+		{
+			return (SinglePubInfo) o;
+		}
 
-        if (o instanceof ASN1Sequence)
-        {
-            return new SinglePubInfo((ASN1Sequence)o);
-        }
+		if(o instanceof ASN1Sequence)
+		{
+			return new SinglePubInfo((ASN1Sequence) o);
+		}
 
-        throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
-    }
+		throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
+	}
 
-    public GeneralName getPubLocation()
-    {
-        return pubLocation;
-    }
+	public GeneralName getPubLocation()
+	{
+		return pubLocation;
+	}
 
-    /**
-     * <pre>
-     * SinglePubInfo ::= SEQUENCE {
-     *        pubMethod    INTEGER {
-     *           dontCare    (0),
-     *           x500        (1),
-     *           web         (2),
-     *           ldap        (3) },
-     *       pubLocation  GeneralName OPTIONAL }
-     * </pre>
-     * @return a basic ASN.1 object representation.
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	/**
+	 * <pre>
+	 * SinglePubInfo ::= SEQUENCE {
+	 *        pubMethod    INTEGER {
+	 *           dontCare    (0),
+	 *           x500        (1),
+	 *           web         (2),
+	 *           ldap        (3) },
+	 *       pubLocation  GeneralName OPTIONAL }
+	 * </pre>
+	 *
+	 * @return a basic ASN.1 object representation.
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(pubMethod);
+		v.add(pubMethod);
 
-        if (pubLocation != null)
-        {
-            v.add(pubLocation);
-        }
+		if(pubLocation != null)
+		{
+			v.add(pubLocation);
+		}
 
-        return new DERSequence(v);
-    }
+		return new DERSequence(v);
+	}
 }

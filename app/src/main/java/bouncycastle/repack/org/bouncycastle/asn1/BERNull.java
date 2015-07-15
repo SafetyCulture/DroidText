@@ -6,25 +6,25 @@ import java.io.IOException;
  * A BER NULL object.
  */
 public class BERNull
-    extends DERNull
+		extends DERNull
 {
-    public static final BERNull INSTANCE = new BERNull();
+	public static final BERNull INSTANCE = new BERNull();
 
-    public BERNull()
-    {
-    }
+	public BERNull()
+	{
+	}
 
-    void encode(
-        DEROutputStream  out)
-        throws IOException
-    {
-        if (out instanceof ASN1OutputStream || out instanceof BEROutputStream)
-        {
-            out.write(NULL);
-        }
-        else
-        {
-            super.encode(out);
-        }
-    }
+	void encode(
+			DEROutputStream out)
+			throws IOException
+	{
+		if(out instanceof ASN1OutputStream || out instanceof BEROutputStream)
+		{
+			out.write(NULL);
+		}
+		else
+		{
+			super.encode(out);
+		}
+	}
 }

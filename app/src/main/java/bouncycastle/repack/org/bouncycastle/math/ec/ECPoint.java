@@ -1,90 +1,90 @@
 package repack.org.bouncycastle.math.ec;
 
-import java.math.BigInteger;
-
 import repack.org.bouncycastle.asn1.x9.X9IntegerConverter;
+
+import java.math.BigInteger;
 
 /**
  * base class for points on elliptic curves.
  */
 public abstract class ECPoint
 {
-    ECCurve        curve;
-    ECFieldElement x;
-    ECFieldElement y;
+	ECCurve curve;
+	ECFieldElement x;
+	ECFieldElement y;
 
-    protected boolean withCompression;
+	protected boolean withCompression;
 
-    protected ECMultiplier multiplier = null;
+	protected ECMultiplier multiplier = null;
 
-    protected PreCompInfo preCompInfo = null;
+	protected PreCompInfo preCompInfo = null;
 
-    private static X9IntegerConverter converter = new X9IntegerConverter();
+	private static X9IntegerConverter converter = new X9IntegerConverter();
 
-    protected ECPoint(ECCurve curve, ECFieldElement x, ECFieldElement y)
-    {
-        this.curve = curve;
-        this.x = x;
-        this.y = y;
-    }
-    
-    public ECCurve getCurve()
-    {
-        return curve;
-    }
-    
-    public ECFieldElement getX()
-    {
-        return x;
-    }
+	protected ECPoint(ECCurve curve, ECFieldElement x, ECFieldElement y)
+	{
+		this.curve = curve;
+		this.x = x;
+		this.y = y;
+	}
 
-    public ECFieldElement getY()
-    {
-        return y;
-    }
+	public ECCurve getCurve()
+	{
+		return curve;
+	}
 
-    public boolean isInfinity()
-    {
-        return x == null && y == null;
-    }
+	public ECFieldElement getX()
+	{
+		return x;
+	}
 
-    public boolean isCompressed()
-    {
-        return withCompression;
-    }
+	public ECFieldElement getY()
+	{
+		return y;
+	}
 
-    public boolean equals(
-        Object  other)
-    {
-        if (other == this)
-        {
-            return true;
-        }
+	public boolean isInfinity()
+	{
+		return x == null && y == null;
+	}
 
-        if (!(other instanceof ECPoint))
-        {
-            return false;
-        }
+	public boolean isCompressed()
+	{
+		return withCompression;
+	}
 
-        ECPoint o = (ECPoint)other;
+	public boolean equals(
+			Object other)
+	{
+		if(other == this)
+		{
+			return true;
+		}
 
-        if (this.isInfinity())
-        {
-            return o.isInfinity();
-        }
+		if(!(other instanceof ECPoint))
+		{
+			return false;
+		}
 
-        return x.equals(o.x) && y.equals(o.y);
-    }
+		ECPoint o = (ECPoint) other;
 
-    public int hashCode()
-    {
-        if (this.isInfinity())
-        {
-            return 0;
-        }
-        
-        return x.hashCode() ^ y.hashCode();
-    }
+		if(this.isInfinity())
+		{
+			return o.isInfinity();
+		}
+
+		return x.equals(o.x) && y.equals(o.y);
+	}
+
+	public int hashCode()
+	{
+		if(this.isInfinity())
+		{
+			return 0;
+		}
+
+		return x.hashCode() ^ y.hashCode();
+	}
 
 //    /**
 //     * Mainly for testing. Explicitly set the <code>ECMultiplier</code>.
@@ -96,493 +96,501 @@ public abstract class ECPoint
 //        this.multiplier = multiplier;
 //    }
 
-    /**
-     * Sets the <code>PreCompInfo</code>. Used by <code>ECMultiplier</code>s
-     * to save the precomputation for this <code>ECPoint</code> to store the
-     * precomputation result for use by subsequent multiplication.
-     * @param preCompInfo The values precomputed by the
-     * <code>ECMultiplier</code>.
-     */
-    void setPreCompInfo(PreCompInfo preCompInfo)
-    {
-        this.preCompInfo = preCompInfo;
-    }
+	/**
+	 * Sets the <code>PreCompInfo</code>. Used by <code>ECMultiplier</code>s
+	 * to save the precomputation for this <code>ECPoint</code> to store the
+	 * precomputation result for use by subsequent multiplication.
+	 *
+	 * @param preCompInfo The values precomputed by the
+	 *                    <code>ECMultiplier</code>.
+	 */
+	void setPreCompInfo(PreCompInfo preCompInfo)
+	{
+		this.preCompInfo = preCompInfo;
+	}
 
-    public abstract byte[] getEncoded();
+	public abstract byte[] getEncoded();
 
-    public abstract ECPoint add(ECPoint b);
-    public abstract ECPoint subtract(ECPoint b);
-    public abstract ECPoint negate();
-    public abstract ECPoint twice();
+	public abstract ECPoint add(ECPoint b);
 
-    /**
-     * Sets the default <code>ECMultiplier</code>, unless already set. 
-     */
-    synchronized void assertECMultiplier()
-    {
-        if (this.multiplier == null)
-        {
-            this.multiplier = new FpNafMultiplier();
-        }
-    }
+	public abstract ECPoint subtract(ECPoint b);
 
-    /**
-     * Multiplies this <code>ECPoint</code> by the given number.
-     * @param k The multiplicator.
-     * @return <code>k * this</code>.
-     */
-    public ECPoint multiply(BigInteger k)
-    {
-        if (k.signum() < 0)
-        {
-            throw new IllegalArgumentException("The multiplicator cannot be negative");
-        }
+	public abstract ECPoint negate();
 
-        if (this.isInfinity())
-        {
-            return this;
-        }
+	public abstract ECPoint twice();
 
-        if (k.signum() == 0)
-        {
-            return this.curve.getInfinity();
-        }
+	/**
+	 * Sets the default <code>ECMultiplier</code>, unless already set.
+	 */
+	synchronized void assertECMultiplier()
+	{
+		if(this.multiplier == null)
+		{
+			this.multiplier = new FpNafMultiplier();
+		}
+	}
 
-        assertECMultiplier();
-        return this.multiplier.multiply(this, k, preCompInfo);
-    }
+	/**
+	 * Multiplies this <code>ECPoint</code> by the given number.
+	 *
+	 * @param k The multiplicator.
+	 * @return <code>k * this</code>.
+	 */
+	public ECPoint multiply(BigInteger k)
+	{
+		if(k.signum() < 0)
+		{
+			throw new IllegalArgumentException("The multiplicator cannot be negative");
+		}
 
-    /**
-     * Elliptic curve points over Fp
-     */
-    public static class Fp extends ECPoint
-    {
-        
-        /**
-         * Create a point which encodes with point compression.
-         * 
-         * @param curve the curve to use
-         * @param x affine x co-ordinate
-         * @param y affine y co-ordinate
-         */
-        public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y)
-        {
-            this(curve, x, y, false);
-        }
+		if(this.isInfinity())
+		{
+			return this;
+		}
 
-        /**
-         * Create a point that encodes with or without point compresion.
-         * 
-         * @param curve the curve to use
-         * @param x affine x co-ordinate
-         * @param y affine y co-ordinate
-         * @param withCompression if true encode with point compression
-         */
-        public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
-        {
-            super(curve, x, y);
+		if(k.signum() == 0)
+		{
+			return this.curve.getInfinity();
+		}
 
-            if ((x != null && y == null) || (x == null && y != null))
-            {
-                throw new IllegalArgumentException("Exactly one of the field elements is null");
-            }
+		assertECMultiplier();
+		return this.multiplier.multiply(this, k, preCompInfo);
+	}
 
-            this.withCompression = withCompression;
-        }
-         
-        /**
-         * return the field element encoded with point compression. (S 4.3.6)
-         */
-        public byte[] getEncoded()
-        {
-            if (this.isInfinity()) 
-            {
-                return new byte[1];
-            }
+	/**
+	 * Elliptic curve points over Fp
+	 */
+	public static class Fp extends ECPoint
+	{
 
-            int qLength = converter.getByteLength(x);
-            
-            if (withCompression)
-            {
-                byte    PC;
-    
-                if (this.getY().toBigInteger().testBit(0))
-                {
-                    PC = 0x03;
-                }
-                else
-                {
-                    PC = 0x02;
-                }
-    
-                byte[]  X = converter.integerToBytes(this.getX().toBigInteger(), qLength);
-                byte[]  PO = new byte[X.length + 1];
-    
-                PO[0] = PC;
-                System.arraycopy(X, 0, PO, 1, X.length);
-    
-                return PO;
-            }
-            else
-            {
-                byte[]  X = converter.integerToBytes(this.getX().toBigInteger(), qLength);
-                byte[]  Y = converter.integerToBytes(this.getY().toBigInteger(), qLength);
-                byte[]  PO = new byte[X.length + Y.length + 1];
-                
-                PO[0] = 0x04;
-                System.arraycopy(X, 0, PO, 1, X.length);
-                System.arraycopy(Y, 0, PO, X.length + 1, Y.length);
+		/**
+		 * Create a point which encodes with point compression.
+		 *
+		 * @param curve the curve to use
+		 * @param x     affine x co-ordinate
+		 * @param y     affine y co-ordinate
+		 */
+		public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y)
+		{
+			this(curve, x, y, false);
+		}
 
-                return PO;
-            }
-        }
+		/**
+		 * Create a point that encodes with or without point compresion.
+		 *
+		 * @param curve           the curve to use
+		 * @param x               affine x co-ordinate
+		 * @param y               affine y co-ordinate
+		 * @param withCompression if true encode with point compression
+		 */
+		public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
+		{
+			super(curve, x, y);
 
-        // B.3 pg 62
-        public ECPoint add(ECPoint b)
-        {
-            if (this.isInfinity())
-            {
-                return b;
-            }
+			if((x != null && y == null) || (x == null && y != null))
+			{
+				throw new IllegalArgumentException("Exactly one of the field elements is null");
+			}
 
-            if (b.isInfinity())
-            {
-                return this;
-            }
+			this.withCompression = withCompression;
+		}
 
-            // Check if b = this or b = -this
-            if (this.x.equals(b.x))
-            {
-                if (this.y.equals(b.y))
-                {
-                    // this = b, i.e. this must be doubled
-                    return this.twice();
-                }
+		/**
+		 * return the field element encoded with point compression. (S 4.3.6)
+		 */
+		public byte[] getEncoded()
+		{
+			if(this.isInfinity())
+			{
+				return new byte[1];
+			}
 
-                // this = -b, i.e. the result is the point at infinity
-                return this.curve.getInfinity();
-            }
+			int qLength = converter.getByteLength(x);
 
-            ECFieldElement gamma = b.y.subtract(this.y).divide(b.x.subtract(this.x));
+			if(withCompression)
+			{
+				byte PC;
 
-            ECFieldElement x3 = gamma.square().subtract(this.x).subtract(b.x);
-            ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
+				if(this.getY().toBigInteger().testBit(0))
+				{
+					PC = 0x03;
+				}
+				else
+				{
+					PC = 0x02;
+				}
 
-            return new ECPoint.Fp(curve, x3, y3);
-        }
+				byte[] X = converter.integerToBytes(this.getX().toBigInteger(), qLength);
+				byte[] PO = new byte[X.length + 1];
 
-        // B.3 pg 62
-        public ECPoint twice()
-        {
-            if (this.isInfinity())
-            {
-                // Twice identity element (point at infinity) is identity
-                return this;
-            }
+				PO[0] = PC;
+				System.arraycopy(X, 0, PO, 1, X.length);
 
-            if (this.y.toBigInteger().signum() == 0) 
-            {
-                // if y1 == 0, then (x1, y1) == (x1, -y1)
-                // and hence this = -this and thus 2(x1, y1) == infinity
-                return this.curve.getInfinity();
-            }
+				return PO;
+			}
+			else
+			{
+				byte[] X = converter.integerToBytes(this.getX().toBigInteger(), qLength);
+				byte[] Y = converter.integerToBytes(this.getY().toBigInteger(), qLength);
+				byte[] PO = new byte[X.length + Y.length + 1];
 
-            ECFieldElement TWO = this.curve.fromBigInteger(BigInteger.valueOf(2));
-            ECFieldElement THREE = this.curve.fromBigInteger(BigInteger.valueOf(3));
-            ECFieldElement gamma = this.x.square().multiply(THREE).add(curve.a).divide(y.multiply(TWO));
+				PO[0] = 0x04;
+				System.arraycopy(X, 0, PO, 1, X.length);
+				System.arraycopy(Y, 0, PO, X.length + 1, Y.length);
 
-            ECFieldElement x3 = gamma.square().subtract(this.x.multiply(TWO));
-            ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
-                
-            return new ECPoint.Fp(curve, x3, y3, this.withCompression);
-        }
+				return PO;
+			}
+		}
 
-        // D.3.2 pg 102 (see Note:)
-        public ECPoint subtract(ECPoint b)
-        {
-            if (b.isInfinity())
-            {
-                return this;
-            }
+		// B.3 pg 62
+		public ECPoint add(ECPoint b)
+		{
+			if(this.isInfinity())
+			{
+				return b;
+			}
 
-            // Add -b
-            return add(b.negate());
-        }
+			if(b.isInfinity())
+			{
+				return this;
+			}
 
-        public ECPoint negate()
-        {
-            return new ECPoint.Fp(curve, this.x, this.y.negate(), this.withCompression);
-        }
+			// Check if b = this or b = -this
+			if(this.x.equals(b.x))
+			{
+				if(this.y.equals(b.y))
+				{
+					// this = b, i.e. this must be doubled
+					return this.twice();
+				}
 
-        /**
-         * Sets the default <code>ECMultiplier</code>, unless already set. 
-         */
-        synchronized void assertECMultiplier()
-        {
-            if (this.multiplier == null)
-            {
-                this.multiplier = new WNafMultiplier();
-            }
-        }
-    }
+				// this = -b, i.e. the result is the point at infinity
+				return this.curve.getInfinity();
+			}
 
-    /**
-     * Elliptic curve points over F2m
-     */
-    public static class F2m extends ECPoint
-    {
-        /**
-         * @param curve base curve
-         * @param x x point
-         * @param y y point
-         */
-        public F2m(ECCurve curve, ECFieldElement x, ECFieldElement y)
-        {
-            this(curve, x, y, false);
-        }
-        
-        /**
-         * @param curve base curve
-         * @param x x point
-         * @param y y point
-         * @param withCompression true if encode with point compression.
-         */
-        public F2m(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
-        {
-            super(curve, x, y);
+			ECFieldElement gamma = b.y.subtract(this.y).divide(b.x.subtract(this.x));
 
-            if ((x != null && y == null) || (x == null && y != null))
-            {
-                throw new IllegalArgumentException("Exactly one of the field elements is null");
-            }
-            
-            if (x != null)
-            {
-                // Check if x and y are elements of the same field
-                ECFieldElement.F2m.checkFieldElements(this.x, this.y);
-    
-                // Check if x and a are elements of the same field
-                if (curve != null)
-                {
-                    ECFieldElement.F2m.checkFieldElements(this.x, this.curve.getA());
-                }
-            }
-            
-            this.withCompression = withCompression;
-        }
+			ECFieldElement x3 = gamma.square().subtract(this.x).subtract(b.x);
+			ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
 
-        /* (non-Javadoc)
-         * @see org.bouncycastle.math.ec.ECPoint#getEncoded()
-         */
-        public byte[] getEncoded()
-        {
-            if (this.isInfinity()) 
-            {
-                return new byte[1];
-            }
+			return new ECPoint.Fp(curve, x3, y3);
+		}
 
-            int byteCount = converter.getByteLength(this.x);
-            byte[] X = converter.integerToBytes(this.getX().toBigInteger(), byteCount);
-            byte[] PO;
+		// B.3 pg 62
+		public ECPoint twice()
+		{
+			if(this.isInfinity())
+			{
+				// Twice identity element (point at infinity) is identity
+				return this;
+			}
 
-            if (withCompression)
-            {
-                // See X9.62 4.3.6 and 4.2.2
-                PO = new byte[byteCount + 1];
+			if(this.y.toBigInteger().signum() == 0)
+			{
+				// if y1 == 0, then (x1, y1) == (x1, -y1)
+				// and hence this = -this and thus 2(x1, y1) == infinity
+				return this.curve.getInfinity();
+			}
 
-                PO[0] = 0x02;
-                // X9.62 4.2.2 and 4.3.6:
-                // if x = 0 then ypTilde := 0, else ypTilde is the rightmost
-                // bit of y * x^(-1)
-                // if ypTilde = 0, then PC := 02, else PC := 03
-                // Note: PC === PO[0]
-                if (!(this.getX().toBigInteger().equals(ECConstants.ZERO)))
-                {
-                    if (this.getY().multiply(this.getX().invert())
-                            .toBigInteger().testBit(0))
-                    {
-                        // ypTilde = 1, hence PC = 03
-                        PO[0] = 0x03;
-                    }
-                }
+			ECFieldElement TWO = this.curve.fromBigInteger(BigInteger.valueOf(2));
+			ECFieldElement THREE = this.curve.fromBigInteger(BigInteger.valueOf(3));
+			ECFieldElement gamma = this.x.square().multiply(THREE).add(curve.a).divide(y.multiply(TWO));
 
-                System.arraycopy(X, 0, PO, 1, byteCount);
-            }
-            else
-            {
-                byte[] Y = converter.integerToBytes(this.getY().toBigInteger(), byteCount);
-    
-                PO = new byte[byteCount + byteCount + 1];
-    
-                PO[0] = 0x04;
-                System.arraycopy(X, 0, PO, 1, byteCount);
-                System.arraycopy(Y, 0, PO, byteCount + 1, byteCount);    
-            }
+			ECFieldElement x3 = gamma.square().subtract(this.x.multiply(TWO));
+			ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
 
-            return PO;
-        }
+			return new ECPoint.Fp(curve, x3, y3, this.withCompression);
+		}
 
-        /**
-         * Check, if two <code>ECPoint</code>s can be added or subtracted.
-         * @param a The first <code>ECPoint</code> to check.
-         * @param b The second <code>ECPoint</code> to check.
-         * @throws IllegalArgumentException if <code>a</code> and <code>b</code>
-         * cannot be added.
-         */
-        private static void checkPoints(ECPoint a, ECPoint b)
-        {
-            // Check, if points are on the same curve
-            if (!(a.curve.equals(b.curve)))
-            {
-                throw new IllegalArgumentException("Only points on the same "
-                        + "curve can be added or subtracted");
-            }
+		// D.3.2 pg 102 (see Note:)
+		public ECPoint subtract(ECPoint b)
+		{
+			if(b.isInfinity())
+			{
+				return this;
+			}
+
+			// Add -b
+			return add(b.negate());
+		}
+
+		public ECPoint negate()
+		{
+			return new ECPoint.Fp(curve, this.x, this.y.negate(), this.withCompression);
+		}
+
+		/**
+		 * Sets the default <code>ECMultiplier</code>, unless already set.
+		 */
+		synchronized void assertECMultiplier()
+		{
+			if(this.multiplier == null)
+			{
+				this.multiplier = new WNafMultiplier();
+			}
+		}
+	}
+
+	/**
+	 * Elliptic curve points over F2m
+	 */
+	public static class F2m extends ECPoint
+	{
+		/**
+		 * @param curve base curve
+		 * @param x     x point
+		 * @param y     y point
+		 */
+		public F2m(ECCurve curve, ECFieldElement x, ECFieldElement y)
+		{
+			this(curve, x, y, false);
+		}
+
+		/**
+		 * @param curve           base curve
+		 * @param x               x point
+		 * @param y               y point
+		 * @param withCompression true if encode with point compression.
+		 */
+		public F2m(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
+		{
+			super(curve, x, y);
+
+			if((x != null && y == null) || (x == null && y != null))
+			{
+				throw new IllegalArgumentException("Exactly one of the field elements is null");
+			}
+
+			if(x != null)
+			{
+				// Check if x and y are elements of the same field
+				ECFieldElement.F2m.checkFieldElements(this.x, this.y);
+
+				// Check if x and a are elements of the same field
+				if(curve != null)
+				{
+					ECFieldElement.F2m.checkFieldElements(this.x, this.curve.getA());
+				}
+			}
+
+			this.withCompression = withCompression;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.bouncycastle.math.ec.ECPoint#getEncoded()
+		 */
+		public byte[] getEncoded()
+		{
+			if(this.isInfinity())
+			{
+				return new byte[1];
+			}
+
+			int byteCount = converter.getByteLength(this.x);
+			byte[] X = converter.integerToBytes(this.getX().toBigInteger(), byteCount);
+			byte[] PO;
+
+			if(withCompression)
+			{
+				// See X9.62 4.3.6 and 4.2.2
+				PO = new byte[byteCount + 1];
+
+				PO[0] = 0x02;
+				// X9.62 4.2.2 and 4.3.6:
+				// if x = 0 then ypTilde := 0, else ypTilde is the rightmost
+				// bit of y * x^(-1)
+				// if ypTilde = 0, then PC := 02, else PC := 03
+				// Note: PC === PO[0]
+				if(!(this.getX().toBigInteger().equals(ECConstants.ZERO)))
+				{
+					if(this.getY().multiply(this.getX().invert())
+							.toBigInteger().testBit(0))
+					{
+						// ypTilde = 1, hence PC = 03
+						PO[0] = 0x03;
+					}
+				}
+
+				System.arraycopy(X, 0, PO, 1, byteCount);
+			}
+			else
+			{
+				byte[] Y = converter.integerToBytes(this.getY().toBigInteger(), byteCount);
+
+				PO = new byte[byteCount + byteCount + 1];
+
+				PO[0] = 0x04;
+				System.arraycopy(X, 0, PO, 1, byteCount);
+				System.arraycopy(Y, 0, PO, byteCount + 1, byteCount);
+			}
+
+			return PO;
+		}
+
+		/**
+		 * Check, if two <code>ECPoint</code>s can be added or subtracted.
+		 *
+		 * @param a The first <code>ECPoint</code> to check.
+		 * @param b The second <code>ECPoint</code> to check.
+		 * @throws IllegalArgumentException if <code>a</code> and <code>b</code>
+		 *                                  cannot be added.
+		 */
+		private static void checkPoints(ECPoint a, ECPoint b)
+		{
+			// Check, if points are on the same curve
+			if(!(a.curve.equals(b.curve)))
+			{
+				throw new IllegalArgumentException("Only points on the same "
+						+ "curve can be added or subtracted");
+			}
 
 //            ECFieldElement.F2m.checkFieldElements(a.x, b.x);
-        }
+		}
 
-        /* (non-Javadoc)
-         * @see org.bouncycastle.math.ec.ECPoint#add(org.bouncycastle.math.ec.ECPoint)
-         */
-        public ECPoint add(ECPoint b)
-        {
-            checkPoints(this, b);
-            return addSimple((ECPoint.F2m)b);
-        }
+		/* (non-Javadoc)
+		 * @see org.bouncycastle.math.ec.ECPoint#add(org.bouncycastle.math.ec.ECPoint)
+		 */
+		public ECPoint add(ECPoint b)
+		{
+			checkPoints(this, b);
+			return addSimple((ECPoint.F2m) b);
+		}
 
-        /**
-         * Adds another <code>ECPoints.F2m</code> to <code>this</code> without
-         * checking if both points are on the same curve. Used by multiplication
-         * algorithms, because there all points are a multiple of the same point
-         * and hence the checks can be omitted.
-         * @param b The other <code>ECPoints.F2m</code> to add to
-         * <code>this</code>.
-         * @return <code>this + b</code>
-         */
-        public ECPoint.F2m addSimple(ECPoint.F2m b)
-        {
-            ECPoint.F2m other = b;
-            if (this.isInfinity())
-            {
-                return other;
-            }
+		/**
+		 * Adds another <code>ECPoints.F2m</code> to <code>this</code> without
+		 * checking if both points are on the same curve. Used by multiplication
+		 * algorithms, because there all points are a multiple of the same point
+		 * and hence the checks can be omitted.
+		 *
+		 * @param b The other <code>ECPoints.F2m</code> to add to
+		 *          <code>this</code>.
+		 * @return <code>this + b</code>
+		 */
+		public ECPoint.F2m addSimple(ECPoint.F2m b)
+		{
+			ECPoint.F2m other = b;
+			if(this.isInfinity())
+			{
+				return other;
+			}
 
-            if (other.isInfinity())
-            {
-                return this;
-            }
+			if(other.isInfinity())
+			{
+				return this;
+			}
 
-            ECFieldElement.F2m x2 = (ECFieldElement.F2m)other.getX();
-            ECFieldElement.F2m y2 = (ECFieldElement.F2m)other.getY();
+			ECFieldElement.F2m x2 = (ECFieldElement.F2m) other.getX();
+			ECFieldElement.F2m y2 = (ECFieldElement.F2m) other.getY();
 
-            // Check if other = this or other = -this
-            if (this.x.equals(x2))
-            {
-                if (this.y.equals(y2))
-                {
-                    // this = other, i.e. this must be doubled
-                    return (ECPoint.F2m)this.twice();
-                }
+			// Check if other = this or other = -this
+			if(this.x.equals(x2))
+			{
+				if(this.y.equals(y2))
+				{
+					// this = other, i.e. this must be doubled
+					return (ECPoint.F2m) this.twice();
+				}
 
-                // this = -other, i.e. the result is the point at infinity
-                return (ECPoint.F2m)this.curve.getInfinity();
-            }
+				// this = -other, i.e. the result is the point at infinity
+				return (ECPoint.F2m) this.curve.getInfinity();
+			}
 
-            ECFieldElement.F2m lambda
-                = (ECFieldElement.F2m)(this.y.add(y2)).divide(this.x.add(x2));
+			ECFieldElement.F2m lambda
+					= (ECFieldElement.F2m) (this.y.add(y2)).divide(this.x.add(x2));
 
-            ECFieldElement.F2m x3
-                = (ECFieldElement.F2m)lambda.square().add(lambda).add(this.x).add(x2).add(this.curve.getA());
+			ECFieldElement.F2m x3
+					= (ECFieldElement.F2m) lambda.square().add(lambda).add(this.x).add(x2).add(this.curve.getA());
 
-            ECFieldElement.F2m y3
-                = (ECFieldElement.F2m)lambda.multiply(this.x.add(x3)).add(x3).add(this.y);
+			ECFieldElement.F2m y3
+					= (ECFieldElement.F2m) lambda.multiply(this.x.add(x3)).add(x3).add(this.y);
 
-            return new ECPoint.F2m(curve, x3, y3, withCompression);
-        }
+			return new ECPoint.F2m(curve, x3, y3, withCompression);
+		}
 
-        /* (non-Javadoc)
-         * @see org.bouncycastle.math.ec.ECPoint#subtract(org.bouncycastle.math.ec.ECPoint)
-         */
-        public ECPoint subtract(ECPoint b)
-        {
-            checkPoints(this, b);
-            return subtractSimple((ECPoint.F2m)b);
-        }
+		/* (non-Javadoc)
+		 * @see org.bouncycastle.math.ec.ECPoint#subtract(org.bouncycastle.math.ec.ECPoint)
+		 */
+		public ECPoint subtract(ECPoint b)
+		{
+			checkPoints(this, b);
+			return subtractSimple((ECPoint.F2m) b);
+		}
 
-        /**
-         * Subtracts another <code>ECPoints.F2m</code> from <code>this</code>
-         * without checking if both points are on the same curve. Used by
-         * multiplication algorithms, because there all points are a multiple
-         * of the same point and hence the checks can be omitted.
-         * @param b The other <code>ECPoints.F2m</code> to subtract from
-         * <code>this</code>.
-         * @return <code>this - b</code>
-         */
-        public ECPoint.F2m subtractSimple(ECPoint.F2m b)
-        {
-            if (b.isInfinity())
-            {
-                return this;
-            }
+		/**
+		 * Subtracts another <code>ECPoints.F2m</code> from <code>this</code>
+		 * without checking if both points are on the same curve. Used by
+		 * multiplication algorithms, because there all points are a multiple
+		 * of the same point and hence the checks can be omitted.
+		 *
+		 * @param b The other <code>ECPoints.F2m</code> to subtract from
+		 *          <code>this</code>.
+		 * @return <code>this - b</code>
+		 */
+		public ECPoint.F2m subtractSimple(ECPoint.F2m b)
+		{
+			if(b.isInfinity())
+			{
+				return this;
+			}
 
-            // Add -b
-            return addSimple((ECPoint.F2m)b.negate());
-        }
+			// Add -b
+			return addSimple((ECPoint.F2m) b.negate());
+		}
 
-        /* (non-Javadoc)
-         * @see org.bouncycastle.math.ec.ECPoint#twice()
-         */
-        public ECPoint twice()
-        {
-            if (this.isInfinity()) 
-            {
-                // Twice identity element (point at infinity) is identity
-                return this;
-            }
+		/* (non-Javadoc)
+		 * @see org.bouncycastle.math.ec.ECPoint#twice()
+		 */
+		public ECPoint twice()
+		{
+			if(this.isInfinity())
+			{
+				// Twice identity element (point at infinity) is identity
+				return this;
+			}
 
-            if (this.x.toBigInteger().signum() == 0) 
-            {
-                // if x1 == 0, then (x1, y1) == (x1, x1 + y1)
-                // and hence this = -this and thus 2(x1, y1) == infinity
-                return this.curve.getInfinity();
-            }
+			if(this.x.toBigInteger().signum() == 0)
+			{
+				// if x1 == 0, then (x1, y1) == (x1, x1 + y1)
+				// and hence this = -this and thus 2(x1, y1) == infinity
+				return this.curve.getInfinity();
+			}
 
-            ECFieldElement.F2m lambda
-                = (ECFieldElement.F2m)this.x.add(this.y.divide(this.x));
+			ECFieldElement.F2m lambda
+					= (ECFieldElement.F2m) this.x.add(this.y.divide(this.x));
 
-            ECFieldElement.F2m x3
-                = (ECFieldElement.F2m)lambda.square().add(lambda).
-                    add(this.curve.getA());
+			ECFieldElement.F2m x3
+					= (ECFieldElement.F2m) lambda.square().add(lambda).
+					add(this.curve.getA());
 
-            ECFieldElement ONE = this.curve.fromBigInteger(ECConstants.ONE);
-            ECFieldElement.F2m y3
-                = (ECFieldElement.F2m)this.x.square().add(
-                    x3.multiply(lambda.add(ONE)));
+			ECFieldElement ONE = this.curve.fromBigInteger(ECConstants.ONE);
+			ECFieldElement.F2m y3
+					= (ECFieldElement.F2m) this.x.square().add(
+					x3.multiply(lambda.add(ONE)));
 
-            return new ECPoint.F2m(this.curve, x3, y3, withCompression);
-        }
+			return new ECPoint.F2m(this.curve, x3, y3, withCompression);
+		}
 
-        public ECPoint negate()
-        {
-            return new ECPoint.F2m(curve, this.getX(), this.getY().add(this.getX()), withCompression);
-        }
+		public ECPoint negate()
+		{
+			return new ECPoint.F2m(curve, this.getX(), this.getY().add(this.getX()), withCompression);
+		}
 
-        /**
-         * Sets the appropriate <code>ECMultiplier</code>, unless already set. 
-         */
-        synchronized void assertECMultiplier()
-        {
-            if (this.multiplier == null)
-            {
-                if (((ECCurve.F2m)this.curve).isKoblitz())
-                {
-                    this.multiplier = new WTauNafMultiplier();
-                }
-                else
-                {
-                    this.multiplier = new WNafMultiplier();
-                }
-            }
-        }
-    }
+		/**
+		 * Sets the appropriate <code>ECMultiplier</code>, unless already set.
+		 */
+		synchronized void assertECMultiplier()
+		{
+			if(this.multiplier == null)
+			{
+				if(((ECCurve.F2m) this.curve).isKoblitz())
+				{
+					this.multiplier = new WTauNafMultiplier();
+				}
+				else
+				{
+					this.multiplier = new WNafMultiplier();
+				}
+			}
+		}
+	}
 }

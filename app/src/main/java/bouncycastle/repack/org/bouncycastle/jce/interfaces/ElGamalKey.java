@@ -4,5 +4,5 @@ import repack.org.bouncycastle.jce.spec.ElGamalParameterSpec;
 
 public interface ElGamalKey
 {
-    public ElGamalParameterSpec getParameters();
+	public ElGamalParameterSpec getParameters();
 }

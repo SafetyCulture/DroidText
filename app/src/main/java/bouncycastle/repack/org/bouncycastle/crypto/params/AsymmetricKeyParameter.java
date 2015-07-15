@@ -3,18 +3,18 @@ package repack.org.bouncycastle.crypto.params;
 import repack.org.bouncycastle.crypto.CipherParameters;
 
 public class AsymmetricKeyParameter
-    implements CipherParameters
+		implements CipherParameters
 {
-    boolean privateKey;
+	boolean privateKey;
 
-    public AsymmetricKeyParameter(
-        boolean privateKey)
-    {
-        this.privateKey = privateKey;
-    }
+	public AsymmetricKeyParameter(
+			boolean privateKey)
+	{
+		this.privateKey = privateKey;
+	}
 
-    public boolean isPrivate()
-    {
-        return privateKey;
-    }
+	public boolean isPrivate()
+	{
+		return privateKey;
+	}
 }

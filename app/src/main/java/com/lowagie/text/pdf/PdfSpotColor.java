@@ -54,78 +54,92 @@ import harmony.java.awt.Color;
 /**
  * A <CODE>PdfSpotColor</CODE> defines a ColorSpace
  *
- * @see		PdfDictionary
+ * @see PdfDictionary
  */
 
-public class PdfSpotColor{
-    
-/*	The tint value */
-    protected float tint;
-    
-/**	The color name */
-    public PdfName name;
-    
-/** The alternative color space */
-    public Color altcs;
-    // constructors
-    
-    /**
-     * Constructs a new <CODE>PdfSpotColor</CODE>.
-     *
-     * @param		name		a String value
-     * @param		tint		a tint value between 0 and 1
-     * @param		altcs		an alternative colorspace value
-     */
-    
-    public PdfSpotColor(String name, float tint, Color altcs) {
-        this.name = new PdfName(name);
-        this.tint = tint;
-        this.altcs = altcs;
-    }
-    
-    /**
-     * Gets the tint of the SpotColor.
-     * @return a float
-     */
-    public float getTint() {
-        return tint;
-    }
-    
-    /**
-     * Gets the alternative ColorSpace.
-     * @return a Color
-     */
-    public Color getAlternativeCS() {
-        return altcs;
-    }
-    
-    protected PdfObject getSpotObject(PdfWriter writer) {
-        PdfArray array = new PdfArray(PdfName.SEPARATION);
-        array.add(name);
-        PdfFunction func = null;
-        if (altcs instanceof ExtendedColor) {
-            int type = ((ExtendedColor)altcs).type;
-            switch (type) {
-                case ExtendedColor.TYPE_GRAY:
-                    array.add(PdfName.DEVICEGRAY);
-                    func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{0}, new float[]{((GrayColor)altcs).getGray()}, 1);
-                    break;
-                case ExtendedColor.TYPE_CMYK:
-                    array.add(PdfName.DEVICECMYK);
-                    CMYKColor cmyk = (CMYKColor)altcs;
-                    func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{0, 0, 0, 0},
-                        new float[]{cmyk.getCyan(), cmyk.getMagenta(), cmyk.getYellow(), cmyk.getBlack()}, 1);
-                    break;
-                default:
-                    throw new RuntimeException("Only RGB, Gray and CMYK are supported as alternative color spaces.");
-            }
-        }
-        else {
-            array.add(PdfName.DEVICERGB);
-            func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{1, 1, 1},
-                new float[]{(float)altcs.getRed() / 255, (float)altcs.getGreen() / 255, (float)altcs.getBlue() / 255}, 1);
-        }
-        array.add(func.getReference());
-        return array;
-    }
+public class PdfSpotColor
+{
+
+	/*	The tint value */
+	protected float tint;
+
+	/**
+	 * The color name
+	 */
+	public PdfName name;
+
+	/**
+	 * The alternative color space
+	 */
+	public Color altcs;
+	// constructors
+
+	/**
+	 * Constructs a new <CODE>PdfSpotColor</CODE>.
+	 *
+	 * @param name  a String value
+	 * @param tint  a tint value between 0 and 1
+	 * @param altcs an alternative colorspace value
+	 */
+
+	public PdfSpotColor(String name, float tint, Color altcs)
+	{
+		this.name = new PdfName(name);
+		this.tint = tint;
+		this.altcs = altcs;
+	}
+
+	/**
+	 * Gets the tint of the SpotColor.
+	 *
+	 * @return a float
+	 */
+	public float getTint()
+	{
+		return tint;
+	}
+
+	/**
+	 * Gets the alternative ColorSpace.
+	 *
+	 * @return a Color
+	 */
+	public Color getAlternativeCS()
+	{
+		return altcs;
+	}
+
+	protected PdfObject getSpotObject(PdfWriter writer)
+	{
+		PdfArray array = new PdfArray(PdfName.SEPARATION);
+		array.add(name);
+		PdfFunction func = null;
+		if(altcs instanceof ExtendedColor)
+		{
+			int type = ((ExtendedColor) altcs).type;
+			switch(type)
+			{
+				case ExtendedColor.TYPE_GRAY:
+					array.add(PdfName.DEVICEGRAY);
+					func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{0}, new float[]{((GrayColor) altcs).getGray()}, 1);
+					break;
+				case ExtendedColor.TYPE_CMYK:
+					array.add(PdfName.DEVICECMYK);
+					CMYKColor cmyk = (CMYKColor) altcs;
+					func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{0, 0, 0, 0},
+							new float[]{cmyk.getCyan(), cmyk.getMagenta(), cmyk.getYellow(), cmyk.getBlack()}, 1);
+					break;
+				default:
+					throw new RuntimeException("Only RGB, Gray and CMYK are supported as alternative color spaces.");
+			}
+		}
+		else
+		{
+			array.add(PdfName.DEVICERGB);
+			func = PdfFunction.type2(writer, new float[]{0, 1}, null, new float[]{1, 1, 1},
+					new float[]{(float) altcs.getRed() / 255, (float) altcs.getGreen() / 255, (float) altcs.getBlue() / 255}, 1);
+		}
+		array.add(func.getReference());
+		return array;
+	}
 }

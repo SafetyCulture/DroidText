@@ -48,81 +48,102 @@ package com.lowagie.text.pdf.parser;
 
 /**
  * A simple text extraction processor.
- * @since	2.1.4
+ *
+ * @since 2.1.4
  */
-public class SimpleTextExtractingPdfContentStreamProcessor extends PdfContentStreamProcessor {
+public class SimpleTextExtractingPdfContentStreamProcessor extends PdfContentStreamProcessor
+{
 
-    /** keeps track of a text matrix. */
-    Matrix lastTextLineMatrix = null;
-    /** keeps track of a text matrix. */
-    Matrix lastEndingTextMatrix = null;
+	/**
+	 * keeps track of a text matrix.
+	 */
+	Matrix lastTextLineMatrix = null;
+	/**
+	 * keeps track of a text matrix.
+	 */
+	Matrix lastEndingTextMatrix = null;
 
-    /** The StringBuffer used to write the resulting String. */
-    StringBuffer result = null;
+	/**
+	 * The StringBuffer used to write the resulting String.
+	 */
+	StringBuffer result = null;
 
-    /**
-     * Creates a new text extraction processor.
-     */
-    public SimpleTextExtractingPdfContentStreamProcessor() {
-    }
+	/**
+	 * Creates a new text extraction processor.
+	 */
+	public SimpleTextExtractingPdfContentStreamProcessor()
+	{
+	}
 
-    public void reset() {
-        super.reset();
-        lastTextLineMatrix = null;
-        lastEndingTextMatrix = null;
-        result = new StringBuffer();
-    }
-    
-    /**
-     * Returns the result so far.
-     * @return	a String with the resulting text.
-     */
-    public String getResultantText(){
-        return result.toString();
-    }
-    
-    /**
-     * Writes text to the result.
-     * @param text	The text that needs to be displayed
-     * @param endingTextMatrix	a text matrix
-     * @see com.lowagie.text.pdf.parser.PdfContentStreamProcessor#displayText(java.lang.String, com.lowagie.text.pdf.parser.Matrix)
-     */
-    public void displayText(String text, Matrix endingTextMatrix){
-        boolean hardReturn = false;
-        if (lastTextLineMatrix != null && lastTextLineMatrix.get(Matrix.I32) != getCurrentTextLineMatrix().get(Matrix.I32)){
-        //if (!textLineMatrix.equals(lastTextLineMatrix)){
-            hardReturn = true;
-        }
+	public void reset()
+	{
+		super.reset();
+		lastTextLineMatrix = null;
+		lastEndingTextMatrix = null;
+		result = new StringBuffer();
+	}
 
-        float currentX = getCurrentTextMatrix().get(Matrix.I31);
-        if (hardReturn){
-            //System.out.println("<Hard Return>");
-            result.append('\n');
-        } else if (lastEndingTextMatrix != null){
-            float lastEndX = lastEndingTextMatrix.get(Matrix.I31);
-            
-            //System.out.println("Displaying '" + text + "' :: lastX + lastWidth = " + lastEndX + " =?= currentX = " + currentX + " :: Delta is " + (currentX - lastEndX));
-            
-            float spaceGlyphWidth = gs().font.getWidth(' ')/1000f;
-            float spaceWidth = (spaceGlyphWidth * gs().fontSize + gs().characterSpacing + gs().wordSpacing) * gs().horizontalScaling; // this is unscaled!!
-            Matrix scaled = new Matrix(spaceWidth, 0).multiply(getCurrentTextMatrix());
-            float scaledSpaceWidth = scaled.get(Matrix.I31) - getCurrentTextMatrix().get(Matrix.I31);
-            
-            if (currentX - lastEndX > scaledSpaceWidth/2f ){
-                //System.out.println("<Implied space on text '" + text + "'> lastEndX=" + lastEndX + ", currentX=" + currentX + ", spaceWidth=" + spaceWidth);
-                result.append(' ');
-            }
-        } else {
-            //System.out.println("Displaying first string of content '" + text + "' :: currentX = " + currentX);
-        }
-        
-        //System.out.println("After displaying '" + text + "' :: Start at " + currentX + " end at " + endingTextMatrix.get(Matrix.I31));
-        
-        result.append(text);
+	/**
+	 * Returns the result so far.
+	 *
+	 * @return a String with the resulting text.
+	 */
+	public String getResultantText()
+	{
+		return result.toString();
+	}
 
-        lastTextLineMatrix = getCurrentTextLineMatrix();
-        lastEndingTextMatrix = endingTextMatrix;
-        
-    }
+	/**
+	 * Writes text to the result.
+	 *
+	 * @param text             The text that needs to be displayed
+	 * @param endingTextMatrix a text matrix
+	 * @see com.lowagie.text.pdf.parser.PdfContentStreamProcessor#displayText(java.lang.String, com.lowagie.text.pdf.parser.Matrix)
+	 */
+	public void displayText(String text, Matrix endingTextMatrix)
+	{
+		boolean hardReturn = false;
+		if(lastTextLineMatrix != null && lastTextLineMatrix.get(Matrix.I32) != getCurrentTextLineMatrix().get(Matrix.I32))
+		{
+			//if (!textLineMatrix.equals(lastTextLineMatrix)){
+			hardReturn = true;
+		}
+
+		float currentX = getCurrentTextMatrix().get(Matrix.I31);
+		if(hardReturn)
+		{
+			//System.out.println("<Hard Return>");
+			result.append('\n');
+		}
+		else if(lastEndingTextMatrix != null)
+		{
+			float lastEndX = lastEndingTextMatrix.get(Matrix.I31);
+
+			//System.out.println("Displaying '" + text + "' :: lastX + lastWidth = " + lastEndX + " =?= currentX = " + currentX + " :: Delta is " + (currentX - lastEndX));
+
+			float spaceGlyphWidth = gs().font.getWidth(' ') / 1000f;
+			float spaceWidth = (spaceGlyphWidth * gs().fontSize + gs().characterSpacing + gs().wordSpacing) * gs().horizontalScaling; // this is unscaled!!
+			Matrix scaled = new Matrix(spaceWidth, 0).multiply(getCurrentTextMatrix());
+			float scaledSpaceWidth = scaled.get(Matrix.I31) - getCurrentTextMatrix().get(Matrix.I31);
+
+			if(currentX - lastEndX > scaledSpaceWidth / 2f)
+			{
+				//System.out.println("<Implied space on text '" + text + "'> lastEndX=" + lastEndX + ", currentX=" + currentX + ", spaceWidth=" + spaceWidth);
+				result.append(' ');
+			}
+		}
+		else
+		{
+			//System.out.println("Displaying first string of content '" + text + "' :: currentX = " + currentX);
+		}
+
+		//System.out.println("After displaying '" + text + "' :: Start at " + currentX + " end at " + endingTextMatrix.get(Matrix.I31));
+
+		result.append(text);
+
+		lastTextLineMatrix = getCurrentTextLineMatrix();
+		lastEndingTextMatrix = endingTextMatrix;
+
+	}
 
 }

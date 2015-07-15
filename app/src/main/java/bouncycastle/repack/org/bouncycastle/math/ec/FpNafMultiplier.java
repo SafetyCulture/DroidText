@@ -7,33 +7,34 @@ import java.math.BigInteger;
  */
 class FpNafMultiplier implements ECMultiplier
 {
-    /**
-     * D.3.2 pg 101
-     * @see repack.org.bouncycastle.math.ec.ECMultiplier#multiply(repack.org.bouncycastle.math.ec.ECPoint, java.math.BigInteger)
-     */
-    public ECPoint multiply(ECPoint p, BigInteger k, PreCompInfo preCompInfo)
-    {
-        // TODO Probably should try to add this
-        // BigInteger e = k.mod(n); // n == order of p
-        BigInteger e = k;
-        BigInteger h = e.multiply(BigInteger.valueOf(3));
+	/**
+	 * D.3.2 pg 101
+	 *
+	 * @see repack.org.bouncycastle.math.ec.ECMultiplier#multiply(repack.org.bouncycastle.math.ec.ECPoint, java.math.BigInteger)
+	 */
+	public ECPoint multiply(ECPoint p, BigInteger k, PreCompInfo preCompInfo)
+	{
+		// TODO Probably should try to add this
+		// BigInteger e = k.mod(n); // n == order of p
+		BigInteger e = k;
+		BigInteger h = e.multiply(BigInteger.valueOf(3));
 
-        ECPoint neg = p.negate();
-        ECPoint R = p;
+		ECPoint neg = p.negate();
+		ECPoint R = p;
 
-        for (int i = h.bitLength() - 2; i > 0; --i)
-        {             
-            R = R.twice();
+		for(int i = h.bitLength() - 2; i > 0; --i)
+		{
+			R = R.twice();
 
-            boolean hBit = h.testBit(i);
-            boolean eBit = e.testBit(i);
+			boolean hBit = h.testBit(i);
+			boolean eBit = e.testBit(i);
 
-            if (hBit != eBit)
-            {
-                R = R.add(hBit ? p : neg);
-            }
-        }
+			if(hBit != eBit)
+			{
+				R = R.add(hBit ? p : neg);
+			}
+		}
 
-        return R;
-    }
+		return R;
+	}
 }

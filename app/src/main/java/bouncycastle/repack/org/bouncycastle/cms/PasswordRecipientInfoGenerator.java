@@ -1,7 +1,5 @@
 package repack.org.bouncycastle.cms;
 
-import java.security.SecureRandom;
-
 import repack.org.bouncycastle.asn1.ASN1EncodableVector;
 import repack.org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import repack.org.bouncycastle.asn1.ASN1OctetString;
@@ -17,122 +15,124 @@ import repack.org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import repack.org.bouncycastle.crypto.params.KeyParameter;
 import repack.org.bouncycastle.operator.GenericKey;
 
+import java.security.SecureRandom;
+
 public abstract class PasswordRecipientInfoGenerator
-    implements RecipientInfoGenerator
+		implements RecipientInfoGenerator
 {
-    private char[] password;
-    private AlgorithmIdentifier keyDerivationAlgorithm;
-    private ASN1ObjectIdentifier kekAlgorithm;
-    private SecureRandom random;
-    private int schemeID;
-    private int keySize;
-    private int blockSize;
+	private char[] password;
+	private AlgorithmIdentifier keyDerivationAlgorithm;
+	private ASN1ObjectIdentifier kekAlgorithm;
+	private SecureRandom random;
+	private int schemeID;
+	private int keySize;
+	private int blockSize;
 
-    protected PasswordRecipientInfoGenerator(ASN1ObjectIdentifier kekAlgorithm, char[] password)
-    {
-        this(kekAlgorithm, password, getKeySize(kekAlgorithm), ((Integer)PasswordRecipientInformation.BLOCKSIZES.get(kekAlgorithm)).intValue());
-    }
+	protected PasswordRecipientInfoGenerator(ASN1ObjectIdentifier kekAlgorithm, char[] password)
+	{
+		this(kekAlgorithm, password, getKeySize(kekAlgorithm), ((Integer) PasswordRecipientInformation.BLOCKSIZES.get(kekAlgorithm)).intValue());
+	}
 
-    protected PasswordRecipientInfoGenerator(ASN1ObjectIdentifier kekAlgorithm, char[] password, int keySize, int blockSize)
-    {
-        this.password = password;
-        this.schemeID = PasswordRecipient.PKCS5_SCHEME2_UTF8;
-        this.kekAlgorithm = kekAlgorithm;
-        this.keySize = keySize;
-        this.blockSize = blockSize;
-    }
+	protected PasswordRecipientInfoGenerator(ASN1ObjectIdentifier kekAlgorithm, char[] password, int keySize, int blockSize)
+	{
+		this.password = password;
+		this.schemeID = PasswordRecipient.PKCS5_SCHEME2_UTF8;
+		this.kekAlgorithm = kekAlgorithm;
+		this.keySize = keySize;
+		this.blockSize = blockSize;
+	}
 
-    private static int getKeySize(ASN1ObjectIdentifier kekAlgorithm)
-    {
-        Integer size = (Integer)PasswordRecipientInformation.KEYSIZES.get(kekAlgorithm);
+	private static int getKeySize(ASN1ObjectIdentifier kekAlgorithm)
+	{
+		Integer size = (Integer) PasswordRecipientInformation.KEYSIZES.get(kekAlgorithm);
 
-        if (size == null)
-        {
-            throw new IllegalArgumentException("cannot find key size for algorithm: " +  kekAlgorithm);
-        }
+		if(size == null)
+		{
+			throw new IllegalArgumentException("cannot find key size for algorithm: " + kekAlgorithm);
+		}
 
-        return size.intValue();
-    }
+		return size.intValue();
+	}
 
-    public PasswordRecipientInfoGenerator setPasswordConversionScheme(int schemeID)
-    {
-        this.schemeID = schemeID;
+	public PasswordRecipientInfoGenerator setPasswordConversionScheme(int schemeID)
+	{
+		this.schemeID = schemeID;
 
-        return this;
-    }
+		return this;
+	}
 
-    public PasswordRecipientInfoGenerator setSaltAndIterationCount(byte[] salt, int iterationCount)
-    {
-        this.keyDerivationAlgorithm = new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2, new PBKDF2Params(salt, iterationCount));
+	public PasswordRecipientInfoGenerator setSaltAndIterationCount(byte[] salt, int iterationCount)
+	{
+		this.keyDerivationAlgorithm = new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2, new PBKDF2Params(salt, iterationCount));
 
-        return this;
-    }
+		return this;
+	}
 
-    public PasswordRecipientInfoGenerator setSecureRandom(SecureRandom random)
-    {
-        this.random = random;
+	public PasswordRecipientInfoGenerator setSecureRandom(SecureRandom random)
+	{
+		this.random = random;
 
-        return this;
-    }
+		return this;
+	}
 
-    public RecipientInfo generate(GenericKey contentEncryptionKey)
-        throws CMSException
-    {
-        byte[] iv = new byte[blockSize];     /// TODO: set IV size properly!
+	public RecipientInfo generate(GenericKey contentEncryptionKey)
+			throws CMSException
+	{
+		byte[] iv = new byte[blockSize];     /// TODO: set IV size properly!
 
-        if (random == null)
-        {
-            random = new SecureRandom();
-        }
-        
-        random.nextBytes(iv);
+		if(random == null)
+		{
+			random = new SecureRandom();
+		}
 
-        if (keyDerivationAlgorithm == null)
-        {
-            byte[] salt = new byte[20];
+		random.nextBytes(iv);
 
-            random.nextBytes(salt);
+		if(keyDerivationAlgorithm == null)
+		{
+			byte[] salt = new byte[20];
 
-            keyDerivationAlgorithm = new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2, new PBKDF2Params(salt, 1024));
-        }
+			random.nextBytes(salt);
 
-        PBKDF2Params params = PBKDF2Params.getInstance(keyDerivationAlgorithm.getParameters());
-        byte[] derivedKey;
+			keyDerivationAlgorithm = new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2, new PBKDF2Params(salt, 1024));
+		}
 
-        if (schemeID == PasswordRecipient.PKCS5_SCHEME2)
-        {
-            PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator();
+		PBKDF2Params params = PBKDF2Params.getInstance(keyDerivationAlgorithm.getParameters());
+		byte[] derivedKey;
 
-            gen.init(PBEParametersGenerator.PKCS5PasswordToBytes(password), params.getSalt(), params.getIterationCount().intValue());
+		if(schemeID == PasswordRecipient.PKCS5_SCHEME2)
+		{
+			PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator();
 
-            derivedKey = ((KeyParameter)gen.generateDerivedParameters(keySize)).getKey();
-        }
-        else
-        {
-            PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator();
+			gen.init(PBEParametersGenerator.PKCS5PasswordToBytes(password), params.getSalt(), params.getIterationCount().intValue());
 
-            gen.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password), params.getSalt(), params.getIterationCount().intValue());
+			derivedKey = ((KeyParameter) gen.generateDerivedParameters(keySize)).getKey();
+		}
+		else
+		{
+			PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator();
 
-            derivedKey = ((KeyParameter)gen.generateDerivedParameters(keySize)).getKey();
-        }
+			gen.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password), params.getSalt(), params.getIterationCount().intValue());
 
-        AlgorithmIdentifier kekAlgorithmId = new AlgorithmIdentifier(kekAlgorithm, new DEROctetString(iv));
+			derivedKey = ((KeyParameter) gen.generateDerivedParameters(keySize)).getKey();
+		}
 
-        byte[] encryptedKeyBytes = generateEncryptedBytes(kekAlgorithmId, derivedKey, contentEncryptionKey);
+		AlgorithmIdentifier kekAlgorithmId = new AlgorithmIdentifier(kekAlgorithm, new DEROctetString(iv));
 
-        ASN1OctetString encryptedKey = new DEROctetString(encryptedKeyBytes);
+		byte[] encryptedKeyBytes = generateEncryptedBytes(kekAlgorithmId, derivedKey, contentEncryptionKey);
 
-        ASN1EncodableVector v = new ASN1EncodableVector();
-        v.add(kekAlgorithm);
-        v.add(new DEROctetString(iv));
+		ASN1OctetString encryptedKey = new DEROctetString(encryptedKeyBytes);
 
-        AlgorithmIdentifier keyEncryptionAlgorithm = new AlgorithmIdentifier(
-            PKCSObjectIdentifiers.id_alg_PWRI_KEK, new DERSequence(v));
+		ASN1EncodableVector v = new ASN1EncodableVector();
+		v.add(kekAlgorithm);
+		v.add(new DEROctetString(iv));
 
-        return new RecipientInfo(new PasswordRecipientInfo(keyDerivationAlgorithm,
-            keyEncryptionAlgorithm, encryptedKey));
-    }
+		AlgorithmIdentifier keyEncryptionAlgorithm = new AlgorithmIdentifier(
+				PKCSObjectIdentifiers.id_alg_PWRI_KEK, new DERSequence(v));
 
-    protected abstract byte[] generateEncryptedBytes(AlgorithmIdentifier algorithm, byte[] derivedKey, GenericKey contentEncryptionKey)
-        throws CMSException;
+		return new RecipientInfo(new PasswordRecipientInfo(keyDerivationAlgorithm,
+				keyEncryptionAlgorithm, encryptedKey));
+	}
+
+	protected abstract byte[] generateEncryptedBytes(AlgorithmIdentifier algorithm, byte[] derivedKey, GenericKey contentEncryptionKey)
+			throws CMSException;
 }

@@ -1,12 +1,12 @@
 package repack.org.bouncycastle.pkcs;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import repack.org.bouncycastle.asn1.pkcs.EncryptedPrivateKeyInfo;
 import repack.org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import repack.org.bouncycastle.operator.OutputEncryptor;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A class for creating EncryptedPrivateKeyInfo structures.
@@ -25,30 +25,30 @@ import repack.org.bouncycastle.operator.OutputEncryptor;
  */
 public class EncryptedPrivateKeyInfoBuilder
 {
-    private PrivateKeyInfo privateKeyInfo;
+	private PrivateKeyInfo privateKeyInfo;
 
-    public EncryptedPrivateKeyInfoBuilder(PrivateKeyInfo privateKeyInfo)
-    {
-        this.privateKeyInfo = privateKeyInfo;
-    }
+	public EncryptedPrivateKeyInfoBuilder(PrivateKeyInfo privateKeyInfo)
+	{
+		this.privateKeyInfo = privateKeyInfo;
+	}
 
-    public EncryptedPrivateKeyInfoHolder build(
-        OutputEncryptor encryptor)
-    {
-        try
-        {
-            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-            OutputStream cOut = encryptor.getOutputStream(bOut);
+	public EncryptedPrivateKeyInfoHolder build(
+			OutputEncryptor encryptor)
+	{
+		try
+		{
+			ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+			OutputStream cOut = encryptor.getOutputStream(bOut);
 
-            cOut.write(privateKeyInfo.getEncoded());
+			cOut.write(privateKeyInfo.getEncoded());
 
-            cOut.close();
+			cOut.close();
 
-            return new EncryptedPrivateKeyInfoHolder(new EncryptedPrivateKeyInfo(encryptor.getAlgorithmIdentifier(), bOut.toByteArray()));
-        }
-        catch (IOException e)
-        {
-            throw new IllegalStateException("cannot encode privateKeyInfo");
-        }
-    }
+			return new EncryptedPrivateKeyInfoHolder(new EncryptedPrivateKeyInfo(encryptor.getAlgorithmIdentifier(), bOut.toByteArray()));
+		}
+		catch(IOException e)
+		{
+			throw new IllegalStateException("cannot encode privateKeyInfo");
+		}
+	}
 }

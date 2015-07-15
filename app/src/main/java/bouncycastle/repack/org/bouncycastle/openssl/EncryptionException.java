@@ -3,23 +3,23 @@ package repack.org.bouncycastle.openssl;
 import java.io.IOException;
 
 public class EncryptionException
-    extends IOException
+		extends IOException
 {
-    private Throwable cause;
+	private Throwable cause;
 
-    public EncryptionException(String msg)
-    {
-        super(msg);
-    }
+	public EncryptionException(String msg)
+	{
+		super(msg);
+	}
 
-    public EncryptionException(String msg, Throwable ex)
-    {
-        super(msg);
-        this.cause = ex;
-    }
+	public EncryptionException(String msg, Throwable ex)
+	{
+		super(msg);
+		this.cause = ex;
+	}
 
-    public Throwable getCause()
-    {
-        return cause;
-    }
+	public Throwable getCause()
+	{
+		return cause;
+	}
 }

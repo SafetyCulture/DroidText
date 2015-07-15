@@ -7,13 +7,13 @@ import repack.org.bouncycastle.crypto.signers.ECDSASigner;
 
 class TlsECDSASigner extends TlsDSASigner
 {
-    public boolean isValidPublicKey(AsymmetricKeyParameter publicKey)
-    {
-        return publicKey instanceof ECPublicKeyParameters;
-    }
+	public boolean isValidPublicKey(AsymmetricKeyParameter publicKey)
+	{
+		return publicKey instanceof ECPublicKeyParameters;
+	}
 
-    protected DSA createDSAImpl()
-    {
-        return new ECDSASigner();
-    }
+	protected DSA createDSAImpl()
+	{
+		return new ECDSASigner();
+	}
 }

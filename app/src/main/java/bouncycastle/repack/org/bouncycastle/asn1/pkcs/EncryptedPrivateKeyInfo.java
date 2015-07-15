@@ -1,7 +1,5 @@
 package repack.org.bouncycastle.asn1.pkcs;
 
-import java.util.Enumeration;
-
 import repack.org.bouncycastle.asn1.ASN1Encodable;
 import repack.org.bouncycastle.asn1.ASN1EncodableVector;
 import repack.org.bouncycastle.asn1.ASN1OctetString;
@@ -11,76 +9,78 @@ import repack.org.bouncycastle.asn1.DEROctetString;
 import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
+import java.util.Enumeration;
+
 public class EncryptedPrivateKeyInfo
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private AlgorithmIdentifier algId;
-    private ASN1OctetString     data;
+	private AlgorithmIdentifier algId;
+	private ASN1OctetString data;
 
-    public EncryptedPrivateKeyInfo(
-        ASN1Sequence  seq)
-    {
-        Enumeration e = seq.getObjects();
+	public EncryptedPrivateKeyInfo(
+			ASN1Sequence seq)
+	{
+		Enumeration e = seq.getObjects();
 
-        algId = AlgorithmIdentifier.getInstance(e.nextElement());
-        data = (ASN1OctetString)e.nextElement();
-    }
+		algId = AlgorithmIdentifier.getInstance(e.nextElement());
+		data = (ASN1OctetString) e.nextElement();
+	}
 
-    public EncryptedPrivateKeyInfo(
-        AlgorithmIdentifier algId,
-        byte[]              encoding)
-    {
-        this.algId = algId;
-        this.data = new DEROctetString(encoding);
-    }
+	public EncryptedPrivateKeyInfo(
+			AlgorithmIdentifier algId,
+			byte[] encoding)
+	{
+		this.algId = algId;
+		this.data = new DEROctetString(encoding);
+	}
 
-    public static EncryptedPrivateKeyInfo getInstance(
-        Object  obj)
-    {
-        if (obj instanceof EncryptedData)
-        {
-            return (EncryptedPrivateKeyInfo)obj;
-        }
-        else if (obj instanceof ASN1Sequence)
-        { 
-            return new EncryptedPrivateKeyInfo((ASN1Sequence)obj);
-        }
+	public static EncryptedPrivateKeyInfo getInstance(
+			Object obj)
+	{
+		if(obj instanceof EncryptedData)
+		{
+			return (EncryptedPrivateKeyInfo) obj;
+		}
+		else if(obj instanceof ASN1Sequence)
+		{
+			return new EncryptedPrivateKeyInfo((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
-    
-    public AlgorithmIdentifier getEncryptionAlgorithm()
-    {
-        return algId;
-    }
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-    public byte[] getEncryptedData()
-    {
-        return data.getOctets();
-    }
+	public AlgorithmIdentifier getEncryptionAlgorithm()
+	{
+		return algId;
+	}
 
-    /**
-     * Produce an object suitable for an ASN1OutputStream.
-     * <pre>
-     * EncryptedPrivateKeyInfo ::= SEQUENCE {
-     *      encryptionAlgorithm AlgorithmIdentifier {{KeyEncryptionAlgorithms}},
-     *      encryptedData EncryptedData
-     * }
-     *
-     * EncryptedData ::= OCTET STRING
-     *
-     * KeyEncryptionAlgorithms ALGORITHM-IDENTIFIER ::= {
-     *          ... -- For local profiles
-     * }
-     * </pre>
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	public byte[] getEncryptedData()
+	{
+		return data.getOctets();
+	}
 
-        v.add(algId);
-        v.add(data);
+	/**
+	 * Produce an object suitable for an ASN1OutputStream.
+	 * <pre>
+	 * EncryptedPrivateKeyInfo ::= SEQUENCE {
+	 *      encryptionAlgorithm AlgorithmIdentifier {{KeyEncryptionAlgorithms}},
+	 *      encryptedData EncryptedData
+	 * }
+	 *
+	 * EncryptedData ::= OCTET STRING
+	 *
+	 * KeyEncryptionAlgorithms ALGORITHM-IDENTIFIER ::= {
+	 *          ... -- For local profiles
+	 * }
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        return new DERSequence(v);
-    }
+		v.add(algId);
+		v.add(data);
+
+		return new DERSequence(v);
+	}
 }

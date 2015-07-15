@@ -50,80 +50,90 @@
 package com.lowagie.text.pdf;
 
 /**
- *
- * @author  Paulo Soares (psoares@consiste.pt)
+ * @author Paulo Soares (psoares@consiste.pt)
  */
-public class CMYKColor extends ExtendedColor {
+public class CMYKColor extends ExtendedColor
+{
 
-    private static final long serialVersionUID = 5940378778276468452L;
+	private static final long serialVersionUID = 5940378778276468452L;
 	float cyan;
-    float magenta;
-    float yellow;
-    float black;
+	float magenta;
+	float yellow;
+	float black;
 
-    /**
-     * Constructs a CMYK Color based on 4 color values (values are integers from 0 to 255).
-     * @param intCyan
-     * @param intMagenta
-     * @param intYellow
-     * @param intBlack
-     */
-    public CMYKColor(int intCyan, int intMagenta, int intYellow, int intBlack) {
-        this(intCyan / 255f, intMagenta / 255f, intYellow / 255f, intBlack / 255f);
-    }
+	/**
+	 * Constructs a CMYK Color based on 4 color values (values are integers from 0 to 255).
+	 *
+	 * @param intCyan
+	 * @param intMagenta
+	 * @param intYellow
+	 * @param intBlack
+	 */
+	public CMYKColor(int intCyan, int intMagenta, int intYellow, int intBlack)
+	{
+		this(intCyan / 255f, intMagenta / 255f, intYellow / 255f, intBlack / 255f);
+	}
 
-    /**
-     * Construct a CMYK Color.
-     * @param floatCyan
-     * @param floatMagenta
-     * @param floatYellow
-     * @param floatBlack
-     */
-    public CMYKColor(float floatCyan, float floatMagenta, float floatYellow, float floatBlack) {
-        super(TYPE_CMYK, 1f - floatCyan - floatBlack, 1f - floatMagenta - floatBlack, 1f - floatYellow - floatBlack);
-        cyan = normalize(floatCyan);
-        magenta = normalize(floatMagenta);
-        yellow = normalize(floatYellow);
-        black = normalize(floatBlack);
-    }
-    
-    /**
-     * @return the cyan value
-     */
-    public float getCyan() {
-        return cyan;
-    }
+	/**
+	 * Construct a CMYK Color.
+	 *
+	 * @param floatCyan
+	 * @param floatMagenta
+	 * @param floatYellow
+	 * @param floatBlack
+	 */
+	public CMYKColor(float floatCyan, float floatMagenta, float floatYellow, float floatBlack)
+	{
+		super(TYPE_CMYK, 1f - floatCyan - floatBlack, 1f - floatMagenta - floatBlack, 1f - floatYellow - floatBlack);
+		cyan = normalize(floatCyan);
+		magenta = normalize(floatMagenta);
+		yellow = normalize(floatYellow);
+		black = normalize(floatBlack);
+	}
 
-    /**
-     * @return the magenta value
-     */
-    public float getMagenta() {
-        return magenta;
-    }
+	/**
+	 * @return the cyan value
+	 */
+	public float getCyan()
+	{
+		return cyan;
+	}
 
-    /**
-     * @return the yellow value
-     */
-    public float getYellow() {
-        return yellow;
-    }
+	/**
+	 * @return the magenta value
+	 */
+	public float getMagenta()
+	{
+		return magenta;
+	}
 
-    /**
-     * @return the black value
-     */
-    public float getBlack() {
-        return black;
-    }
+	/**
+	 * @return the yellow value
+	 */
+	public float getYellow()
+	{
+		return yellow;
+	}
 
-    public boolean equals(Object obj) {
-        if (!(obj instanceof CMYKColor))
-            return false;
-        CMYKColor c2 = (CMYKColor)obj;
-        return (cyan == c2.cyan && magenta == c2.magenta && yellow == c2.yellow && black == c2.black);
-    }
-    
-    public int hashCode() {
-        return Float.floatToIntBits(cyan) ^ Float.floatToIntBits(magenta) ^ Float.floatToIntBits(yellow) ^ Float.floatToIntBits(black); 
-    }
-    
+	/**
+	 * @return the black value
+	 */
+	public float getBlack()
+	{
+		return black;
+	}
+
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof CMYKColor))
+			return false;
+		CMYKColor c2 = (CMYKColor) obj;
+		return (cyan == c2.cyan && magenta == c2.magenta && yellow == c2.yellow && black == c2.black);
+	}
+
+	public int hashCode()
+	{
+		return Float.floatToIntBits(cyan) ^ Float.floatToIntBits(magenta) ^ Float.floatToIntBits(yellow) ^ Float.floatToIntBits(black);
+	}
+
 }

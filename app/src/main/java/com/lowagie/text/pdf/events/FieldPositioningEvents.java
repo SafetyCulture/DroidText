@@ -46,9 +46,6 @@
  */
 package com.lowagie.text.pdf.events;
 
-import java.io.IOException;
-import java.util.HashMap;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -63,108 +60,142 @@ import com.lowagie.text.pdf.PdfRectangle;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.TextField;
 
+import java.io.IOException;
+import java.util.HashMap;
+
 /**
  * Class that can be used to position AcroForm fields.
  */
-public class FieldPositioningEvents extends PdfPageEventHelper implements PdfPCellEvent {
+public class FieldPositioningEvents extends PdfPageEventHelper implements PdfPCellEvent
+{
 
-    /**
-     * Keeps a map with fields that are to be positioned in inGenericTag.
-     */
-    protected HashMap genericChunkFields = new HashMap();
+	/**
+	 * Keeps a map with fields that are to be positioned in inGenericTag.
+	 */
+	protected HashMap genericChunkFields = new HashMap();
 
-    /**
-     * Keeps the form field that is to be positioned in a cellLayout event.
-     */
-    protected PdfFormField cellField = null;
-    
-    /**
-     * The PdfWriter to use when a field has to added in a cell event. 
-     */
-    protected PdfWriter fieldWriter = null;
-    /**
-     * The PdfFormField that is the parent of the field added in a cell event. 
-     */
-    protected PdfFormField parent = null;
-    
-    /** Creates a new event. This constructor will be used if you need to position fields with Chunk objects. */
-    public FieldPositioningEvents() {}
-    
-    /** Some extra padding that will be taken into account when defining the widget. */
-    public float padding;
-    
-    /**
-     * Add a PdfFormField that has to be tied to a generic Chunk.
-     */
-    public void addField(String text, PdfFormField field) {
-    	genericChunkFields.put(text, field);
-    }
-    
-    /** Creates a new event. This constructor will be used if you need to position fields with a Cell Event. */
-    public FieldPositioningEvents(PdfWriter writer, PdfFormField field) {
-    	this.cellField = field;
-    	this.fieldWriter = writer;
-    }  
-    
-    /** Creates a new event. This constructor will be used if you need to position fields with a Cell Event. */
-    public FieldPositioningEvents(PdfFormField parent, PdfFormField field) {
-    	this.cellField = field;
-    	this.parent = parent;
-    }
-    
-    /** Creates a new event. This constructor will be used if you need to position fields with a Cell Event. 
-     * @throws DocumentException
-     * @throws IOException*/
-    public FieldPositioningEvents(PdfWriter writer, String text) throws IOException, DocumentException {
-    	this.fieldWriter = writer;
-    	TextField tf = new TextField(writer, new Rectangle(0, 0), text);
+	/**
+	 * Keeps the form field that is to be positioned in a cellLayout event.
+	 */
+	protected PdfFormField cellField = null;
+
+	/**
+	 * The PdfWriter to use when a field has to added in a cell event.
+	 */
+	protected PdfWriter fieldWriter = null;
+	/**
+	 * The PdfFormField that is the parent of the field added in a cell event.
+	 */
+	protected PdfFormField parent = null;
+
+	/**
+	 * Creates a new event. This constructor will be used if you need to position fields with Chunk objects.
+	 */
+	public FieldPositioningEvents()
+	{
+	}
+
+	/**
+	 * Some extra padding that will be taken into account when defining the widget.
+	 */
+	public float padding;
+
+	/**
+	 * Add a PdfFormField that has to be tied to a generic Chunk.
+	 */
+	public void addField(String text, PdfFormField field)
+	{
+		genericChunkFields.put(text, field);
+	}
+
+	/**
+	 * Creates a new event. This constructor will be used if you need to position fields with a Cell Event.
+	 */
+	public FieldPositioningEvents(PdfWriter writer, PdfFormField field)
+	{
+		this.cellField = field;
+		this.fieldWriter = writer;
+	}
+
+	/**
+	 * Creates a new event. This constructor will be used if you need to position fields with a Cell Event.
+	 */
+	public FieldPositioningEvents(PdfFormField parent, PdfFormField field)
+	{
+		this.cellField = field;
+		this.parent = parent;
+	}
+
+	/**
+	 * Creates a new event. This constructor will be used if you need to position fields with a Cell Event.
+	 *
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	public FieldPositioningEvents(PdfWriter writer, String text) throws IOException, DocumentException
+	{
+		this.fieldWriter = writer;
+		TextField tf = new TextField(writer, new Rectangle(0, 0), text);
 		tf.setFontSize(14);
 		cellField = tf.getTextField();
-	}   
-    
-    /** Creates a new event. This constructor will be used if you need to position fields with a Cell Event. 
-     * @throws DocumentException
-     * @throws IOException*/
-    public FieldPositioningEvents(PdfWriter writer, PdfFormField parent, String text) throws IOException, DocumentException {
-    	this.parent = parent;
-    	TextField tf = new TextField(writer, new Rectangle(0, 0), text);
+	}
+
+	/**
+	 * Creates a new event. This constructor will be used if you need to position fields with a Cell Event.
+	 *
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	public FieldPositioningEvents(PdfWriter writer, PdfFormField parent, String text) throws IOException, DocumentException
+	{
+		this.parent = parent;
+		TextField tf = new TextField(writer, new Rectangle(0, 0), text);
 		tf.setFontSize(14);
 		cellField = tf.getTextField();
-	}  
+	}
 
 	/**
 	 * @param padding The padding to set.
 	 */
-	public void setPadding(float padding) {
+	public void setPadding(float padding)
+	{
 		this.padding = padding;
 	}
-	
+
 	/**
 	 * @param parent The parent to set.
 	 */
-	public void setParent(PdfFormField parent) {
+	public void setParent(PdfFormField parent)
+	{
 		this.parent = parent;
 	}
+
 	/**
 	 * @see com.lowagie.text.pdf.PdfPageEvent#onGenericTag(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document, com.lowagie.text.Rectangle, java.lang.String)
 	 */
 	public void onGenericTag(PdfWriter writer, Document document,
-			Rectangle rect, String text) {
+							 Rectangle rect, String text)
+	{
 		rect.setBottom(rect.getBottom() - 3);
 		PdfFormField field = (PdfFormField) genericChunkFields.get(text);
-		if (field == null) {
+		if(field == null)
+		{
 			TextField tf = new TextField(writer, new Rectangle(rect.getLeft(padding), rect.getBottom(padding), rect.getRight(padding), rect.getTop(padding)), text);
 			tf.setFontSize(14);
-			try {
+			try
+			{
 				field = tf.getTextField();
-			} catch (Exception e) {
+			}
+			catch(Exception e)
+			{
 				throw new ExceptionConverter(e);
 			}
 		}
-		else {
-			field.put(PdfName.RECT,  new PdfRectangle(rect.getLeft(padding), rect.getBottom(padding), rect.getRight(padding), rect.getTop(padding)));
+		else
+		{
+			field.put(PdfName.RECT, new PdfRectangle(rect.getLeft(padding), rect.getBottom(padding), rect.getRight(padding), rect.getTop(padding)));
 		}
-		if (parent == null)
+		if(parent == null)
 			writer.addAnnotation(field);
 		else
 			parent.addKid(field);
@@ -173,10 +204,12 @@ public class FieldPositioningEvents extends PdfPageEventHelper implements PdfPCe
 	/**
 	 * @see com.lowagie.text.pdf.PdfPCellEvent#cellLayout(com.lowagie.text.pdf.PdfPCell, com.lowagie.text.Rectangle, com.lowagie.text.pdf.PdfContentByte[])
 	 */
-	public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvases) {
-		if (cellField == null || (fieldWriter == null && parent == null)) throw new ExceptionConverter(new IllegalArgumentException("You have used the wrong constructor for this FieldPositioningEvents class."));
+	public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvases)
+	{
+		if(cellField == null || (fieldWriter == null && parent == null))
+			throw new ExceptionConverter(new IllegalArgumentException("You have used the wrong constructor for this FieldPositioningEvents class."));
 		cellField.put(PdfName.RECT, new PdfRectangle(rect.getLeft(padding), rect.getBottom(padding), rect.getRight(padding), rect.getTop(padding)));
-		if (parent == null)
+		if(parent == null)
 			fieldWriter.addAnnotation(cellField);
 		else
 			parent.addKid(cellField);

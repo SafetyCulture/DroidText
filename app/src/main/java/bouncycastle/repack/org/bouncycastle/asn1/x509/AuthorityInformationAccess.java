@@ -24,83 +24,82 @@ import repack.org.bouncycastle.asn1.DERSequence;
  * </pre>
  */
 public class AuthorityInformationAccess
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private AccessDescription[]    descriptions;
+	private AccessDescription[] descriptions;
 
-    public static AuthorityInformationAccess getInstance(
-        Object  obj)
-    {
-        if (obj instanceof AuthorityInformationAccess)
-        {
-            return (AuthorityInformationAccess)obj;
-        }
+	public static AuthorityInformationAccess getInstance(
+			Object obj)
+	{
+		if(obj instanceof AuthorityInformationAccess)
+		{
+			return (AuthorityInformationAccess) obj;
+		}
 
-        if (obj instanceof ASN1Sequence)
-        {
-            return new AuthorityInformationAccess((ASN1Sequence)obj);
-        }
+		if(obj instanceof ASN1Sequence)
+		{
+			return new AuthorityInformationAccess((ASN1Sequence) obj);
+		}
 
-        if (obj instanceof X509Extension)
-        {
-            return getInstance(X509Extension.convertValueToObject((X509Extension)obj));
-        }
+		if(obj instanceof X509Extension)
+		{
+			return getInstance(X509Extension.convertValueToObject((X509Extension) obj));
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
- 
-    public AuthorityInformationAccess(
-        ASN1Sequence   seq)
-    {
-        if (seq.size() < 1) 
-        {
-            throw new IllegalArgumentException("sequence may not be empty");
-        }
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-        descriptions = new AccessDescription[seq.size()];
-        
-        for (int i = 0; i != seq.size(); i++)
-        {
-            descriptions[i] = AccessDescription.getInstance(seq.getObjectAt(i));
-        }
-    }
+	public AuthorityInformationAccess(
+			ASN1Sequence seq)
+	{
+		if(seq.size() < 1)
+		{
+			throw new IllegalArgumentException("sequence may not be empty");
+		}
 
-    /**
-     * create an AuthorityInformationAccess with the oid and location provided.
-     */
-    public AuthorityInformationAccess(
-        DERObjectIdentifier oid,
-        GeneralName location)
-    {
-        descriptions = new AccessDescription[1];
-        
-        descriptions[0] = new AccessDescription(oid, location);
-    }
+		descriptions = new AccessDescription[seq.size()];
+
+		for(int i = 0; i != seq.size(); i++)
+		{
+			descriptions[i] = AccessDescription.getInstance(seq.getObjectAt(i));
+		}
+	}
+
+	/**
+	 * create an AuthorityInformationAccess with the oid and location provided.
+	 */
+	public AuthorityInformationAccess(
+			DERObjectIdentifier oid,
+			GeneralName location)
+	{
+		descriptions = new AccessDescription[1];
+
+		descriptions[0] = new AccessDescription(oid, location);
+	}
 
 
-    /**
-     * 
-     * @return the access descriptions contained in this object.
-     */
-    public AccessDescription[] getAccessDescriptions()
-    {
-        return descriptions;
-    }
-    
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector vec = new ASN1EncodableVector();
-        
-        for (int i = 0; i != descriptions.length; i++)
-        {
-            vec.add(descriptions[i]);
-        }
-        
-        return new DERSequence(vec);
-    }
+	/**
+	 * @return the access descriptions contained in this object.
+	 */
+	public AccessDescription[] getAccessDescriptions()
+	{
+		return descriptions;
+	}
 
-    public String toString()
-    {
-        return ("AuthorityInformationAccess: Oid(" + this.descriptions[0].getAccessMethod().getId() + ")");
-    }
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector vec = new ASN1EncodableVector();
+
+		for(int i = 0; i != descriptions.length; i++)
+		{
+			vec.add(descriptions[i]);
+		}
+
+		return new DERSequence(vec);
+	}
+
+	public String toString()
+	{
+		return ("AuthorityInformationAccess: Oid(" + this.descriptions[0].getAccessMethod().getId() + ")");
+	}
 }

@@ -2,7 +2,7 @@ package repack.org.bouncycastle.util.test;
 
 public interface Test
 {
-    String getName();
+	String getName();
 
-    TestResult perform();
+	TestResult perform();
 }

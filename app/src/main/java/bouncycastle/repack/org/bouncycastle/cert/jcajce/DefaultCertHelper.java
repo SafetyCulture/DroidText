@@ -4,11 +4,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
 class DefaultCertHelper
-    extends CertHelper
+		extends CertHelper
 {
-    protected CertificateFactory createCertificateFactory(String type)
-        throws CertificateException
-    {
-        return CertificateFactory.getInstance(type);
-    }
+	protected CertificateFactory createCertificateFactory(String type)
+			throws CertificateException
+	{
+		return CertificateFactory.getInstance(type);
+	}
 }

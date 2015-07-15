@@ -1,30 +1,30 @@
 package repack.org.bouncycastle.crypto.params;
 
-import java.security.SecureRandom;
-
 import repack.org.bouncycastle.crypto.KeyGenerationParameters;
 
+import java.security.SecureRandom;
+
 public class DHKeyGenerationParameters
-    extends KeyGenerationParameters
+		extends KeyGenerationParameters
 {
-    private DHParameters    params;
+	private DHParameters params;
 
-    public DHKeyGenerationParameters(
-        SecureRandom    random,
-        DHParameters    params)
-    {
-        super(random, getStrength(params));
+	public DHKeyGenerationParameters(
+			SecureRandom random,
+			DHParameters params)
+	{
+		super(random, getStrength(params));
 
-        this.params = params;
-    }
+		this.params = params;
+	}
 
-    public DHParameters getParameters()
-    {
-        return params;
-    }
+	public DHParameters getParameters()
+	{
+		return params;
+	}
 
-    static int getStrength(DHParameters params)
-    {
-        return params.getL() != 0 ? params.getL() : params.getP().bitLength();
-    }
+	static int getStrength(DHParameters params)
+	{
+		return params.getL() != 0 ? params.getL() : params.getP().bitLength();
+	}
 }

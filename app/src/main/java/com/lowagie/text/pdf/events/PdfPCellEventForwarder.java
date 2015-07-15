@@ -49,13 +49,13 @@
 
 package com.lowagie.text.pdf.events;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPCellEvent;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * If you want to add more than one event to a cell,
@@ -64,26 +64,33 @@ import com.lowagie.text.pdf.PdfPCellEvent;
  * the PdfPCell.
  */
 
-public class PdfPCellEventForwarder implements PdfPCellEvent {
+public class PdfPCellEventForwarder implements PdfPCellEvent
+{
 
-	/** ArrayList containing all the PageEvents that have to be executed. */
+	/**
+	 * ArrayList containing all the PageEvents that have to be executed.
+	 */
 	protected ArrayList events = new ArrayList();
-	
-	/** 
+
+	/**
 	 * Add a page event to the forwarder.
+	 *
 	 * @param event an event that has to be added to the forwarder.
 	 */
-	public void addCellEvent(PdfPCellEvent event) {
+	public void addCellEvent(PdfPCellEvent event)
+	{
 		events.add(event);
 	}
 
 	/**
 	 * @see com.lowagie.text.pdf.PdfPCellEvent#cellLayout(com.lowagie.text.pdf.PdfPCell, com.lowagie.text.Rectangle, com.lowagie.text.pdf.PdfContentByte[])
 	 */
-	public void cellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases) {
+	public void cellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases)
+	{
 		PdfPCellEvent event;
-		for (Iterator i = events.iterator(); i.hasNext(); ) {
-			event = (PdfPCellEvent)i.next();
+		for(Iterator i = events.iterator(); i.hasNext(); )
+		{
+			event = (PdfPCellEvent) i.next();
 			event.cellLayout(cell, position, canvases);
 		}
 	}

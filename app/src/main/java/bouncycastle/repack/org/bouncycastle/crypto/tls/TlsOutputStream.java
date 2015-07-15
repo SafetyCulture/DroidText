@@ -8,32 +8,32 @@ import java.io.OutputStream;
  */
 class TlsOutputStream extends OutputStream
 {
-    private byte[] buf = new byte[1];
-    private TlsProtocolHandler handler;
+	private byte[] buf = new byte[1];
+	private TlsProtocolHandler handler;
 
-    TlsOutputStream(TlsProtocolHandler handler)
-    {
-        this.handler = handler;
-    }
+	TlsOutputStream(TlsProtocolHandler handler)
+	{
+		this.handler = handler;
+	}
 
-    public void write(byte buf[], int offset, int len) throws IOException
-    {
-        this.handler.writeData(buf, offset, len);
-    }
+	public void write(byte buf[], int offset, int len) throws IOException
+	{
+		this.handler.writeData(buf, offset, len);
+	}
 
-    public void write(int arg0) throws IOException
-    {
-        buf[0] = (byte)arg0;
-        this.write(buf, 0, 1);
-    }
+	public void write(int arg0) throws IOException
+	{
+		buf[0] = (byte) arg0;
+		this.write(buf, 0, 1);
+	}
 
-    public void close() throws IOException
-    {
-        handler.close();
-    }
+	public void close() throws IOException
+	{
+		handler.close();
+	}
 
-    public void flush() throws IOException
-    {
-        handler.flush();
-    }
+	public void flush() throws IOException
+	{
+		handler.flush();
+	}
 }

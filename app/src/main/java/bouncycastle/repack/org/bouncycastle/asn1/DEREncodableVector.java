@@ -9,30 +9,30 @@ import java.util.Vector;
  */
 public class DEREncodableVector
 {
-    Vector v = new Vector();
+	Vector v = new Vector();
 
-    /**
-     * @deprecated use ASN1EncodableVector instead.
-     */
-    public DEREncodableVector()
-    {
+	/**
+	 * @deprecated use ASN1EncodableVector instead.
+	 */
+	public DEREncodableVector()
+	{
 
-    }
-    
-    public void add(
-        DEREncodable   obj)
-    {
-        v.addElement(obj);
-    }
+	}
 
-    public DEREncodable get(
-        int i)
-    {
-        return (DEREncodable)v.elementAt(i);
-    }
+	public void add(
+			DEREncodable obj)
+	{
+		v.addElement(obj);
+	}
 
-    public int size()
-    {
-        return v.size();
-    }
+	public DEREncodable get(
+			int i)
+	{
+		return (DEREncodable) v.elementAt(i);
+	}
+
+	public int size()
+	{
+		return v.size();
+	}
 }

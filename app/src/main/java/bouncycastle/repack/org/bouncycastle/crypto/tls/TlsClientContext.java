@@ -4,11 +4,11 @@ import java.security.SecureRandom;
 
 public interface TlsClientContext
 {
-    SecureRandom getSecureRandom();
+	SecureRandom getSecureRandom();
 
-    SecurityParameters getSecurityParameters();
+	SecurityParameters getSecurityParameters();
 
-    Object getUserObject();
+	Object getUserObject();
 
-    void setUserObject(Object userObject);
+	void setUserObject(Object userObject);
 }

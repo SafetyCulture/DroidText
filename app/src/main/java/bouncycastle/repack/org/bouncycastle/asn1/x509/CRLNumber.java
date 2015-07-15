@@ -11,22 +11,22 @@ import java.math.BigInteger;
  * </pre>
  */
 public class CRLNumber
-    extends DERInteger
+		extends DERInteger
 {
 
-    public CRLNumber(
-        BigInteger number)
-    {
-        super(number);
-    }
+	public CRLNumber(
+			BigInteger number)
+	{
+		super(number);
+	}
 
-    public BigInteger getCRLNumber()
-    {
-        return getPositiveValue();
-    }
+	public BigInteger getCRLNumber()
+	{
+		return getPositiveValue();
+	}
 
-    public String toString()
-    {
-        return "CRLNumber: " + getCRLNumber();
-    }
+	public String toString()
+	{
+		return "CRLNumber: " + getCRLNumber();
+	}
 }

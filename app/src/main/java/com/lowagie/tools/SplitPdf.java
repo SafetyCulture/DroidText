@@ -49,8 +49,6 @@
 
 package com.lowagie.tools;
 
-import java.io.FileOutputStream;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -58,25 +56,32 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 
+import java.io.FileOutputStream;
+
 /**
  * This class demonstrates how to split a PDF file using iText.
- * 
+ *
  * @author Bruno Lowagie
  * @since 2.1.1 (renamed to follow Java naming conventions)
  */
-public class SplitPdf extends java.lang.Object {
+public class SplitPdf extends java.lang.Object
+{
 
 	/**
 	 * This class can be used to split an existing PDF file.
-	 * 
-	 * @param args
-	 *            the command line arguments
+	 *
+	 * @param args the command line arguments
 	 */
-	public static void main(String args[]) {
-		if (args.length != 4) {
+	public static void main(String args[])
+	{
+		if(args.length != 4)
+		{
 			System.err.println("arguments: srcfile destfile1 destfile2 pagenumber");
-		} else {
-			try {
+		}
+		else
+		{
+			try
+			{
 				int pagenumber = Integer.parseInt(args[3]);
 
 				// we create a reader for a certain document
@@ -85,7 +90,8 @@ public class SplitPdf extends java.lang.Object {
 				int n = reader.getNumberOfPages();
 				System.out.println("There are " + n + " pages in the original file.");
 
-				if (pagenumber < 2 || pagenumber > n) {
+				if(pagenumber < 2 || pagenumber > n)
+				{
 					throw new DocumentException("You can't split this document at page " + pagenumber
 							+ "; there is no such page.");
 				}
@@ -105,27 +111,35 @@ public class SplitPdf extends java.lang.Object {
 				int rotation;
 				int i = 0;
 				// step 4: we add content
-				while (i < pagenumber - 1) {
+				while(i < pagenumber - 1)
+				{
 					i++;
 					document1.setPageSize(reader.getPageSizeWithRotation(i));
 					document1.newPage();
 					page = writer1.getImportedPage(reader, i);
 					rotation = reader.getPageRotation(i);
-					if (rotation == 90 || rotation == 270) {
+					if(rotation == 90 || rotation == 270)
+					{
 						cb1.addTemplate(page, 0, -1f, 1f, 0, 0, reader.getPageSizeWithRotation(i).getHeight());
-					} else {
+					}
+					else
+					{
 						cb1.addTemplate(page, 1f, 0, 0, 1f, 0, 0);
 					}
 				}
-				while (i < n) {
+				while(i < n)
+				{
 					i++;
 					document2.setPageSize(reader.getPageSizeWithRotation(i));
 					document2.newPage();
 					page = writer2.getImportedPage(reader, i);
 					rotation = reader.getPageRotation(i);
-					if (rotation == 90 || rotation == 270) {
+					if(rotation == 90 || rotation == 270)
+					{
 						cb2.addTemplate(page, 0, -1f, 1f, 0, 0, reader.getPageSizeWithRotation(i).getHeight());
-					} else {
+					}
+					else
+					{
 						cb2.addTemplate(page, 1f, 0, 0, 1f, 0, 0);
 					}
 					System.out.println("Processed page " + i);
@@ -133,7 +147,9 @@ public class SplitPdf extends java.lang.Object {
 				// step 5: we close the document
 				document1.close();
 				document2.close();
-			} catch (Exception e) {
+			}
+			catch(Exception e)
+			{
 				e.printStackTrace();
 			}
 		}

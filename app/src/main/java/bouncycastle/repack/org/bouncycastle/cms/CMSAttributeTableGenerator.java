@@ -9,11 +9,11 @@ import java.util.Map;
  */
 public interface CMSAttributeTableGenerator
 {
-    static final String CONTENT_TYPE = "contentType";
-    static final String DIGEST = "digest";
-    static final String SIGNATURE = "encryptedDigest";
-    static final String DIGEST_ALGORITHM_IDENTIFIER = "digestAlgID";
+	static final String CONTENT_TYPE = "contentType";
+	static final String DIGEST = "digest";
+	static final String SIGNATURE = "encryptedDigest";
+	static final String DIGEST_ALGORITHM_IDENTIFIER = "digestAlgID";
 
-    AttributeTable getAttributes(Map parameters)
-        throws CMSAttributeTableGenerationException;
+	AttributeTable getAttributes(Map parameters)
+			throws CMSAttributeTableGenerationException;
 }

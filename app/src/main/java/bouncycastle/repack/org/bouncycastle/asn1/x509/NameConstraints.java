@@ -1,8 +1,5 @@
 package repack.org.bouncycastle.asn1.x509;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import repack.org.bouncycastle.asn1.ASN1Encodable;
 import repack.org.bouncycastle.asn1.ASN1EncodableVector;
 import repack.org.bouncycastle.asn1.ASN1Sequence;
@@ -11,94 +8,95 @@ import repack.org.bouncycastle.asn1.DERObject;
 import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.DERTaggedObject;
 
+import java.util.Enumeration;
+import java.util.Vector;
+
 public class NameConstraints
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private ASN1Sequence permitted, excluded;
+	private ASN1Sequence permitted, excluded;
 
-    public NameConstraints(ASN1Sequence seq)
-    {
-        Enumeration e = seq.getObjects();
-        while (e.hasMoreElements())
-        {
-            ASN1TaggedObject o = ASN1TaggedObject.getInstance(e.nextElement());
-            switch (o.getTagNo())
-            {
-            case 0:
-                permitted = ASN1Sequence.getInstance(o, false);
-                break;
-            case 1:
-                excluded = ASN1Sequence.getInstance(o, false);
-                break;
-            }
-        }
-    }
+	public NameConstraints(ASN1Sequence seq)
+	{
+		Enumeration e = seq.getObjects();
+		while(e.hasMoreElements())
+		{
+			ASN1TaggedObject o = ASN1TaggedObject.getInstance(e.nextElement());
+			switch(o.getTagNo())
+			{
+				case 0:
+					permitted = ASN1Sequence.getInstance(o, false);
+					break;
+				case 1:
+					excluded = ASN1Sequence.getInstance(o, false);
+					break;
+			}
+		}
+	}
 
-    /**
-     * Constructor from a given details.
-     * 
-     * <p>
-     * permitted and excluded are Vectors of GeneralSubtree objects.
-     * 
-     * @param permitted
-     *            Permitted subtrees
-     * @param excluded
-     *            Excludes subtrees
-     */
-    public NameConstraints(
-        Vector permitted,
-        Vector excluded)
-    {
-        if (permitted != null)
-        {
-            this.permitted = createSequence(permitted);
-        }
-        if (excluded != null)
-        {
-            this.excluded = createSequence(excluded);
-        }
-    }
+	/**
+	 * Constructor from a given details.
+	 * <p/>
+	 * <p/>
+	 * permitted and excluded are Vectors of GeneralSubtree objects.
+	 *
+	 * @param permitted Permitted subtrees
+	 * @param excluded  Excludes subtrees
+	 */
+	public NameConstraints(
+			Vector permitted,
+			Vector excluded)
+	{
+		if(permitted != null)
+		{
+			this.permitted = createSequence(permitted);
+		}
+		if(excluded != null)
+		{
+			this.excluded = createSequence(excluded);
+		}
+	}
 
-    private DERSequence createSequence(Vector subtree)
-    {
-        ASN1EncodableVector vec = new ASN1EncodableVector();
-        Enumeration e = subtree.elements(); 
-        while (e.hasMoreElements())
-        {
-            vec.add((GeneralSubtree)e.nextElement());
-        }
-        
-        return new DERSequence(vec);
-    }
+	private DERSequence createSequence(Vector subtree)
+	{
+		ASN1EncodableVector vec = new ASN1EncodableVector();
+		Enumeration e = subtree.elements();
+		while(e.hasMoreElements())
+		{
+			vec.add((GeneralSubtree) e.nextElement());
+		}
 
-    public ASN1Sequence getPermittedSubtrees() 
-    {
-        return permitted;
-    }
+		return new DERSequence(vec);
+	}
 
-    public ASN1Sequence getExcludedSubtrees() 
-    {
-        return excluded;
-    }
+	public ASN1Sequence getPermittedSubtrees()
+	{
+		return permitted;
+	}
 
-    /*
-     * NameConstraints ::= SEQUENCE { permittedSubtrees [0] GeneralSubtrees
-     * OPTIONAL, excludedSubtrees [1] GeneralSubtrees OPTIONAL }
-     */
-    public DERObject toASN1Object() 
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	public ASN1Sequence getExcludedSubtrees()
+	{
+		return excluded;
+	}
 
-        if (permitted != null) 
-        {
-            v.add(new DERTaggedObject(false, 0, permitted));
-        }
+	/*
+	 * NameConstraints ::= SEQUENCE { permittedSubtrees [0] GeneralSubtrees
+	 * OPTIONAL, excludedSubtrees [1] GeneralSubtrees OPTIONAL }
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        if (excluded != null) 
-        {
-            v.add(new DERTaggedObject(false, 1, excluded));
-        }
+		if(permitted != null)
+		{
+			v.add(new DERTaggedObject(false, 0, permitted));
+		}
 
-        return new DERSequence(v);
-    }
+		if(excluded != null)
+		{
+			v.add(new DERTaggedObject(false, 1, excluded));
+		}
+
+		return new DERSequence(v);
+	}
 }

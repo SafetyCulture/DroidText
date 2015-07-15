@@ -49,12 +49,12 @@
 
 package com.lowagie.text.pdf.events;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * If you want to add more than one page event to a PdfPTable,
@@ -63,26 +63,33 @@ import com.lowagie.text.pdf.PdfPTableEvent;
  * the PdfWriter.
  */
 
-public class PdfPTableEventForwarder implements PdfPTableEvent {
+public class PdfPTableEventForwarder implements PdfPTableEvent
+{
 
-	/** ArrayList containing all the PageEvents that have to be executed. */
+	/**
+	 * ArrayList containing all the PageEvents that have to be executed.
+	 */
 	protected ArrayList events = new ArrayList();
-	
-	/** 
+
+	/**
 	 * Add a page event to the forwarder.
+	 *
 	 * @param event an event that has to be added to the forwarder.
 	 */
-	public void addTableEvent(PdfPTableEvent event) {
+	public void addTableEvent(PdfPTableEvent event)
+	{
 		events.add(event);
 	}
 
 	/**
 	 * @see com.lowagie.text.pdf.PdfPTableEvent#tableLayout(com.lowagie.text.pdf.PdfPTable, float[][], float[], int, int, com.lowagie.text.pdf.PdfContentByte[])
 	 */
-	public void tableLayout(PdfPTable table, float[][] widths, float[] heights, int headerRows, int rowStart, PdfContentByte[] canvases) {
+	public void tableLayout(PdfPTable table, float[][] widths, float[] heights, int headerRows, int rowStart, PdfContentByte[] canvases)
+	{
 		PdfPTableEvent event;
-		for (Iterator i = events.iterator(); i.hasNext(); ) {
-			event = (PdfPTableEvent)i.next();
+		for(Iterator i = events.iterator(); i.hasNext(); )
+		{
+			event = (PdfPTableEvent) i.next();
 			event.tableLayout(table, widths, heights, headerRows, rowStart, canvases);
 		}
 	}

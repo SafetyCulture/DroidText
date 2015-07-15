@@ -1,14 +1,5 @@
 package repack.org.bouncycastle.jce.provider;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.math.BigInteger;
-
-import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.DHParameterSpec;
-import javax.crypto.spec.DHPublicKeySpec;
-
 import repack.org.bouncycastle.asn1.ASN1Sequence;
 import repack.org.bouncycastle.asn1.DERInteger;
 import repack.org.bouncycastle.asn1.DERObjectIdentifier;
@@ -20,160 +11,168 @@ import repack.org.bouncycastle.asn1.x9.DHDomainParameters;
 import repack.org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 import repack.org.bouncycastle.crypto.params.DHPublicKeyParameters;
 
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+import javax.crypto.spec.DHPublicKeySpec;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+
 public class JCEDHPublicKey
-    implements DHPublicKey
+		implements DHPublicKey
 {
-    static final long serialVersionUID = -216691575254424324L;
-    
-    private BigInteger              y;
-    private DHParameterSpec         dhSpec;
-    private SubjectPublicKeyInfo    info;
-    
-    JCEDHPublicKey(
-        DHPublicKeySpec    spec)
-    {
-        this.y = spec.getY();
-        this.dhSpec = new DHParameterSpec(spec.getP(), spec.getG());
-    }
+	static final long serialVersionUID = -216691575254424324L;
 
-    JCEDHPublicKey(
-        DHPublicKey    key)
-    {
-        this.y = key.getY();
-        this.dhSpec = key.getParams();
-    }
+	private BigInteger y;
+	private DHParameterSpec dhSpec;
+	private SubjectPublicKeyInfo info;
 
-    JCEDHPublicKey(
-        DHPublicKeyParameters  params)
-    {
-        this.y = params.getY();
-        this.dhSpec = new DHParameterSpec(params.getParameters().getP(), params.getParameters().getG(), params.getParameters().getL());
-    }
+	JCEDHPublicKey(
+			DHPublicKeySpec spec)
+	{
+		this.y = spec.getY();
+		this.dhSpec = new DHParameterSpec(spec.getP(), spec.getG());
+	}
 
-    JCEDHPublicKey(
-        BigInteger        y,
-        DHParameterSpec   dhSpec)
-    {
-        this.y = y;
-        this.dhSpec = dhSpec;
-    }
+	JCEDHPublicKey(
+			DHPublicKey key)
+	{
+		this.y = key.getY();
+		this.dhSpec = key.getParams();
+	}
 
-    JCEDHPublicKey(
-        SubjectPublicKeyInfo    info)
-    {
-        this.info = info;
+	JCEDHPublicKey(
+			DHPublicKeyParameters params)
+	{
+		this.y = params.getY();
+		this.dhSpec = new DHParameterSpec(params.getParameters().getP(), params.getParameters().getG(), params.getParameters().getL());
+	}
 
-        DERInteger              derY;
-        try
-        {
-            derY = (DERInteger)info.getPublicKey();
-        }
-        catch (IOException e)
-        {
-            throw new IllegalArgumentException("invalid info structure in DH public key");
-        }
+	JCEDHPublicKey(
+			BigInteger y,
+			DHParameterSpec dhSpec)
+	{
+		this.y = y;
+		this.dhSpec = dhSpec;
+	}
 
-        this.y = derY.getValue();
+	JCEDHPublicKey(
+			SubjectPublicKeyInfo info)
+	{
+		this.info = info;
 
-        ASN1Sequence seq = ASN1Sequence.getInstance(info.getAlgorithmId().getParameters());
-        DERObjectIdentifier id = info.getAlgorithmId().getObjectId();
+		DERInteger derY;
+		try
+		{
+			derY = (DERInteger) info.getPublicKey();
+		}
+		catch(IOException e)
+		{
+			throw new IllegalArgumentException("invalid info structure in DH public key");
+		}
 
-        // we need the PKCS check to handle older keys marked with the X9 oid.
-        if (id.equals(PKCSObjectIdentifiers.dhKeyAgreement) || isPKCSParam(seq))
-        {
-            DHParameter             params = new DHParameter(seq);
+		this.y = derY.getValue();
 
-            if (params.getL() != null)
-            {
-                this.dhSpec = new DHParameterSpec(params.getP(), params.getG(), params.getL().intValue());
-            }
-            else
-            {
-                this.dhSpec = new DHParameterSpec(params.getP(), params.getG());
-            }
-        }
-        else if (id.equals(X9ObjectIdentifiers.dhpublicnumber))
-        {
-            DHDomainParameters params = DHDomainParameters.getInstance(seq);
+		ASN1Sequence seq = ASN1Sequence.getInstance(info.getAlgorithmId().getParameters());
+		DERObjectIdentifier id = info.getAlgorithmId().getObjectId();
 
-            this.dhSpec = new DHParameterSpec(params.getP().getValue(), params.getG().getValue());
-        }
-        else
-        {
-            throw new IllegalArgumentException("unknown algorithm type: " + id);
-        }
-    }
+		// we need the PKCS check to handle older keys marked with the X9 oid.
+		if(id.equals(PKCSObjectIdentifiers.dhKeyAgreement) || isPKCSParam(seq))
+		{
+			DHParameter params = new DHParameter(seq);
 
-    public String getAlgorithm()
-    {
-        return "DH";
-    }
+			if(params.getL() != null)
+			{
+				this.dhSpec = new DHParameterSpec(params.getP(), params.getG(), params.getL().intValue());
+			}
+			else
+			{
+				this.dhSpec = new DHParameterSpec(params.getP(), params.getG());
+			}
+		}
+		else if(id.equals(X9ObjectIdentifiers.dhpublicnumber))
+		{
+			DHDomainParameters params = DHDomainParameters.getInstance(seq);
 
-    public String getFormat()
-    {
-        return "X.509";
-    }
+			this.dhSpec = new DHParameterSpec(params.getP().getValue(), params.getG().getValue());
+		}
+		else
+		{
+			throw new IllegalArgumentException("unknown algorithm type: " + id);
+		}
+	}
 
-    public byte[] getEncoded()
-    {
-        if (info != null)
-        {
-            return info.getDEREncoded();
-        }
+	public String getAlgorithm()
+	{
+		return "DH";
+	}
 
-        SubjectPublicKeyInfo    info = new SubjectPublicKeyInfo(new AlgorithmIdentifier(PKCSObjectIdentifiers.dhKeyAgreement, new DHParameter(dhSpec.getP(), dhSpec.getG(), dhSpec.getL()).getDERObject()), new DERInteger(y));
+	public String getFormat()
+	{
+		return "X.509";
+	}
 
-        return info.getDEREncoded();
-    }
+	public byte[] getEncoded()
+	{
+		if(info != null)
+		{
+			return info.getDEREncoded();
+		}
 
-    public DHParameterSpec getParams()
-    {
-        return dhSpec;
-    }
+		SubjectPublicKeyInfo info = new SubjectPublicKeyInfo(new AlgorithmIdentifier(PKCSObjectIdentifiers.dhKeyAgreement, new DHParameter(dhSpec.getP(), dhSpec.getG(), dhSpec.getL()).getDERObject()), new DERInteger(y));
 
-    public BigInteger getY()
-    {
-        return y;
-    }
+		return info.getDEREncoded();
+	}
 
-    private boolean isPKCSParam(ASN1Sequence seq)
-    {
-        if (seq.size() == 2)
-        {
-            return true;
-        }
-        
-        if (seq.size() > 3)
-        {
-            return false;
-        }
+	public DHParameterSpec getParams()
+	{
+		return dhSpec;
+	}
 
-        DERInteger l = DERInteger.getInstance(seq.getObjectAt(2));
-        DERInteger p = DERInteger.getInstance(seq.getObjectAt(0));
+	public BigInteger getY()
+	{
+		return y;
+	}
 
-        if (l.getValue().compareTo(BigInteger.valueOf(p.getValue().bitLength())) > 0)
-        {
-            return false;
-        }
+	private boolean isPKCSParam(ASN1Sequence seq)
+	{
+		if(seq.size() == 2)
+		{
+			return true;
+		}
 
-        return true;
-    }
+		if(seq.size() > 3)
+		{
+			return false;
+		}
 
-    private void readObject(
-        ObjectInputStream   in)
-        throws IOException, ClassNotFoundException
-    {
-        this.y = (BigInteger)in.readObject();
-        this.dhSpec = new DHParameterSpec((BigInteger)in.readObject(), (BigInteger)in.readObject(), in.readInt());
-    }
+		DERInteger l = DERInteger.getInstance(seq.getObjectAt(2));
+		DERInteger p = DERInteger.getInstance(seq.getObjectAt(0));
 
-    private void writeObject(
-        ObjectOutputStream  out)
-        throws IOException
-    {
-        out.writeObject(this.getY());
-        out.writeObject(dhSpec.getP());
-        out.writeObject(dhSpec.getG());
-        out.writeInt(dhSpec.getL());
-    }
+		if(l.getValue().compareTo(BigInteger.valueOf(p.getValue().bitLength())) > 0)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private void readObject(
+			ObjectInputStream in)
+			throws IOException, ClassNotFoundException
+	{
+		this.y = (BigInteger) in.readObject();
+		this.dhSpec = new DHParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject(), in.readInt());
+	}
+
+	private void writeObject(
+			ObjectOutputStream out)
+			throws IOException
+	{
+		out.writeObject(this.getY());
+		out.writeObject(dhSpec.getP());
+		out.writeObject(dhSpec.getG());
+		out.writeInt(dhSpec.getL());
+	}
 }

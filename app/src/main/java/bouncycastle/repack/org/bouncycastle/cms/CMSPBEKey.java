@@ -1,73 +1,72 @@
 package repack.org.bouncycastle.cms;
 
+import javax.crypto.interfaces.PBEKey;
+import javax.crypto.spec.PBEParameterSpec;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.spec.InvalidParameterSpecException;
 
-import javax.crypto.interfaces.PBEKey;
-import javax.crypto.spec.PBEParameterSpec;
-
 public abstract class CMSPBEKey
-    implements PBEKey
+		implements PBEKey
 {
-    private char[] password;
-    private byte[] salt;
-    private int    iterationCount;
+	private char[] password;
+	private byte[] salt;
+	private int iterationCount;
 
-    protected static PBEParameterSpec getParamSpec(AlgorithmParameters algParams)
-        throws InvalidAlgorithmParameterException
-    {
-        try
-        {
-            return (PBEParameterSpec)algParams.getParameterSpec(PBEParameterSpec.class);
-        }
-        catch (InvalidParameterSpecException e)
-        {
-            throw new InvalidAlgorithmParameterException("cannot process PBE spec: " + e.getMessage());
-        }
-    }
+	protected static PBEParameterSpec getParamSpec(AlgorithmParameters algParams)
+			throws InvalidAlgorithmParameterException
+	{
+		try
+		{
+			return (PBEParameterSpec) algParams.getParameterSpec(PBEParameterSpec.class);
+		}
+		catch(InvalidParameterSpecException e)
+		{
+			throw new InvalidAlgorithmParameterException("cannot process PBE spec: " + e.getMessage());
+		}
+	}
 
-    public CMSPBEKey(char[] password, byte[] salt, int iterationCount)
-    {
-        this.password = password;
-        this.salt = salt;
-        this.iterationCount = iterationCount;
-    }
+	public CMSPBEKey(char[] password, byte[] salt, int iterationCount)
+	{
+		this.password = password;
+		this.salt = salt;
+		this.iterationCount = iterationCount;
+	}
 
-    public CMSPBEKey(char[] password, PBEParameterSpec pbeSpec)
-    {
-        this(password, pbeSpec.getSalt(), pbeSpec.getIterationCount());
-    }
-    
-    public char[] getPassword()
-    {
-        return password;
-    }
+	public CMSPBEKey(char[] password, PBEParameterSpec pbeSpec)
+	{
+		this(password, pbeSpec.getSalt(), pbeSpec.getIterationCount());
+	}
 
-    public byte[] getSalt()
-    {
-        return salt;
-    }
+	public char[] getPassword()
+	{
+		return password;
+	}
 
-    public int getIterationCount()
-    {
-        return iterationCount;
-    }
+	public byte[] getSalt()
+	{
+		return salt;
+	}
 
-    public String getAlgorithm()
-    {
-        return "PKCS5S2";
-    }
+	public int getIterationCount()
+	{
+		return iterationCount;
+	}
 
-    public String getFormat()
-    {
-        return "RAW";
-    }
+	public String getAlgorithm()
+	{
+		return "PKCS5S2";
+	}
 
-    public byte[] getEncoded()
-    {
-        return null;
-    }
+	public String getFormat()
+	{
+		return "RAW";
+	}
 
-    abstract byte[] getEncoded(String algorithmOid);
+	public byte[] getEncoded()
+	{
+		return null;
+	}
+
+	abstract byte[] getEncoded(String algorithmOid);
 }

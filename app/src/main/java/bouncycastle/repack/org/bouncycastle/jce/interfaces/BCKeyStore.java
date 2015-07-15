@@ -7,8 +7,8 @@ import java.security.SecureRandom;
  */
 public interface BCKeyStore
 {
-    /**
-     * set the random source for the key store
-     */
-    public void setRandom(SecureRandom random);
+	/**
+	 * set the random source for the key store
+	 */
+	public void setRandom(SecureRandom random);
 }

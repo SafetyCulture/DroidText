@@ -6,20 +6,20 @@ import java.security.MessageDigest;
 
 class DigOutputStream extends OutputStream
 {
-    private final MessageDigest dig;
+	private final MessageDigest dig;
 
-    DigOutputStream(MessageDigest dig)
-    {
-        this.dig = dig;
-    }
+	DigOutputStream(MessageDigest dig)
+	{
+		this.dig = dig;
+	}
 
-    public void write(byte[] b, int off, int len) throws IOException
-    {
-        dig.update(b, off, len);
-    }
+	public void write(byte[] b, int off, int len) throws IOException
+	{
+		dig.update(b, off, len);
+	}
 
-    public void write(int b) throws IOException
-    {
-        dig.update((byte) b);
-    }
+	public void write(int b) throws IOException
+	{
+		dig.update((byte) b);
+	}
 }

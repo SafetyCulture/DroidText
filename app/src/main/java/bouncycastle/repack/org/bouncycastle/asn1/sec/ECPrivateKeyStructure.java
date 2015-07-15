@@ -1,8 +1,5 @@
 package repack.org.bouncycastle.asn1.sec;
 
-import java.math.BigInteger;
-import java.util.Enumeration;
-
 import repack.org.bouncycastle.asn1.ASN1Encodable;
 import repack.org.bouncycastle.asn1.ASN1EncodableVector;
 import repack.org.bouncycastle.asn1.ASN1Object;
@@ -18,111 +15,114 @@ import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.DERTaggedObject;
 import repack.org.bouncycastle.util.BigIntegers;
 
+import java.math.BigInteger;
+import java.util.Enumeration;
+
 /**
  * the elliptic curve private key object from SEC 1
  */
 public class ECPrivateKeyStructure
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private ASN1Sequence  seq;
+	private ASN1Sequence seq;
 
-    public ECPrivateKeyStructure(
-        ASN1Sequence  seq)
-    {
-        this.seq = seq;
-    }
+	public ECPrivateKeyStructure(
+			ASN1Sequence seq)
+	{
+		this.seq = seq;
+	}
 
-    public ECPrivateKeyStructure(
-        BigInteger  key)
-    {
-        byte[] bytes = BigIntegers.asUnsignedByteArray(key);
+	public ECPrivateKeyStructure(
+			BigInteger key)
+	{
+		byte[] bytes = BigIntegers.asUnsignedByteArray(key);
 
-        ASN1EncodableVector v = new ASN1EncodableVector();
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(new DERInteger(1));
-        v.add(new DEROctetString(bytes));
+		v.add(new DERInteger(1));
+		v.add(new DEROctetString(bytes));
 
-        seq = new DERSequence(v);
-    }
+		seq = new DERSequence(v);
+	}
 
-    public ECPrivateKeyStructure(
-        BigInteger    key,
-        ASN1Encodable parameters)
-    {
-        this(key, null, parameters);
-    }
+	public ECPrivateKeyStructure(
+			BigInteger key,
+			ASN1Encodable parameters)
+	{
+		this(key, null, parameters);
+	}
 
-    public ECPrivateKeyStructure(
-        BigInteger    key,
-        DERBitString  publicKey,
-        ASN1Encodable parameters)
-    {
-        byte[] bytes = BigIntegers.asUnsignedByteArray(key);
+	public ECPrivateKeyStructure(
+			BigInteger key,
+			DERBitString publicKey,
+			ASN1Encodable parameters)
+	{
+		byte[] bytes = BigIntegers.asUnsignedByteArray(key);
 
-        ASN1EncodableVector v = new ASN1EncodableVector();
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(new DERInteger(1));
-        v.add(new DEROctetString(bytes));
+		v.add(new DERInteger(1));
+		v.add(new DEROctetString(bytes));
 
-        if (parameters != null)
-        {
-            v.add(new DERTaggedObject(true, 0, parameters));
-        }
+		if(parameters != null)
+		{
+			v.add(new DERTaggedObject(true, 0, parameters));
+		}
 
-        if (publicKey != null)
-        {
-            v.add(new DERTaggedObject(true, 1, publicKey));
-        }
+		if(publicKey != null)
+		{
+			v.add(new DERTaggedObject(true, 1, publicKey));
+		}
 
-        seq = new DERSequence(v);
-    }
+		seq = new DERSequence(v);
+	}
 
-    public BigInteger getKey()
-    {
-        ASN1OctetString  octs = (ASN1OctetString)seq.getObjectAt(1);
+	public BigInteger getKey()
+	{
+		ASN1OctetString octs = (ASN1OctetString) seq.getObjectAt(1);
 
-        return new BigInteger(1, octs.getOctets());
-    }
+		return new BigInteger(1, octs.getOctets());
+	}
 
-    public DERBitString getPublicKey()
-    {
-        return (DERBitString)getObjectInTag(1);
-    }
+	public DERBitString getPublicKey()
+	{
+		return (DERBitString) getObjectInTag(1);
+	}
 
-    public ASN1Object getParameters()
-    {
-        return getObjectInTag(0);
-    }
+	public ASN1Object getParameters()
+	{
+		return getObjectInTag(0);
+	}
 
-    private ASN1Object getObjectInTag(int tagNo)
-    {
-        Enumeration e = seq.getObjects();
+	private ASN1Object getObjectInTag(int tagNo)
+	{
+		Enumeration e = seq.getObjects();
 
-        while (e.hasMoreElements())
-        {
-            DEREncodable obj = (DEREncodable)e.nextElement();
+		while(e.hasMoreElements())
+		{
+			DEREncodable obj = (DEREncodable) e.nextElement();
 
-            if (obj instanceof ASN1TaggedObject)
-            {
-                ASN1TaggedObject tag = (ASN1TaggedObject)obj;
-                if (tag.getTagNo() == tagNo)
-                {
-                    return (ASN1Object)((DEREncodable)tag.getObject()).getDERObject();
-                }
-            }
-        }
-        return null;
-    }
+			if(obj instanceof ASN1TaggedObject)
+			{
+				ASN1TaggedObject tag = (ASN1TaggedObject) obj;
+				if(tag.getTagNo() == tagNo)
+				{
+					return (ASN1Object) ((DEREncodable) tag.getObject()).getDERObject();
+				}
+			}
+		}
+		return null;
+	}
 
-    /**
-     * ECPrivateKey ::= SEQUENCE {
-     *     version INTEGER { ecPrivkeyVer1(1) } (ecPrivkeyVer1),
-     *     privateKey OCTET STRING,
-     *     parameters [0] Parameters OPTIONAL,
-     *     publicKey [1] BIT STRING OPTIONAL }
-     */
-    public DERObject toASN1Object()
-    {
-        return seq;
-    }
+	/**
+	 * ECPrivateKey ::= SEQUENCE {
+	 * version INTEGER { ecPrivkeyVer1(1) } (ecPrivkeyVer1),
+	 * privateKey OCTET STRING,
+	 * parameters [0] Parameters OPTIONAL,
+	 * publicKey [1] BIT STRING OPTIONAL }
+	 */
+	public DERObject toASN1Object()
+	{
+		return seq;
+	}
 }

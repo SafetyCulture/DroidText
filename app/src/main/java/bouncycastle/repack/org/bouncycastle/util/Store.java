@@ -4,6 +4,6 @@ import java.util.Collection;
 
 public interface Store
 {
-    Collection getMatches(Selector selector)
-        throws StoreException;
+	Collection getMatches(Selector selector)
+			throws StoreException;
 }

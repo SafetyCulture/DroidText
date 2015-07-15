@@ -54,7 +54,7 @@ import com.lowagie.text.Image;
 
 /**
  * <CODE>PdfFont</CODE> is the Pdf Font object.
- * <P>
+ * <p/>
  * Limitation: in this class only base 14 Type 1 fonts (courier, courier bold, courier oblique,
  * courier boldoblique, helvetica, helvetica bold, helvetica oblique, helvetica boldoblique,
  * symbol, times roman, times bold, times italic, times bolditalic, zapfdingbats) and their
@@ -62,126 +62,152 @@ import com.lowagie.text.Image;
  * This object is described in the 'Portable Document Format Reference Manual version 1.3'
  * section 7.7 (page 198-203).
  *
- * @see		PdfName
- * @see		PdfDictionary
- * @see		BadPdfFormatException
+ * @see PdfName
+ * @see PdfDictionary
+ * @see BadPdfFormatException
  */
 
-class PdfFont implements Comparable {
-    
-    
-    /** the font metrics. */
-    private BaseFont font;
-    
-    /** the size. */
-    private float size;
-    
-    /** an image. */
-    protected Image image;
-    
-    protected float hScale = 1;
-    
-    // constructors
-    
-    PdfFont(BaseFont bf, float size) {
-        this.size = size;
-        font = bf;
-    }
-    
-    // methods
-    
-    /**
-     * Compares this <CODE>PdfFont</CODE> with another
-     *
-     * @param	object	the other <CODE>PdfFont</CODE>
-     * @return	a value
-     */
-    
-    public int compareTo(Object object) {
-        if (image != null)
-            return 0;
-        if (object == null) {
-            return -1;
-        }
-        PdfFont pdfFont;
-        try {
-            pdfFont = (PdfFont) object;
-            if (font != pdfFont.font) {
-                return 1;
-            }
-            if (this.size() != pdfFont.size()) {
-                return 2;
-            }
-            return 0;
-        }
-        catch(ClassCastException cce) {
-            return -2;
-        }
-    }
-    
-    /**
-     * Returns the size of this font.
-     *
-     * @return		a size
-     */
-    
-    float size() {
-        if (image == null)
-            return size;
-        else {
-            return image.getScaledHeight();
-        }
-    }
-    
-    /**
-     * Returns the approximative width of 1 character of this font.
-     *
-     * @return		a width in Text Space
-     */
-    
-    float width() {
-        return width(' ');
-    }
-    
-    /**
-     * Returns the width of a certain character of this font.
-     *
-     * @param		character	a certain character
-     * @return		a width in Text Space
-     */
-    
-    float width(int character) {
-        if (image == null)
-            return font.getWidthPoint(character, size) * hScale;
-        else
-            return image.getScaledWidth();
-    }
-    
-    float width(String s) {
-        if (image == null)
-            return font.getWidthPoint(s, size) * hScale;
-        else
-            return image.getScaledWidth();
-    }
-    
-    BaseFont getFont() {
-        return font;
-    }
-    
-    void setImage(Image image) {
-        this.image = image;
-    }
-    
-    static PdfFont getDefaultFont() {
-        try {
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false);
-            return new PdfFont(bf, 12);
-        }
-        catch (Exception ee) {
-            throw new ExceptionConverter(ee);
-        }
-    }
-    void setHorizontalScaling(float hScale) {
-        this.hScale = hScale;
-    }
+class PdfFont implements Comparable
+{
+
+
+	/**
+	 * the font metrics.
+	 */
+	private BaseFont font;
+
+	/**
+	 * the size.
+	 */
+	private float size;
+
+	/**
+	 * an image.
+	 */
+	protected Image image;
+
+	protected float hScale = 1;
+
+	// constructors
+
+	PdfFont(BaseFont bf, float size)
+	{
+		this.size = size;
+		font = bf;
+	}
+
+	// methods
+
+	/**
+	 * Compares this <CODE>PdfFont</CODE> with another
+	 *
+	 * @param object the other <CODE>PdfFont</CODE>
+	 * @return a value
+	 */
+
+	public int compareTo(Object object)
+	{
+		if(image != null)
+			return 0;
+		if(object == null)
+		{
+			return -1;
+		}
+		PdfFont pdfFont;
+		try
+		{
+			pdfFont = (PdfFont) object;
+			if(font != pdfFont.font)
+			{
+				return 1;
+			}
+			if(this.size() != pdfFont.size())
+			{
+				return 2;
+			}
+			return 0;
+		}
+		catch(ClassCastException cce)
+		{
+			return -2;
+		}
+	}
+
+	/**
+	 * Returns the size of this font.
+	 *
+	 * @return a size
+	 */
+
+	float size()
+	{
+		if(image == null)
+			return size;
+		else
+		{
+			return image.getScaledHeight();
+		}
+	}
+
+	/**
+	 * Returns the approximative width of 1 character of this font.
+	 *
+	 * @return a width in Text Space
+	 */
+
+	float width()
+	{
+		return width(' ');
+	}
+
+	/**
+	 * Returns the width of a certain character of this font.
+	 *
+	 * @param character a certain character
+	 * @return a width in Text Space
+	 */
+
+	float width(int character)
+	{
+		if(image == null)
+			return font.getWidthPoint(character, size) * hScale;
+		else
+			return image.getScaledWidth();
+	}
+
+	float width(String s)
+	{
+		if(image == null)
+			return font.getWidthPoint(s, size) * hScale;
+		else
+			return image.getScaledWidth();
+	}
+
+	BaseFont getFont()
+	{
+		return font;
+	}
+
+	void setImage(Image image)
+	{
+		this.image = image;
+	}
+
+	static PdfFont getDefaultFont()
+	{
+		try
+		{
+			BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false);
+			return new PdfFont(bf, 12);
+		}
+		catch(Exception ee)
+		{
+			throw new ExceptionConverter(ee);
+		}
+	}
+
+	void setHorizontalScaling(float hScale)
+	{
+		this.hScale = hScale;
+	}
 }

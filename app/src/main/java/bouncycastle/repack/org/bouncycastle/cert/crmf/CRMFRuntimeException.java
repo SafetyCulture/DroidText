@@ -1,19 +1,19 @@
 package repack.org.bouncycastle.cert.crmf;
 
 public class CRMFRuntimeException
-    extends RuntimeException
+		extends RuntimeException
 {
-    private Throwable cause;
+	private Throwable cause;
 
-    public CRMFRuntimeException(String msg, Throwable cause)
-    {
-        super(msg);
+	public CRMFRuntimeException(String msg, Throwable cause)
+	{
+		super(msg);
 
-        this.cause = cause;
-    }
+		this.cause = cause;
+	}
 
-    public Throwable getCause()
-    {
-        return cause;
-    }
+	public Throwable getCause()
+	{
+		return cause;
+	}
 }

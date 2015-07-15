@@ -7,18 +7,18 @@ import repack.org.bouncycastle.crypto.signers.RSADigestSigner;
 import repack.org.bouncycastle.operator.OperatorCreationException;
 
 public class BcRSAContentSignerBuilder
-    extends BcContentSignerBuilder
+		extends BcContentSignerBuilder
 {
-    public BcRSAContentSignerBuilder(AlgorithmIdentifier sigAlgId, AlgorithmIdentifier digAlgId)
-    {
-        super(sigAlgId, digAlgId);
-    }
+	public BcRSAContentSignerBuilder(AlgorithmIdentifier sigAlgId, AlgorithmIdentifier digAlgId)
+	{
+		super(sigAlgId, digAlgId);
+	}
 
-    protected Signer createSigner(AlgorithmIdentifier sigAlgId, AlgorithmIdentifier digAlgId)
-        throws OperatorCreationException
-    {
-        Digest dig = BcUtil.createDigest(digAlgId);
+	protected Signer createSigner(AlgorithmIdentifier sigAlgId, AlgorithmIdentifier digAlgId)
+			throws OperatorCreationException
+	{
+		Digest dig = BcUtil.createDigest(digAlgId);
 
-        return new RSADigestSigner(dig);
-    }
+		return new RSADigestSigner(dig);
+	}
 }

@@ -50,22 +50,27 @@
 package com.lowagie.text.pdf;
 
 /**
- *
- * @author  psoares
+ * @author psoares
  */
-public class PdfXConformanceException extends RuntimeException {
-    
-    private static final long serialVersionUID = 9199144538884293397L;
+public class PdfXConformanceException extends RuntimeException
+{
 
-	/** Creates a new instance of PdfXConformanceException. */
-    public PdfXConformanceException() {
-    }
-    
-    /**
-     * Creates a new instance of PdfXConformanceException.
-     * @param s
-     */
-    public PdfXConformanceException(String s) {
-        super(s);
-    }    
+	private static final long serialVersionUID = 9199144538884293397L;
+
+	/**
+	 * Creates a new instance of PdfXConformanceException.
+	 */
+	public PdfXConformanceException()
+	{
+	}
+
+	/**
+	 * Creates a new instance of PdfXConformanceException.
+	 *
+	 * @param s
+	 */
+	public PdfXConformanceException(String s)
+	{
+		super(s);
+	}
 }

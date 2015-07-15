@@ -52,36 +52,49 @@ package com.lowagie.text.xml.xmp;
 import java.util.Enumeration;
 import java.util.Properties;
 
-public class LangAlt extends Properties {
+public class LangAlt extends Properties
+{
 
-	/** A serial version id. */
+	/**
+	 * A serial version id.
+	 */
 	private static final long serialVersionUID = 4396971487200843099L;
-	
-	/** Key for the default language. */
+
+	/**
+	 * Key for the default language.
+	 */
 	public static final String DEFAULT = "x-default";
 
-	/** Creates a Properties object that stores languages for use in an XmpSchema */
-	public LangAlt(String defaultValue) {
+	/**
+	 * Creates a Properties object that stores languages for use in an XmpSchema
+	 */
+	public LangAlt(String defaultValue)
+	{
 		super();
 		addLanguage(DEFAULT, defaultValue);
 	}
 
-	/** Creates a Properties object that stores languages for use in an XmpSchema */
-	public LangAlt() {
+	/**
+	 * Creates a Properties object that stores languages for use in an XmpSchema
+	 */
+	public LangAlt()
+	{
 		super();
 	}
 
 	/**
 	 * Add a language.
 	 */
-	public void addLanguage(String language, String value) {
+	public void addLanguage(String language, String value)
+	{
 		setProperty(language, XmpSchema.escape(value));
 	}
 
 	/**
 	 * Process a property.
 	 */
-	protected void process(StringBuffer buf, Object lang) {
+	protected void process(StringBuffer buf, Object lang)
+	{
 		buf.append("<rdf:li xml:lang=\"");
 		buf.append(lang);
 		buf.append("\" >");
@@ -92,10 +105,12 @@ public class LangAlt extends Properties {
 	/**
 	 * Creates a String that can be used in an XmpSchema.
 	 */
-	public String toString() {
+	public String toString()
+	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("<rdf:Alt>");
-		for (Enumeration e = this.propertyNames(); e.hasMoreElements();) {
+		for(Enumeration e = this.propertyNames(); e.hasMoreElements(); )
+		{
 			process(sb, e.nextElement());
 		}
 		sb.append("</rdf:Alt>");

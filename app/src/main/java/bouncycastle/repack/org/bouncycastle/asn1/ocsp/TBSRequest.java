@@ -12,143 +12,143 @@ import repack.org.bouncycastle.asn1.x509.GeneralName;
 import repack.org.bouncycastle.asn1.x509.X509Extensions;
 
 public class TBSRequest
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private static final DERInteger V1 = new DERInteger(0);
-    
-    DERInteger      version;
-    GeneralName     requestorName;
-    ASN1Sequence    requestList;
-    X509Extensions  requestExtensions;
+	private static final DERInteger V1 = new DERInteger(0);
 
-    boolean         versionSet;
+	DERInteger version;
+	GeneralName requestorName;
+	ASN1Sequence requestList;
+	X509Extensions requestExtensions;
 
-    public TBSRequest(
-        GeneralName     requestorName,
-        ASN1Sequence    requestList,
-        X509Extensions  requestExtensions)
-    {
-        this.version = V1;
-        this.requestorName = requestorName;
-        this.requestList = requestList;
-        this.requestExtensions = requestExtensions;
-    }
+	boolean versionSet;
 
-    public TBSRequest(
-        ASN1Sequence    seq)
-    {
-        int    index = 0;
+	public TBSRequest(
+			GeneralName requestorName,
+			ASN1Sequence requestList,
+			X509Extensions requestExtensions)
+	{
+		this.version = V1;
+		this.requestorName = requestorName;
+		this.requestList = requestList;
+		this.requestExtensions = requestExtensions;
+	}
 
-        if (seq.getObjectAt(0) instanceof ASN1TaggedObject)
-        {
-            ASN1TaggedObject    o = (ASN1TaggedObject)seq.getObjectAt(0);
+	public TBSRequest(
+			ASN1Sequence seq)
+	{
+		int index = 0;
 
-            if (o.getTagNo() == 0)
-            {
-                versionSet = true;
-                version = DERInteger.getInstance((ASN1TaggedObject)seq.getObjectAt(0), true);
-                index++;
-            }
-            else
-            {
-                version = V1;
-            }
-        }
-        else
-        {
-            version = V1;
-        }
+		if(seq.getObjectAt(0) instanceof ASN1TaggedObject)
+		{
+			ASN1TaggedObject o = (ASN1TaggedObject) seq.getObjectAt(0);
 
-        if (seq.getObjectAt(index) instanceof ASN1TaggedObject)
-        {
-            requestorName = GeneralName.getInstance((ASN1TaggedObject)seq.getObjectAt(index++), true);
-        }
-        
-        requestList = (ASN1Sequence)seq.getObjectAt(index++);
+			if(o.getTagNo() == 0)
+			{
+				versionSet = true;
+				version = DERInteger.getInstance((ASN1TaggedObject) seq.getObjectAt(0), true);
+				index++;
+			}
+			else
+			{
+				version = V1;
+			}
+		}
+		else
+		{
+			version = V1;
+		}
 
-        if (seq.size() == (index + 1))
-        {
-            requestExtensions = X509Extensions.getInstance((ASN1TaggedObject)seq.getObjectAt(index), true);
-        }
-    }
+		if(seq.getObjectAt(index) instanceof ASN1TaggedObject)
+		{
+			requestorName = GeneralName.getInstance((ASN1TaggedObject) seq.getObjectAt(index++), true);
+		}
 
-    public static TBSRequest getInstance(
-        ASN1TaggedObject obj,
-        boolean          explicit)
-    {
-        return getInstance(ASN1Sequence.getInstance(obj, explicit));
-    }
+		requestList = (ASN1Sequence) seq.getObjectAt(index++);
 
-    public static TBSRequest getInstance(
-        Object  obj)
-    {
-        if (obj == null || obj instanceof TBSRequest)
-        {
-            return (TBSRequest)obj;
-        }
-        else if (obj instanceof ASN1Sequence)
-        {
-            return new TBSRequest((ASN1Sequence)obj);
-        }
+		if(seq.size() == (index + 1))
+		{
+			requestExtensions = X509Extensions.getInstance((ASN1TaggedObject) seq.getObjectAt(index), true);
+		}
+	}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
+	public static TBSRequest getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		return getInstance(ASN1Sequence.getInstance(obj, explicit));
+	}
 
-    public DERInteger getVersion()
-    {
-        return version;
-    }
+	public static TBSRequest getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof TBSRequest)
+		{
+			return (TBSRequest) obj;
+		}
+		else if(obj instanceof ASN1Sequence)
+		{
+			return new TBSRequest((ASN1Sequence) obj);
+		}
 
-    public GeneralName getRequestorName()
-    {
-        return requestorName;
-    }
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-    public ASN1Sequence getRequestList()
-    {
-        return requestList;
-    }
+	public DERInteger getVersion()
+	{
+		return version;
+	}
 
-    public X509Extensions getRequestExtensions()
-    {
-        return requestExtensions;
-    }
+	public GeneralName getRequestorName()
+	{
+		return requestorName;
+	}
 
-    /**
-     * Produce an object suitable for an ASN1OutputStream.
-     * <pre>
-     * TBSRequest      ::=     SEQUENCE {
-     *     version             [0]     EXPLICIT Version DEFAULT v1,
-     *     requestorName       [1]     EXPLICIT GeneralName OPTIONAL,
-     *     requestList                 SEQUENCE OF Request,
-     *     requestExtensions   [2]     EXPLICIT Extensions OPTIONAL }
-     * </pre>
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector    v = new ASN1EncodableVector();
+	public ASN1Sequence getRequestList()
+	{
+		return requestList;
+	}
 
-        //
-        // if default don't include - unless explicitly provided. Not strictly correct
-        // but required for some requests
-        //
-        if (!version.equals(V1) || versionSet)
-        {
-            v.add(new DERTaggedObject(true, 0, version));
-        }
-        
-        if (requestorName != null)
-        {
-            v.add(new DERTaggedObject(true, 1, requestorName));
-        }
+	public X509Extensions getRequestExtensions()
+	{
+		return requestExtensions;
+	}
 
-        v.add(requestList);
+	/**
+	 * Produce an object suitable for an ASN1OutputStream.
+	 * <pre>
+	 * TBSRequest      ::=     SEQUENCE {
+	 *     version             [0]     EXPLICIT Version DEFAULT v1,
+	 *     requestorName       [1]     EXPLICIT GeneralName OPTIONAL,
+	 *     requestList                 SEQUENCE OF Request,
+	 *     requestExtensions   [2]     EXPLICIT Extensions OPTIONAL }
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        if (requestExtensions != null)
-        {
-            v.add(new DERTaggedObject(true, 2, requestExtensions));
-        }
+		//
+		// if default don't include - unless explicitly provided. Not strictly correct
+		// but required for some requests
+		//
+		if(!version.equals(V1) || versionSet)
+		{
+			v.add(new DERTaggedObject(true, 0, version));
+		}
 
-        return new DERSequence(v);
-    }
+		if(requestorName != null)
+		{
+			v.add(new DERTaggedObject(true, 1, requestorName));
+		}
+
+		v.add(requestList);
+
+		if(requestExtensions != null)
+		{
+			v.add(new DERTaggedObject(true, 2, requestExtensions));
+		}
+
+		return new DERSequence(v);
+	}
 }

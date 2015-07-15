@@ -1,11 +1,5 @@
 package repack.org.bouncycastle.cert.ocsp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Set;
-
 import repack.org.bouncycastle.asn1.ASN1InputStream;
 import repack.org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import repack.org.bouncycastle.asn1.ASN1OutputStream;
@@ -20,6 +14,12 @@ import repack.org.bouncycastle.cert.CertIOException;
 import repack.org.bouncycastle.cert.X509CertificateHolder;
 import repack.org.bouncycastle.operator.ContentVerifier;
 import repack.org.bouncycastle.operator.ContentVerifierProvider;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <pre>
@@ -53,197 +53,197 @@ import repack.org.bouncycastle.operator.ContentVerifierProvider;
  */
 public class OCSPReq
 {
-    private static final X509CertificateHolder[] EMPTY_CERTS = new X509CertificateHolder[0];
+	private static final X509CertificateHolder[] EMPTY_CERTS = new X509CertificateHolder[0];
 
-    private OCSPRequest    req;
-    private X509Extensions extensions;
+	private OCSPRequest req;
+	private X509Extensions extensions;
 
-    public OCSPReq(
-        OCSPRequest req)
-    {
-        this.req = req;
-        this.extensions = req.getTbsRequest().getRequestExtensions();
-    }
-    
-    public OCSPReq(
-        byte[]          req)
-        throws IOException
-    {
-        this(new ASN1InputStream(req));
-    }
+	public OCSPReq(
+			OCSPRequest req)
+	{
+		this.req = req;
+		this.extensions = req.getTbsRequest().getRequestExtensions();
+	}
 
-    private OCSPReq(
-        ASN1InputStream aIn)
-        throws IOException
-    {
-        try
-        {
-            this.req = OCSPRequest.getInstance(aIn.readObject());
-            this.extensions = req.getTbsRequest().getRequestExtensions();
-        }
-        catch (IllegalArgumentException e)
-        {
-            throw new CertIOException("malformed request: " + e.getMessage(), e);
-        }
-        catch (ClassCastException e)
-        {
-            throw new CertIOException("malformed request: " + e.getMessage(), e);
-        }
-    }
+	public OCSPReq(
+			byte[] req)
+			throws IOException
+	{
+		this(new ASN1InputStream(req));
+	}
 
-    public int getVersion()
-    {
-        return req.getTbsRequest().getVersion().getValue().intValue() + 1;
-    }
+	private OCSPReq(
+			ASN1InputStream aIn)
+			throws IOException
+	{
+		try
+		{
+			this.req = OCSPRequest.getInstance(aIn.readObject());
+			this.extensions = req.getTbsRequest().getRequestExtensions();
+		}
+		catch(IllegalArgumentException e)
+		{
+			throw new CertIOException("malformed request: " + e.getMessage(), e);
+		}
+		catch(ClassCastException e)
+		{
+			throw new CertIOException("malformed request: " + e.getMessage(), e);
+		}
+	}
 
-    public GeneralName getRequestorName()
-    {
-        return GeneralName.getInstance(req.getTbsRequest().getRequestorName());
-    }
+	public int getVersion()
+	{
+		return req.getTbsRequest().getVersion().getValue().intValue() + 1;
+	}
 
-    public Req[] getRequestList()
-    {
-        ASN1Sequence    seq = req.getTbsRequest().getRequestList();
-        Req[]           requests = new Req[seq.size()];
+	public GeneralName getRequestorName()
+	{
+		return GeneralName.getInstance(req.getTbsRequest().getRequestorName());
+	}
 
-        for (int i = 0; i != requests.length; i++)
-        {
-            requests[i] = new Req(Request.getInstance(seq.getObjectAt(i)));
-        }
+	public Req[] getRequestList()
+	{
+		ASN1Sequence seq = req.getTbsRequest().getRequestList();
+		Req[] requests = new Req[seq.size()];
 
-        return requests;
-    }
+		for(int i = 0; i != requests.length; i++)
+		{
+			requests[i] = new Req(Request.getInstance(seq.getObjectAt(i)));
+		}
 
-    public boolean hasExtensions()
-    {
-        return extensions != null;
-    }
+		return requests;
+	}
 
-    public X509Extension getExtension(ASN1ObjectIdentifier oid)
-    {
-        if (extensions != null)
-        {
-            return extensions.getExtension(oid);
-        }
+	public boolean hasExtensions()
+	{
+		return extensions != null;
+	}
 
-        return null;
-    }
+	public X509Extension getExtension(ASN1ObjectIdentifier oid)
+	{
+		if(extensions != null)
+		{
+			return extensions.getExtension(oid);
+		}
 
-    public List getExtensionOIDs()
-    {
-        return OCSPUtils.getExtensionOIDs(extensions);
-    }
+		return null;
+	}
 
-    public Set getCriticalExtensionOIDs()
-    {
-        return OCSPUtils.getCriticalExtensionOIDs(extensions);
-    }
+	public List getExtensionOIDs()
+	{
+		return OCSPUtils.getExtensionOIDs(extensions);
+	}
 
-    public Set getNonCriticalExtensionOIDs()
-    {
-        return OCSPUtils.getNonCriticalExtensionOIDs(extensions);
-    }
+	public Set getCriticalExtensionOIDs()
+	{
+		return OCSPUtils.getCriticalExtensionOIDs(extensions);
+	}
 
-    /**
-     * return the object identifier representing the signature algorithm
-     */
-    public ASN1ObjectIdentifier getSignatureAlgOID()
-    {
-        if (!this.isSigned())
-        {
-            return null;
-        }
+	public Set getNonCriticalExtensionOIDs()
+	{
+		return OCSPUtils.getNonCriticalExtensionOIDs(extensions);
+	}
 
-        return req.getOptionalSignature().getSignatureAlgorithm().getAlgorithm();
-    }
+	/**
+	 * return the object identifier representing the signature algorithm
+	 */
+	public ASN1ObjectIdentifier getSignatureAlgOID()
+	{
+		if(!this.isSigned())
+		{
+			return null;
+		}
 
-    public byte[] getSignature()
-    {
-        if (!this.isSigned())
-        {
-            return null;
-        }
+		return req.getOptionalSignature().getSignatureAlgorithm().getAlgorithm();
+	}
 
-        return req.getOptionalSignature().getSignature().getBytes();
-    }
+	public byte[] getSignature()
+	{
+		if(!this.isSigned())
+		{
+			return null;
+		}
 
-    public X509CertificateHolder[] getCerts()
-    {
-        //
-        // load the certificates if we have any
-        //
-        if (req.getOptionalSignature() != null)
-        {
-            ASN1Sequence s = req.getOptionalSignature().getCerts();
+		return req.getOptionalSignature().getSignature().getBytes();
+	}
 
-            if (s != null)
-            {
-                X509CertificateHolder[] certs = new X509CertificateHolder[s.size()];
+	public X509CertificateHolder[] getCerts()
+	{
+		//
+		// load the certificates if we have any
+		//
+		if(req.getOptionalSignature() != null)
+		{
+			ASN1Sequence s = req.getOptionalSignature().getCerts();
 
-                for (int i = 0; i != certs.length; i++)
-                {
-                    certs[i] = new X509CertificateHolder(X509CertificateStructure.getInstance(s.getObjectAt(i)));
-                }
+			if(s != null)
+			{
+				X509CertificateHolder[] certs = new X509CertificateHolder[s.size()];
 
-                return certs;
-            }
+				for(int i = 0; i != certs.length; i++)
+				{
+					certs[i] = new X509CertificateHolder(X509CertificateStructure.getInstance(s.getObjectAt(i)));
+				}
 
-            return EMPTY_CERTS;
-        }
-        else
-        {
-            return EMPTY_CERTS;
-        }
-    }
-    
-    /**
-     * Return whether or not this request is signed.
-     * 
-     * @return true if signed false otherwise.
-     */
-    public boolean isSigned()
-    {
-        return req.getOptionalSignature() != null;
-    }
+				return certs;
+			}
 
-    /**
-     * verify the signature against the TBSRequest object we contain.
-     */
-    public boolean isSignatureValid(
-        ContentVerifierProvider verifierProvider)
-        throws OCSPException
-    {
-        if (!this.isSigned())
-        {
-            throw new OCSPException("attempt to verify signature on unsigned object");
-        }
+			return EMPTY_CERTS;
+		}
+		else
+		{
+			return EMPTY_CERTS;
+		}
+	}
 
-        try
-        {
-            ContentVerifier verifier = verifierProvider.get(req.getOptionalSignature().getSignatureAlgorithm());
-            OutputStream sOut = verifier.getOutputStream();
+	/**
+	 * Return whether or not this request is signed.
+	 *
+	 * @return true if signed false otherwise.
+	 */
+	public boolean isSigned()
+	{
+		return req.getOptionalSignature() != null;
+	}
 
-            sOut.write(req.getTbsRequest().getDEREncoded());
+	/**
+	 * verify the signature against the TBSRequest object we contain.
+	 */
+	public boolean isSignatureValid(
+			ContentVerifierProvider verifierProvider)
+			throws OCSPException
+	{
+		if(!this.isSigned())
+		{
+			throw new OCSPException("attempt to verify signature on unsigned object");
+		}
 
-            return verifier.verify(this.getSignature());
-        }
-        catch (Exception e)
-        {
-            throw new OCSPException("exception processing signature: " + e, e);
-        }
-    }
+		try
+		{
+			ContentVerifier verifier = verifierProvider.get(req.getOptionalSignature().getSignatureAlgorithm());
+			OutputStream sOut = verifier.getOutputStream();
 
-    /**
-     * return the ASN.1 encoded representation of this object.
-     */
-    public byte[] getEncoded()
-        throws IOException
-    {
-        ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-        ASN1OutputStream        aOut = new ASN1OutputStream(bOut);
+			sOut.write(req.getTbsRequest().getDEREncoded());
 
-        aOut.writeObject(req);
+			return verifier.verify(this.getSignature());
+		}
+		catch(Exception e)
+		{
+			throw new OCSPException("exception processing signature: " + e, e);
+		}
+	}
 
-        return bOut.toByteArray();
-    }
+	/**
+	 * return the ASN.1 encoded representation of this object.
+	 */
+	public byte[] getEncoded()
+			throws IOException
+	{
+		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+		ASN1OutputStream aOut = new ASN1OutputStream(bOut);
+
+		aOut.writeObject(req);
+
+		return bOut.toByteArray();
+	}
 }

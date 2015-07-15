@@ -1,7 +1,5 @@
 package repack.org.bouncycastle.asn1.cryptopro;
 
-import java.util.Enumeration;
-
 import repack.org.bouncycastle.asn1.ASN1Encodable;
 import repack.org.bouncycastle.asn1.ASN1EncodableVector;
 import repack.org.bouncycastle.asn1.ASN1OctetString;
@@ -11,62 +9,64 @@ import repack.org.bouncycastle.asn1.DERObject;
 import repack.org.bouncycastle.asn1.DERObjectIdentifier;
 import repack.org.bouncycastle.asn1.DERSequence;
 
+import java.util.Enumeration;
+
 public class GOST28147Parameters
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    ASN1OctetString iv;
-    DERObjectIdentifier paramSet;
+	ASN1OctetString iv;
+	DERObjectIdentifier paramSet;
 
-    public static GOST28147Parameters getInstance(
-        ASN1TaggedObject obj,
-        boolean          explicit)
-    {
-        return getInstance(ASN1Sequence.getInstance(obj, explicit));
-    }
+	public static GOST28147Parameters getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		return getInstance(ASN1Sequence.getInstance(obj, explicit));
+	}
 
-    public static GOST28147Parameters getInstance(
-        Object obj)
-    {
-        if(obj == null || obj instanceof GOST28147Parameters)
-        {
-            return (GOST28147Parameters)obj;
-        }
+	public static GOST28147Parameters getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof GOST28147Parameters)
+		{
+			return (GOST28147Parameters) obj;
+		}
 
-        if(obj instanceof ASN1Sequence)
-        {
-            return new GOST28147Parameters((ASN1Sequence)obj);
-        }
+		if(obj instanceof ASN1Sequence)
+		{
+			return new GOST28147Parameters((ASN1Sequence) obj);
+		}
 
-        throw new IllegalArgumentException("Invalid GOST3410Parameter: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("Invalid GOST3410Parameter: " + obj.getClass().getName());
+	}
 
-    public GOST28147Parameters(
-        ASN1Sequence  seq)
-    {
-        Enumeration     e = seq.getObjects();
+	public GOST28147Parameters(
+			ASN1Sequence seq)
+	{
+		Enumeration e = seq.getObjects();
 
-        iv = (ASN1OctetString)e.nextElement();
-        paramSet = (DERObjectIdentifier)e.nextElement();
-    }
+		iv = (ASN1OctetString) e.nextElement();
+		paramSet = (DERObjectIdentifier) e.nextElement();
+	}
 
-    /**
-     * <pre>
-     * Gost28147-89-Parameters ::=
-     *               SEQUENCE {
-     *                       iv                   Gost28147-89-IV,
-     *                       encryptionParamSet   OBJECT IDENTIFIER
-     *                }
-     *
-     *   Gost28147-89-IV ::= OCTET STRING (SIZE (8))
-     * </pre>
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	/**
+	 * <pre>
+	 * Gost28147-89-Parameters ::=
+	 *               SEQUENCE {
+	 *                       iv                   Gost28147-89-IV,
+	 *                       encryptionParamSet   OBJECT IDENTIFIER
+	 *                }
+	 *
+	 *   Gost28147-89-IV ::= OCTET STRING (SIZE (8))
+	 * </pre>
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(iv);
-        v.add(paramSet);
+		v.add(iv);
+		v.add(paramSet);
 
-        return new DERSequence(v);
-    }
+		return new DERSequence(v);
+	}
 }

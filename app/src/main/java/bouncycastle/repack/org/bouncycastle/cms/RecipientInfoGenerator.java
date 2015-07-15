@@ -5,6 +5,6 @@ import repack.org.bouncycastle.operator.GenericKey;
 
 public interface RecipientInfoGenerator
 {
-    RecipientInfo generate(GenericKey contentEncryptionKey)
-        throws CMSException;
+	RecipientInfo generate(GenericKey contentEncryptionKey)
+			throws CMSException;
 }

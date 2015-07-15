@@ -3,26 +3,26 @@ package repack.org.bouncycastle.crypto.params;
 import repack.org.bouncycastle.crypto.CipherParameters;
 
 public class ParametersWithSBox
-    implements CipherParameters
+		implements CipherParameters
 {
-    private CipherParameters  parameters;
-    private byte[]            sBox;
+	private CipherParameters parameters;
+	private byte[] sBox;
 
-    public ParametersWithSBox(
-        CipherParameters parameters,
-        byte[]           sBox)
-    {
-        this.parameters = parameters;
-        this.sBox = sBox;
-    }
+	public ParametersWithSBox(
+			CipherParameters parameters,
+			byte[] sBox)
+	{
+		this.parameters = parameters;
+		this.sBox = sBox;
+	}
 
-    public byte[] getSBox()
-    {
-        return sBox;
-    }
+	public byte[] getSBox()
+	{
+		return sBox;
+	}
 
-    public CipherParameters getParameters()
-    {
-        return parameters;
-    }
+	public CipherParameters getParameters()
+	{
+		return parameters;
+	}
 }

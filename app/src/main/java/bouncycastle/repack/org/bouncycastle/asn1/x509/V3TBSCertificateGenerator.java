@@ -24,173 +24,172 @@ import repack.org.bouncycastle.asn1.x500.X500Name;
  *      extensions        [ 3 ] Extensions OPTIONAL
  *      }
  * </pre>
- *
  */
 public class V3TBSCertificateGenerator
 {
-    DERTaggedObject         version = new DERTaggedObject(0, new DERInteger(2));
+	DERTaggedObject version = new DERTaggedObject(0, new DERInteger(2));
 
-    DERInteger              serialNumber;
-    AlgorithmIdentifier     signature;
-    X509Name                issuer;
-    Time                    startDate, endDate;
-    X509Name                subject;
-    SubjectPublicKeyInfo    subjectPublicKeyInfo;
-    X509Extensions          extensions;
+	DERInteger serialNumber;
+	AlgorithmIdentifier signature;
+	X509Name issuer;
+	Time startDate, endDate;
+	X509Name subject;
+	SubjectPublicKeyInfo subjectPublicKeyInfo;
+	X509Extensions extensions;
 
-    private boolean altNamePresentAndCritical;
-    private DERBitString issuerUniqueID;
-    private DERBitString subjectUniqueID;
+	private boolean altNamePresentAndCritical;
+	private DERBitString issuerUniqueID;
+	private DERBitString subjectUniqueID;
 
-    public V3TBSCertificateGenerator()
-    {
-    }
+	public V3TBSCertificateGenerator()
+	{
+	}
 
-    public void setSerialNumber(
-        DERInteger  serialNumber)
-    {
-        this.serialNumber = serialNumber;
-    }
+	public void setSerialNumber(
+			DERInteger serialNumber)
+	{
+		this.serialNumber = serialNumber;
+	}
 
-    public void setSignature(
-        AlgorithmIdentifier    signature)
-    {
-        this.signature = signature;
-    }
+	public void setSignature(
+			AlgorithmIdentifier signature)
+	{
+		this.signature = signature;
+	}
 
-    public void setIssuer(
-        X509Name    issuer)
-    {
-        this.issuer = issuer;
-    }
+	public void setIssuer(
+			X509Name issuer)
+	{
+		this.issuer = issuer;
+	}
 
-    public void setIssuer(
-        X500Name issuer)
-    {
-        this.issuer = X509Name.getInstance(issuer.getDERObject());
-    }
-    
-    public void setStartDate(
-        DERUTCTime startDate)
-    {
-        this.startDate = new Time(startDate);
-    }
+	public void setIssuer(
+			X500Name issuer)
+	{
+		this.issuer = X509Name.getInstance(issuer.getDERObject());
+	}
 
-    public void setStartDate(
-        Time startDate)
-    {
-        this.startDate = startDate;
-    }
+	public void setStartDate(
+			DERUTCTime startDate)
+	{
+		this.startDate = new Time(startDate);
+	}
 
-    public void setEndDate(
-        DERUTCTime endDate)
-    {
-        this.endDate = new Time(endDate);
-    }
+	public void setStartDate(
+			Time startDate)
+	{
+		this.startDate = startDate;
+	}
 
-    public void setEndDate(
-        Time endDate)
-    {
-        this.endDate = endDate;
-    }
+	public void setEndDate(
+			DERUTCTime endDate)
+	{
+		this.endDate = new Time(endDate);
+	}
 
-    public void setSubject(
-        X509Name    subject)
-    {
-        this.subject = subject;
-    }
+	public void setEndDate(
+			Time endDate)
+	{
+		this.endDate = endDate;
+	}
 
-    public void setSubject(
-        X500Name subject)
-    {
-        this.subject = X509Name.getInstance(subject.getDERObject());
-    }
+	public void setSubject(
+			X509Name subject)
+	{
+		this.subject = subject;
+	}
 
-    public void setIssuerUniqueID(
-        DERBitString uniqueID)
-    {
-        this.issuerUniqueID = uniqueID;
-    }
+	public void setSubject(
+			X500Name subject)
+	{
+		this.subject = X509Name.getInstance(subject.getDERObject());
+	}
 
-    public void setSubjectUniqueID(
-        DERBitString uniqueID)
-    {
-        this.subjectUniqueID = uniqueID;
-    }
+	public void setIssuerUniqueID(
+			DERBitString uniqueID)
+	{
+		this.issuerUniqueID = uniqueID;
+	}
 
-    public void setSubjectPublicKeyInfo(
-        SubjectPublicKeyInfo    pubKeyInfo)
-    {
-        this.subjectPublicKeyInfo = pubKeyInfo;
-    }
+	public void setSubjectUniqueID(
+			DERBitString uniqueID)
+	{
+		this.subjectUniqueID = uniqueID;
+	}
 
-    public void setExtensions(
-        X509Extensions    extensions)
-    {
-        this.extensions = extensions;
-        if (extensions != null)
-        {
-            X509Extension altName = extensions.getExtension(X509Extensions.SubjectAlternativeName);
+	public void setSubjectPublicKeyInfo(
+			SubjectPublicKeyInfo pubKeyInfo)
+	{
+		this.subjectPublicKeyInfo = pubKeyInfo;
+	}
 
-            if (altName != null && altName.isCritical())
-            {
-                altNamePresentAndCritical = true;
-            }
-        }
-    }
+	public void setExtensions(
+			X509Extensions extensions)
+	{
+		this.extensions = extensions;
+		if(extensions != null)
+		{
+			X509Extension altName = extensions.getExtension(X509Extensions.SubjectAlternativeName);
 
-    public TBSCertificateStructure generateTBSCertificate()
-    {
-        if ((serialNumber == null) || (signature == null)
-            || (issuer == null) || (startDate == null) || (endDate == null)
-            || (subject == null && !altNamePresentAndCritical) || (subjectPublicKeyInfo == null))
-        {
-            throw new IllegalStateException("not all mandatory fields set in V3 TBScertificate generator");
-        }
+			if(altName != null && altName.isCritical())
+			{
+				altNamePresentAndCritical = true;
+			}
+		}
+	}
 
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	public TBSCertificateStructure generateTBSCertificate()
+	{
+		if((serialNumber == null) || (signature == null)
+				|| (issuer == null) || (startDate == null) || (endDate == null)
+				|| (subject == null && !altNamePresentAndCritical) || (subjectPublicKeyInfo == null))
+		{
+			throw new IllegalStateException("not all mandatory fields set in V3 TBScertificate generator");
+		}
 
-        v.add(version);
-        v.add(serialNumber);
-        v.add(signature);
-        v.add(issuer);
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        //
-        // before and after dates
-        //
-        ASN1EncodableVector  validity = new ASN1EncodableVector();
+		v.add(version);
+		v.add(serialNumber);
+		v.add(signature);
+		v.add(issuer);
 
-        validity.add(startDate);
-        validity.add(endDate);
+		//
+		// before and after dates
+		//
+		ASN1EncodableVector validity = new ASN1EncodableVector();
 
-        v.add(new DERSequence(validity));
+		validity.add(startDate);
+		validity.add(endDate);
 
-        if (subject != null)
-        {
-            v.add(subject);
-        }
-        else
-        {
-            v.add(new DERSequence());
-        }
+		v.add(new DERSequence(validity));
 
-        v.add(subjectPublicKeyInfo);
+		if(subject != null)
+		{
+			v.add(subject);
+		}
+		else
+		{
+			v.add(new DERSequence());
+		}
 
-        if (issuerUniqueID != null)
-        {
-            v.add(new DERTaggedObject(false, 1, issuerUniqueID));
-        }
+		v.add(subjectPublicKeyInfo);
 
-        if (subjectUniqueID != null)
-        {
-            v.add(new DERTaggedObject(false, 2, subjectUniqueID));
-        }
+		if(issuerUniqueID != null)
+		{
+			v.add(new DERTaggedObject(false, 1, issuerUniqueID));
+		}
 
-        if (extensions != null)
-        {
-            v.add(new DERTaggedObject(3, extensions));
-        }
+		if(subjectUniqueID != null)
+		{
+			v.add(new DERTaggedObject(false, 2, subjectUniqueID));
+		}
 
-        return new TBSCertificateStructure(new DERSequence(v));
-    }
+		if(extensions != null)
+		{
+			v.add(new DERTaggedObject(3, extensions));
+		}
+
+		return new TBSCertificateStructure(new DERSequence(v));
+	}
 }

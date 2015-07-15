@@ -47,15 +47,15 @@
 
 package com.lowagie.text.html.simpleparser;
 
-import java.util.HashMap;
-
 import com.lowagie.text.DocListener;
 import com.lowagie.text.Image;
 
+import java.util.HashMap;
+
 /**
- *
- * @author  psoares
+ * @author psoares
  */
-public interface Img {
-    boolean process(Image img, HashMap h, ChainedProperties cprops, DocListener doc);
+public interface Img
+{
+	boolean process(Image img, HashMap h, ChainedProperties cprops, DocListener doc);
 }

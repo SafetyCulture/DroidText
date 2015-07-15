@@ -19,9 +19,11 @@
  */
 package harmony.java.awt.geom;
 
-public abstract class Dimension2D implements Cloneable {
+public abstract class Dimension2D implements Cloneable
+{
 
-	protected Dimension2D() {
+	protected Dimension2D()
+	{
 	}
 
 	public abstract double getWidth();
@@ -30,15 +32,20 @@ public abstract class Dimension2D implements Cloneable {
 
 	public abstract void setSize(double width, double height);
 
-	public void setSize(Dimension2D d) {
+	public void setSize(Dimension2D d)
+	{
 		setSize(d.getWidth(), d.getHeight());
 	}
 
 	@Override
-	public Object clone() {
-		try {
+	public Object clone()
+	{
+		try
+		{
 			return super.clone();
-		} catch (CloneNotSupportedException e) {
+		}
+		catch(CloneNotSupportedException e)
+		{
 			throw new InternalError();
 		}
 	}

@@ -50,73 +50,95 @@
 package com.lowagie.text.pdf;
 
 import harmony.java.awt.Color;
+
 /**
- *
- * @author  Paulo Soares (psoares@consiste.pt)
+ * @author Paulo Soares (psoares@consiste.pt)
  */
-public abstract class ExtendedColor extends Color{
-    
+public abstract class ExtendedColor extends Color
+{
+
 	private static final long serialVersionUID = 2722660170712380080L;
-	/** a type of extended color. */
-    public static final int TYPE_RGB = 0;
-    /** a type of extended color. */
-    public static final int TYPE_GRAY = 1;
-    /** a type of extended color. */
-    public static final int TYPE_CMYK = 2;
-    /** a type of extended color. */
-    public static final int TYPE_SEPARATION = 3;
-    /** a type of extended color. */
-    public static final int TYPE_PATTERN = 4;
-    /** a type of extended color. */
-    public static final int TYPE_SHADING = 5;
-    
-    protected int type;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_RGB = 0;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_GRAY = 1;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_CMYK = 2;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_SEPARATION = 3;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_PATTERN = 4;
+	/**
+	 * a type of extended color.
+	 */
+	public static final int TYPE_SHADING = 5;
 
-    /**
-     * Constructs an extended color of a certain type.
-     * @param type
-     */
-    public ExtendedColor(int type) {
-        super(0, 0, 0);
-        this.type = type;
-    }
-    
-    /**
-     * Constructs an extended color of a certain type and a certain color.
-     * @param type
-     * @param red
-     * @param green
-     * @param blue
-     */
-    public ExtendedColor(int type, float red, float green, float blue) {
-        super(normalize(red), normalize(green), normalize(blue));
-        this.type = type;
-    }
-    
-    /**
-     * Gets the type of this color.
-     * @return one of the types (see constants)
-     */
-    public int getType() {
-        return type;
-    }
-    
-    /**
-     * Gets the type of a given color.
-     * @param color
-     * @return one of the types (see constants)
-     */
-    public static int getType(Color color) {
-        if (color instanceof ExtendedColor)
-            return ((ExtendedColor)color).getType();
-        return TYPE_RGB;
-    }
+	protected int type;
 
-    static final float normalize(float value) {
-        if (value < 0)
-            return 0;
-        if (value > 1)
-            return 1;
-        return value;
-    }
+	/**
+	 * Constructs an extended color of a certain type.
+	 *
+	 * @param type
+	 */
+	public ExtendedColor(int type)
+	{
+		super(0, 0, 0);
+		this.type = type;
+	}
+
+	/**
+	 * Constructs an extended color of a certain type and a certain color.
+	 *
+	 * @param type
+	 * @param red
+	 * @param green
+	 * @param blue
+	 */
+	public ExtendedColor(int type, float red, float green, float blue)
+	{
+		super(normalize(red), normalize(green), normalize(blue));
+		this.type = type;
+	}
+
+	/**
+	 * Gets the type of this color.
+	 *
+	 * @return one of the types (see constants)
+	 */
+	public int getType()
+	{
+		return type;
+	}
+
+	/**
+	 * Gets the type of a given color.
+	 *
+	 * @param color
+	 * @return one of the types (see constants)
+	 */
+	public static int getType(Color color)
+	{
+		if(color instanceof ExtendedColor)
+			return ((ExtendedColor) color).getType();
+		return TYPE_RGB;
+	}
+
+	static final float normalize(float value)
+	{
+		if(value < 0)
+			return 0;
+		if(value > 1)
+			return 1;
+		return value;
+	}
 }

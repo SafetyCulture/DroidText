@@ -19,52 +19,62 @@
  */
 package harmony.java.awt.geom;
 
-import java.util.NoSuchElementException;
-
 import org.apache.harmony.awt.internal.nls.Messages;
 
-public abstract class Ellipse2D extends RectangularShape {
+import java.util.NoSuchElementException;
 
-	public static class Float extends Ellipse2D {
+public abstract class Ellipse2D extends RectangularShape
+{
+
+	public static class Float extends Ellipse2D
+	{
 
 		public float x;
 		public float y;
 		public float width;
 		public float height;
 
-		public Float() {
+		public Float()
+		{
 		}
 
-		public Float(float x, float y, float width, float height) {
+		public Float(float x, float y, float width, float height)
+		{
 			setFrame(x, y, width, height);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0 || height <= 0.0;
 		}
 
-		public void setFrame(float x, float y, float width, float height) {
+		public void setFrame(float x, float y, float width, float height)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -72,66 +82,78 @@ public abstract class Ellipse2D extends RectangularShape {
 		}
 
 		@Override
-		public void setFrame(double x, double y, double width, double height) {
+		public void setFrame(double x, double y, double width, double height)
+		{
 			this.x = (float) x;
 			this.y = (float) y;
 			this.width = (float) width;
 			this.height = (float) height;
 		}
 
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Rectangle2D.Float(x, y, width, height);
 		}
 	}
 
-	public static class Double extends Ellipse2D {
+	public static class Double extends Ellipse2D
+	{
 
 		public double x;
 		public double y;
 		public double width;
 		public double height;
 
-		public Double() {
+		public Double()
+		{
 		}
 
-		public Double(double x, double y, double width, double height) {
+		public Double(double x, double y, double width, double height)
+		{
 			setFrame(x, y, width, height);
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0 || height <= 0.0;
 		}
 
 		@Override
-		public void setFrame(double x, double y, double width, double height) {
+		public void setFrame(double x, double y, double width, double height)
+		{
 			this.x = x;
 			this.y = y;
 			this.width = width;
 			this.height = height;
 		}
 
-		public Rectangle2D getBounds2D() {
+		public Rectangle2D getBounds2D()
+		{
 			return new Rectangle2D.Double(x, y, width, height);
 		}
 	}
@@ -139,7 +161,8 @@ public abstract class Ellipse2D extends RectangularShape {
 	/*
 	 * Ellipse2D path iterator
 	 */
-	class Iterator implements PathIterator {
+	class Iterator implements PathIterator
+	{
 
 		/*
 		 * Ellipse is subdivided into four quarters by x and y axis. Each part
@@ -158,8 +181,8 @@ public abstract class Ellipse2D extends RectangularShape {
 		/**
 		 * The points coordinates calculation table.
 		 */
-		final double points[][] = { { 1.0, 0.5 + u, 0.5 + u, 1.0, 0.5, 1.0 }, { 0.5 - u, 1.0, 0.0, 0.5 + u, 0.0, 0.5 },
-				{ 0.0, 0.5 - u, 0.5 - u, 0.0, 0.5, 0.0 }, { 0.5 + u, 0.0, 1.0, 0.5 - u, 1.0, 0.5 } };
+		final double points[][] = {{1.0, 0.5 + u, 0.5 + u, 1.0, 0.5, 1.0}, {0.5 - u, 1.0, 0.0, 0.5 + u, 0.0, 0.5},
+				{0.0, 0.5 - u, 0.5 - u, 0.0, 0.5, 0.0}, {0.5 + u, 0.0, 1.0, 0.5 - u, 1.0, 0.5}};
 
 		/**
 		 * The x coordinate of left-upper corner of the ellipse bounds
@@ -194,94 +217,113 @@ public abstract class Ellipse2D extends RectangularShape {
 		/**
 		 * Constructs a new Ellipse2D.Iterator for given ellipse and
 		 * transformation
-		 * 
-		 * @param e
-		 *            - the source Ellipse2D object
-		 * @param at
-		 *            - the AffineTransform object to apply rectangle path
+		 *
+		 * @param e  - the source Ellipse2D object
+		 * @param at - the AffineTransform object to apply rectangle path
 		 */
-		Iterator(Ellipse2D e, AffineTransform t) {
+		Iterator(Ellipse2D e, AffineTransform t)
+		{
 			this.x = e.getX();
 			this.y = e.getY();
 			this.width = e.getWidth();
 			this.height = e.getHeight();
 			this.t = t;
-			if (width < 0.0 || height < 0.0) {
+			if(width < 0.0 || height < 0.0)
+			{
 				index = 6;
 			}
 		}
 
-		public int getWindingRule() {
+		public int getWindingRule()
+		{
 			return WIND_NON_ZERO;
 		}
 
-		public boolean isDone() {
+		public boolean isDone()
+		{
 			return index > 5;
 		}
 
-		public void next() {
+		public void next()
+		{
 			index++;
 		}
 
-		public int currentSegment(double[] coords) {
-			if (isDone()) {
+		public int currentSegment(double[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == 5) {
+			if(index == 5)
+			{
 				return SEG_CLOSE;
 			}
 			int type;
 			int count;
-			if (index == 0) {
+			if(index == 0)
+			{
 				type = SEG_MOVETO;
 				count = 1;
 				double p[] = points[3];
 				coords[0] = x + p[4] * width;
 				coords[1] = y + p[5] * height;
-			} else {
+			}
+			else
+			{
 				type = SEG_CUBICTO;
 				count = 3;
 				double p[] = points[index - 1];
 				int j = 0;
-				for (int i = 0; i < 3; i++) {
+				for(int i = 0; i < 3; i++)
+				{
 					coords[j] = x + p[j++] * width;
 					coords[j] = y + p[j++] * height;
 				}
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, count);
 			}
 			return type;
 		}
 
-		public int currentSegment(float[] coords) {
-			if (isDone()) {
+		public int currentSegment(float[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
-			if (index == 5) {
+			if(index == 5)
+			{
 				return SEG_CLOSE;
 			}
 			int type;
 			int count;
-			if (index == 0) {
+			if(index == 0)
+			{
 				type = SEG_MOVETO;
 				count = 1;
 				double p[] = points[3];
 				coords[0] = (float) (x + p[4] * width);
 				coords[1] = (float) (y + p[5] * height);
-			} else {
+			}
+			else
+			{
 				type = SEG_CUBICTO;
 				count = 3;
 				int j = 0;
 				double p[] = points[index - 1];
-				for (int i = 0; i < 3; i++) {
+				for(int i = 0; i < 3; i++)
+				{
 					coords[j] = (float) (x + p[j++] * width);
 					coords[j] = (float) (y + p[j++] * height);
 				}
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, count);
 			}
 			return type;
@@ -289,11 +331,14 @@ public abstract class Ellipse2D extends RectangularShape {
 
 	}
 
-	protected Ellipse2D() {
+	protected Ellipse2D()
+	{
 	}
 
-	public boolean contains(double px, double py) {
-		if (isEmpty()) {
+	public boolean contains(double px, double py)
+	{
+		if(isEmpty())
+		{
 			return false;
 		}
 
@@ -303,8 +348,10 @@ public abstract class Ellipse2D extends RectangularShape {
 		return a * a + b * b < 0.25;
 	}
 
-	public boolean intersects(double rx, double ry, double rw, double rh) {
-		if (isEmpty() || rw <= 0.0 || rh <= 0.0) {
+	public boolean intersects(double rx, double ry, double rw, double rh)
+	{
+		if(isEmpty() || rw <= 0.0 || rh <= 0.0)
+		{
 			return false;
 		}
 
@@ -322,8 +369,10 @@ public abstract class Ellipse2D extends RectangularShape {
 		return contains(nx, ny);
 	}
 
-	public boolean contains(double rx, double ry, double rw, double rh) {
-		if (isEmpty() || rw <= 0.0 || rh <= 0.0) {
+	public boolean contains(double rx, double ry, double rw, double rh)
+	{
+		if(isEmpty() || rw <= 0.0 || rh <= 0.0)
+		{
 			return false;
 		}
 
@@ -335,7 +384,8 @@ public abstract class Ellipse2D extends RectangularShape {
 		return contains(rx1, ry1) && contains(rx2, ry1) && contains(rx2, ry2) && contains(rx1, ry2);
 	}
 
-	public PathIterator getPathIterator(AffineTransform at) {
+	public PathIterator getPathIterator(AffineTransform at)
+	{
 		return new Iterator(this, at);
 	}
 }

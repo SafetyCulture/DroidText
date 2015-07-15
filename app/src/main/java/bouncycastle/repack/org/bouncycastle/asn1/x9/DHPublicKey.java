@@ -6,47 +6,47 @@ import repack.org.bouncycastle.asn1.DERInteger;
 import repack.org.bouncycastle.asn1.DERObject;
 
 public class DHPublicKey
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private DERInteger y;
+	private DERInteger y;
 
-    public static DHPublicKey getInstance(ASN1TaggedObject obj, boolean explicit)
-    {
-        return getInstance(DERInteger.getInstance(obj, explicit));
-    }
+	public static DHPublicKey getInstance(ASN1TaggedObject obj, boolean explicit)
+	{
+		return getInstance(DERInteger.getInstance(obj, explicit));
+	}
 
-    public static DHPublicKey getInstance(Object obj)
-    {
-        if (obj == null || obj instanceof DHPublicKey)
-        {
-            return (DHPublicKey)obj;
-        }
+	public static DHPublicKey getInstance(Object obj)
+	{
+		if(obj == null || obj instanceof DHPublicKey)
+		{
+			return (DHPublicKey) obj;
+		}
 
-        if (obj instanceof DERInteger)
-        {
-            return new DHPublicKey((DERInteger)obj);
-        }
+		if(obj instanceof DERInteger)
+		{
+			return new DHPublicKey((DERInteger) obj);
+		}
 
-        throw new IllegalArgumentException("Invalid DHPublicKey: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("Invalid DHPublicKey: " + obj.getClass().getName());
+	}
 
-    public DHPublicKey(DERInteger y)
-    {
-        if (y == null)
-        {
-            throw new IllegalArgumentException("'y' cannot be null");
-        }
+	public DHPublicKey(DERInteger y)
+	{
+		if(y == null)
+		{
+			throw new IllegalArgumentException("'y' cannot be null");
+		}
 
-        this.y = y;
-    }
+		this.y = y;
+	}
 
-    public DERInteger getY()
-    {
-        return this.y;
-    }
+	public DERInteger getY()
+	{
+		return this.y;
+	}
 
-    public DERObject toASN1Object()
-    {
-        return this.y;
-    }
+	public DERObject toASN1Object()
+	{
+		return this.y;
+	}
 }

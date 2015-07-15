@@ -7,16 +7,17 @@ import repack.org.bouncycastle.jce.spec.ECParameterSpec;
  */
 public interface ECKey
 {
-    /**
-     * return a parameter specification representing the EC domain parameters
-     * for the key.
-     * @deprecated this method vanises in JDK 1.5. Use getParameters().
-     */
-    public ECParameterSpec getParams();
-    
-    /**
-     * return a parameter specification representing the EC domain parameters
-     * for the key.
-     */
-    public ECParameterSpec getParameters();
+	/**
+	 * return a parameter specification representing the EC domain parameters
+	 * for the key.
+	 *
+	 * @deprecated this method vanises in JDK 1.5. Use getParameters().
+	 */
+	public ECParameterSpec getParams();
+
+	/**
+	 * return a parameter specification representing the EC domain parameters
+	 * for the key.
+	 */
+	public ECParameterSpec getParameters();
 }

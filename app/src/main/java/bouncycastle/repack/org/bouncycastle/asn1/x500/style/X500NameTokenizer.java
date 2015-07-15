@@ -8,92 +8,92 @@ package repack.org.bouncycastle.asn1.x500.style;
  */
 class X500NameTokenizer
 {
-    private String          value;
-    private int             index;
-    private char            seperator;
-    private StringBuffer    buf = new StringBuffer();
+	private String value;
+	private int index;
+	private char seperator;
+	private StringBuffer buf = new StringBuffer();
 
-    public X500NameTokenizer(
-        String  oid)
-    {
-        this(oid, ',');
-    }
-    
-    public X500NameTokenizer(
-        String  oid,
-        char    seperator)
-    {
-        this.value = oid;
-        this.index = -1;
-        this.seperator = seperator;
-    }
+	public X500NameTokenizer(
+			String oid)
+	{
+		this(oid, ',');
+	}
 
-    public boolean hasMoreTokens()
-    {
-        return (index != value.length());
-    }
+	public X500NameTokenizer(
+			String oid,
+			char seperator)
+	{
+		this.value = oid;
+		this.index = -1;
+		this.seperator = seperator;
+	}
 
-    public String nextToken()
-    {
-        if (index == value.length())
-        {
-            return null;
-        }
+	public boolean hasMoreTokens()
+	{
+		return (index != value.length());
+	}
 
-        int     end = index + 1;
-        boolean quoted = false;
-        boolean escaped = false;
+	public String nextToken()
+	{
+		if(index == value.length())
+		{
+			return null;
+		}
 
-        buf.setLength(0);
+		int end = index + 1;
+		boolean quoted = false;
+		boolean escaped = false;
 
-        while (end != value.length())
-        {
-            char    c = value.charAt(end);
+		buf.setLength(0);
 
-            if (c == '"')
-            {
-                if (!escaped)
-                {
-                    quoted = !quoted;
-                }
-                else
-                {
-                    buf.append(c);
-                }
-                escaped = false;
-            }
-            else
-            {
-                if (escaped || quoted)
-                {
-                    if (c == '#' && buf.charAt(buf.length() - 1) == '=')
-                    {
-                        buf.append('\\');
-                    }
-                    else if (c == '+' && seperator != '+')
-                    {
-                        buf.append('\\');
-                    }
-                    buf.append(c);
-                    escaped = false;
-                }
-                else if (c == '\\')
-                {
-                    escaped = true;
-                }
-                else if (c == seperator)
-                {
-                    break;
-                }
-                else
-                {
-                    buf.append(c);
-                }
-            }
-            end++;
-        }
+		while(end != value.length())
+		{
+			char c = value.charAt(end);
 
-        index = end;
-        return buf.toString().trim();
-    }
+			if(c == '"')
+			{
+				if(!escaped)
+				{
+					quoted = !quoted;
+				}
+				else
+				{
+					buf.append(c);
+				}
+				escaped = false;
+			}
+			else
+			{
+				if(escaped || quoted)
+				{
+					if(c == '#' && buf.charAt(buf.length() - 1) == '=')
+					{
+						buf.append('\\');
+					}
+					else if(c == '+' && seperator != '+')
+					{
+						buf.append('\\');
+					}
+					buf.append(c);
+					escaped = false;
+				}
+				else if(c == '\\')
+				{
+					escaped = true;
+				}
+				else if(c == seperator)
+				{
+					break;
+				}
+				else
+				{
+					buf.append(c);
+				}
+			}
+			end++;
+		}
+
+		index = end;
+		return buf.toString().trim();
+	}
 }

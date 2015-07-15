@@ -54,17 +54,22 @@ import java.io.IOException;
 /**
  * Typed exception used when opening an existing PDF document.
  * Gets thrown when the document isn't a valid PDF document.
+ *
  * @since 2.1.5 It was written for iText 2.0.8, but moved to another package
  */
-public class BadPasswordException extends IOException {
+public class BadPasswordException extends IOException
+{
 
-	/** Serial Version UID. */
+	/**
+	 * Serial Version UID.
+	 */
 	private static final long serialVersionUID = -4333706268155063964L;
 
 	/**
 	 * Creates an exception saying the user password was incorrect.
 	 */
-	public BadPasswordException(String message) {
+	public BadPasswordException(String message)
+	{
 		super(message);
 	}
 }

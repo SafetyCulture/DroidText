@@ -26,9 +26,9 @@ import harmony.java.awt.geom.Rectangle2D;
 
 /**
  * Shape
- * 
  */
-public interface Shape {
+public interface Shape
+{
 	public boolean contains(double x, double y);
 
 	public boolean contains(double x, double y, double w, double h);

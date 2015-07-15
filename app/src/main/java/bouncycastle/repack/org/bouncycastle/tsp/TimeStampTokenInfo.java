@@ -1,111 +1,111 @@
 package repack.org.bouncycastle.tsp;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.util.Date;
-
 import repack.org.bouncycastle.asn1.tsp.Accuracy;
 import repack.org.bouncycastle.asn1.tsp.TSTInfo;
 import repack.org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import repack.org.bouncycastle.asn1.x509.GeneralName;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.util.Date;
+
 public class TimeStampTokenInfo
 {
-    TSTInfo tstInfo;
-    Date    genTime;
-    
-    TimeStampTokenInfo(TSTInfo tstInfo)
-        throws TSPException, IOException
-    {
-        this.tstInfo = tstInfo;
+	TSTInfo tstInfo;
+	Date genTime;
 
-        try
-        {
-            this.genTime = tstInfo.getGenTime().getDate();
-        }
-        catch (ParseException e)
-        {
-            throw new TSPException("unable to parse genTime field");
-        }
-    }
+	TimeStampTokenInfo(TSTInfo tstInfo)
+			throws TSPException, IOException
+	{
+		this.tstInfo = tstInfo;
 
-    public boolean isOrdered()
-    {
-        return tstInfo.getOrdering().isTrue();
-    }
+		try
+		{
+			this.genTime = tstInfo.getGenTime().getDate();
+		}
+		catch(ParseException e)
+		{
+			throw new TSPException("unable to parse genTime field");
+		}
+	}
 
-    public Accuracy getAccuracy()
-    {
-        return tstInfo.getAccuracy();
-    }
+	public boolean isOrdered()
+	{
+		return tstInfo.getOrdering().isTrue();
+	}
 
-    public Date getGenTime()
-    {
-        return genTime;
-    }
+	public Accuracy getAccuracy()
+	{
+		return tstInfo.getAccuracy();
+	}
 
-    public GenTimeAccuracy getGenTimeAccuracy()
-    {
-        if (this.getAccuracy() != null)
-        {
-            return new GenTimeAccuracy(this.getAccuracy());
-        }
-        
-        return null;
-    }
-    
-    public String getPolicy()
-    {
-        return tstInfo.getPolicy().getId();
-    }
-    
-    public BigInteger getSerialNumber()
-    {
-        return tstInfo.getSerialNumber().getValue();
-    }
+	public Date getGenTime()
+	{
+		return genTime;
+	}
 
-    public GeneralName getTsa()
-    {
-        return tstInfo.getTsa();
-    }
+	public GenTimeAccuracy getGenTimeAccuracy()
+	{
+		if(this.getAccuracy() != null)
+		{
+			return new GenTimeAccuracy(this.getAccuracy());
+		}
 
-    /**
-     * @return the nonce value, null if there isn't one.
-     */
-    public BigInteger getNonce()
-    {
-        if (tstInfo.getNonce() != null)
-        {
-            return tstInfo.getNonce().getValue();
-        }
+		return null;
+	}
 
-        return null;
-    }
+	public String getPolicy()
+	{
+		return tstInfo.getPolicy().getId();
+	}
 
-    public AlgorithmIdentifier getHashAlgorithm()
-    {
-        return tstInfo.getMessageImprint().getHashAlgorithm();
-    }
+	public BigInteger getSerialNumber()
+	{
+		return tstInfo.getSerialNumber().getValue();
+	}
 
-    public String getMessageImprintAlgOID()
-    {
-        return tstInfo.getMessageImprint().getHashAlgorithm().getObjectId().getId();
-    }
+	public GeneralName getTsa()
+	{
+		return tstInfo.getTsa();
+	}
 
-    public byte[] getMessageImprintDigest()
-    {
-        return tstInfo.getMessageImprint().getHashedMessage();
-    }
+	/**
+	 * @return the nonce value, null if there isn't one.
+	 */
+	public BigInteger getNonce()
+	{
+		if(tstInfo.getNonce() != null)
+		{
+			return tstInfo.getNonce().getValue();
+		}
 
-    public byte[] getEncoded() 
-        throws IOException
-    {
-        return tstInfo.getEncoded();
-    }
+		return null;
+	}
 
-    public TSTInfo toTSTInfo()
-    {
-        return tstInfo;
-    }
+	public AlgorithmIdentifier getHashAlgorithm()
+	{
+		return tstInfo.getMessageImprint().getHashAlgorithm();
+	}
+
+	public String getMessageImprintAlgOID()
+	{
+		return tstInfo.getMessageImprint().getHashAlgorithm().getObjectId().getId();
+	}
+
+	public byte[] getMessageImprintDigest()
+	{
+		return tstInfo.getMessageImprint().getHashedMessage();
+	}
+
+	public byte[] getEncoded()
+			throws IOException
+	{
+		return tstInfo.getEncoded();
+	}
+
+	public TSTInfo toTSTInfo()
+	{
+		return tstInfo;
+	}
 }

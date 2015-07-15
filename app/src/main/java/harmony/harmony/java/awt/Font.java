@@ -1,6 +1,7 @@
 package harmony.java.awt;
 
-public class Font {
+public class Font
+{
 
 	public static final int NORMAL = 0;
 	public static final int BOLD = 1;
@@ -12,32 +13,39 @@ public class Font {
 	private boolean bold;
 	private boolean italic;
 
-	public Font(String name, int style, int size) {
+	public Font(String name, int style, int size)
+	{
 		this.name = name;
 
-		if ((style & BOLD) == BOLD) {
+		if((style & BOLD) == BOLD)
+		{
 			bold = true;
 		}
-		if ((style & ITALIC) == ITALIC) {
+		if((style & ITALIC) == ITALIC)
+		{
 			italic = true;
 		}
 
 		this.size = size;
 	}
 
-	public String getFontName() {
+	public String getFontName()
+	{
 		return name + (isBold() ? " Bold" : "") + (isItalic() ? " Italic" : "");
 	}
 
-	public boolean isBold() {
+	public boolean isBold()
+	{
 		return bold;
 	}
 
-	public boolean isItalic() {
+	public boolean isItalic()
+	{
 		return italic;
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return this.name;
 	}
 

@@ -5,12 +5,12 @@ import repack.org.bouncycastle.asn1.DERSet;
 import repack.org.bouncycastle.asn1.cms.Attribute;
 
 public class SMIMECapabilitiesAttribute
-    extends Attribute
+		extends Attribute
 {
-    public SMIMECapabilitiesAttribute(
-        SMIMECapabilityVector capabilities)
-    {
-        super(SMIMEAttributes.smimeCapabilities,
-                new DERSet(new DERSequence(capabilities.toASN1EncodableVector())));
-    }
+	public SMIMECapabilitiesAttribute(
+			SMIMECapabilityVector capabilities)
+	{
+		super(SMIMEAttributes.smimeCapabilities,
+				new DERSet(new DERSequence(capabilities.toASN1EncodableVector())));
+	}
 }

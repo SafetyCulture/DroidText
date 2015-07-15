@@ -10,111 +10,112 @@ import repack.org.bouncycastle.asn1.DERSequence;
 import repack.org.bouncycastle.asn1.DERUTF8String;
 
 public class MetaData
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private DERBoolean hashProtected;
-    private DERUTF8String fileName;
-    private DERIA5String  mediaType;
-    private Attributes otherMetaData;
+	private DERBoolean hashProtected;
+	private DERUTF8String fileName;
+	private DERIA5String mediaType;
+	private Attributes otherMetaData;
 
-    public MetaData(
-        DERBoolean hashProtected,
-        DERUTF8String fileName,
-        DERIA5String mediaType,
-        Attributes otherMetaData)
-    {
-        this.hashProtected = hashProtected;
-        this.fileName = fileName;
-        this.mediaType = mediaType;
-        this.otherMetaData = otherMetaData;
-    }
+	public MetaData(
+			DERBoolean hashProtected,
+			DERUTF8String fileName,
+			DERIA5String mediaType,
+			Attributes otherMetaData)
+	{
+		this.hashProtected = hashProtected;
+		this.fileName = fileName;
+		this.mediaType = mediaType;
+		this.otherMetaData = otherMetaData;
+	}
 
-    private MetaData(ASN1Sequence seq)
-    {
-        this.hashProtected = DERBoolean.getInstance(seq.getObjectAt(0));
+	private MetaData(ASN1Sequence seq)
+	{
+		this.hashProtected = DERBoolean.getInstance(seq.getObjectAt(0));
 
-        int index = 1;
+		int index = 1;
 
-        if (index < seq.size() && seq.getObjectAt(index) instanceof DERUTF8String)
-        {
-            this.fileName = DERUTF8String.getInstance(seq.getObjectAt(index++));
-        }
-        if (index < seq.size() && seq.getObjectAt(index) instanceof DERIA5String)
-        {
-            this.mediaType = DERIA5String.getInstance(seq.getObjectAt(index++));
-        }
-        if (index < seq.size())
-        {
-            this.otherMetaData = Attributes.getInstance(seq.getObjectAt(index++));
-        }
-    }
+		if(index < seq.size() && seq.getObjectAt(index) instanceof DERUTF8String)
+		{
+			this.fileName = DERUTF8String.getInstance(seq.getObjectAt(index++));
+		}
+		if(index < seq.size() && seq.getObjectAt(index) instanceof DERIA5String)
+		{
+			this.mediaType = DERIA5String.getInstance(seq.getObjectAt(index++));
+		}
+		if(index < seq.size())
+		{
+			this.otherMetaData = Attributes.getInstance(seq.getObjectAt(index++));
+		}
+	}
 
-    public static MetaData getInstance(Object obj)
-    {
-        if (obj instanceof MetaData)
-        {
-            return (MetaData)obj;
-        }
-        else if (obj != null)
-        {
-            return new MetaData(ASN1Sequence.getInstance(obj));
-        }
+	public static MetaData getInstance(Object obj)
+	{
+		if(obj instanceof MetaData)
+		{
+			return (MetaData) obj;
+		}
+		else if(obj != null)
+		{
+			return new MetaData(ASN1Sequence.getInstance(obj));
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * <pre>
-     * MetaData ::= SEQUENCE {
-     *   hashProtected        BOOLEAN,
-     *   fileName             UTF8String OPTIONAL,
-     *   mediaType            IA5String OPTIONAL,
-     *   otherMetaData        Attributes OPTIONAL
-     * }
-     * </pre>
-     * @return
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	/**
+	 * <pre>
+	 * MetaData ::= SEQUENCE {
+	 *   hashProtected        BOOLEAN,
+	 *   fileName             UTF8String OPTIONAL,
+	 *   mediaType            IA5String OPTIONAL,
+	 *   otherMetaData        Attributes OPTIONAL
+	 * }
+	 * </pre>
+	 *
+	 * @return
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(hashProtected);
+		v.add(hashProtected);
 
-        if (fileName != null)
-        {
-            v.add(fileName);
-        }
+		if(fileName != null)
+		{
+			v.add(fileName);
+		}
 
-        if (mediaType != null)
-        {
-            v.add(mediaType);
-        }
+		if(mediaType != null)
+		{
+			v.add(mediaType);
+		}
 
-        if (otherMetaData != null)
-        {
-            v.add(otherMetaData);
-        }
-        
-        return new DERSequence(v);
-    }
+		if(otherMetaData != null)
+		{
+			v.add(otherMetaData);
+		}
 
-    public boolean isHashProtected()
-    {
-        return hashProtected.isTrue();
-    }
+		return new DERSequence(v);
+	}
 
-    public DERUTF8String getFileName()
-    {
-        return this.fileName;
-    }
+	public boolean isHashProtected()
+	{
+		return hashProtected.isTrue();
+	}
 
-    public DERIA5String getMediaType()
-    {
-        return this.mediaType;
-    }
+	public DERUTF8String getFileName()
+	{
+		return this.fileName;
+	}
 
-    public Attributes getOtherMetaData()
-    {
-        return otherMetaData;
-    }
+	public DERIA5String getMediaType()
+	{
+		return this.mediaType;
+	}
+
+	public Attributes getOtherMetaData()
+	{
+		return otherMetaData;
+	}
 }

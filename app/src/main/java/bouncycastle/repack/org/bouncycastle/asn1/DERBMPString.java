@@ -6,120 +6,120 @@ import java.io.IOException;
  * DER BMPString object.
  */
 public class DERBMPString
-    extends ASN1Object
-    implements DERString
+		extends ASN1Object
+		implements DERString
 {
-    String  string;
+	String string;
 
-    /**
-     * return a BMP String from the given object.
-     *
-     * @param obj the object we want converted.
-     * @exception IllegalArgumentException if the object cannot be converted.
-     */
-    public static DERBMPString getInstance(
-        Object  obj)
-    {
-        if (obj == null || obj instanceof DERBMPString)
-        {
-            return (DERBMPString)obj;
-        }
+	/**
+	 * return a BMP String from the given object.
+	 *
+	 * @param obj the object we want converted.
+	 * @throws IllegalArgumentException if the object cannot be converted.
+	 */
+	public static DERBMPString getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof DERBMPString)
+		{
+			return (DERBMPString) obj;
+		}
 
-        throw new IllegalArgumentException("illegal object in getInstance: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("illegal object in getInstance: " + obj.getClass().getName());
+	}
 
-    /**
-     * return a BMP String from a tagged object.
-     *
-     * @param obj the tagged object holding the object we want
-     * @param explicit true if the object is meant to be explicitly
-     *              tagged false otherwise.
-     * @exception IllegalArgumentException if the tagged object cannot
-     *              be converted.
-     */
-    public static DERBMPString getInstance(
-        ASN1TaggedObject obj,
-        boolean          explicit)
-    {
-        DERObject o = obj.getObject();
+	/**
+	 * return a BMP String from a tagged object.
+	 *
+	 * @param obj      the tagged object holding the object we want
+	 * @param explicit true if the object is meant to be explicitly
+	 *                 tagged false otherwise.
+	 * @throws IllegalArgumentException if the tagged object cannot
+	 *                                  be converted.
+	 */
+	public static DERBMPString getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		DERObject o = obj.getObject();
 
-        if (explicit || o instanceof DERBMPString)
-        {
-            return getInstance(o);
-        }
-        else
-        {
-            return new DERBMPString(ASN1OctetString.getInstance(o).getOctets());
-        }
-    }
-    
+		if(explicit || o instanceof DERBMPString)
+		{
+			return getInstance(o);
+		}
+		else
+		{
+			return new DERBMPString(ASN1OctetString.getInstance(o).getOctets());
+		}
+	}
 
-    /**
-     * basic constructor - byte encoded string.
-     */
-    public DERBMPString(
-        byte[]   string)
-    {
-        char[]  cs = new char[string.length / 2];
 
-        for (int i = 0; i != cs.length; i++)
-        {
-            cs[i] = (char)((string[2 * i] << 8) | (string[2 * i + 1] & 0xff));
-        }
+	/**
+	 * basic constructor - byte encoded string.
+	 */
+	public DERBMPString(
+			byte[] string)
+	{
+		char[] cs = new char[string.length / 2];
 
-        this.string = new String(cs);
-    }
+		for(int i = 0; i != cs.length; i++)
+		{
+			cs[i] = (char) ((string[2 * i] << 8) | (string[2 * i + 1] & 0xff));
+		}
 
-    /**
-     * basic constructor
-     */
-    public DERBMPString(
-        String   string)
-    {
-        this.string = string;
-    }
+		this.string = new String(cs);
+	}
 
-    public String getString()
-    {
-        return string;
-    }
+	/**
+	 * basic constructor
+	 */
+	public DERBMPString(
+			String string)
+	{
+		this.string = string;
+	}
 
-    public String toString()
-    {
-        return string;
-    }
+	public String getString()
+	{
+		return string;
+	}
 
-    public int hashCode()
-    {
-        return this.getString().hashCode();
-    }
+	public String toString()
+	{
+		return string;
+	}
 
-    protected boolean asn1Equals(
-        DERObject  o)
-    {
-        if (!(o instanceof DERBMPString))
-        {
-            return false;
-        }
+	public int hashCode()
+	{
+		return this.getString().hashCode();
+	}
 
-        DERBMPString  s = (DERBMPString)o;
+	protected boolean asn1Equals(
+			DERObject o)
+	{
+		if(!(o instanceof DERBMPString))
+		{
+			return false;
+		}
 
-        return this.getString().equals(s.getString());
-    }
+		DERBMPString s = (DERBMPString) o;
 
-    void encode(
-        DEROutputStream  out)
-        throws IOException
-    {
-        char[]  c = string.toCharArray();
-        byte[]  b = new byte[c.length * 2];
+		return this.getString().equals(s.getString());
+	}
 
-        for (int i = 0; i != c.length; i++)
-        {
-            b[2 * i] = (byte)(c[i] >> 8);
-            b[2 * i + 1] = (byte)c[i];
-        }
+	void encode(
+			DEROutputStream out)
+			throws IOException
+	{
+		char[] c = string.toCharArray();
+		byte[] b = new byte[c.length * 2];
 
-        out.writeEncoded(BMP_STRING, b);
-    }
+		for(int i = 0; i != c.length; i++)
+		{
+			b[2 * i] = (byte) (c[i] >> 8);
+			b[2 * i + 1] = (byte) c[i];
+		}
+
+		out.writeEncoded(BMP_STRING, b);
+	}
 }

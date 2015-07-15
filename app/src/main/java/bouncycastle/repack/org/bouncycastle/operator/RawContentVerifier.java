@@ -6,12 +6,12 @@ package repack.org.bouncycastle.operator;
  */
 public interface RawContentVerifier
 {
-    /**
-     * Verify that the expected signature value was derived from the passed in digest.
-     *
-     * @param digest digest calculated from the content.
-     * @param expected expected value of the signature
-     * @return true if the expected signature is derived from the digest, false otherwise.
-     */
-    boolean verify(byte[] digest, byte[] expected);
+	/**
+	 * Verify that the expected signature value was derived from the passed in digest.
+	 *
+	 * @param digest   digest calculated from the content.
+	 * @param expected expected value of the signature
+	 * @return true if the expected signature is derived from the digest, false otherwise.
+	 */
+	boolean verify(byte[] digest, byte[] expected);
 }

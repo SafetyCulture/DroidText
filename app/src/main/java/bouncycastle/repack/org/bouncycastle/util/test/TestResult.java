@@ -2,9 +2,9 @@ package repack.org.bouncycastle.util.test;
 
 public interface TestResult
 {
-    public boolean isSuccessful();
-    
-    public Throwable getException();
-    
-    public String toString();
+	public boolean isSuccessful();
+
+	public Throwable getException();
+
+	public String toString();
 }

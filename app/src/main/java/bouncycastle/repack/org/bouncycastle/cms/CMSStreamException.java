@@ -3,24 +3,24 @@ package repack.org.bouncycastle.cms;
 import java.io.IOException;
 
 public class CMSStreamException
-    extends IOException
+		extends IOException
 {
-    private final Throwable underlying;
+	private final Throwable underlying;
 
-    CMSStreamException(String msg)
-    {
-        super(msg);
-        this.underlying = null;
-    }
+	CMSStreamException(String msg)
+	{
+		super(msg);
+		this.underlying = null;
+	}
 
-    CMSStreamException(String msg, Throwable underlying)
-    {
-        super(msg);
-        this.underlying = underlying;
-    }
+	CMSStreamException(String msg, Throwable underlying)
+	{
+		super(msg);
+		this.underlying = underlying;
+	}
 
-    public Throwable getCause()
-    {
-        return underlying;
-    }
+	public Throwable getCause()
+	{
+		return underlying;
+	}
 }

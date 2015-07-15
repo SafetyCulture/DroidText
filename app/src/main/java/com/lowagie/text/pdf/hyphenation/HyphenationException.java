@@ -19,12 +19,14 @@ package com.lowagie.text.pdf.hyphenation;
 /**
  * @author Carlos Villegas <cav@uniscope.co.jp>
  */
-public class HyphenationException extends Exception {
+public class HyphenationException extends Exception
+{
 
-    private static final long serialVersionUID = 4721513606846982325L;
+	private static final long serialVersionUID = 4721513606846982325L;
 
-	public HyphenationException(String msg) {
-        super(msg);
-    }
+	public HyphenationException(String msg)
+	{
+		super(msg);
+	}
 
 }

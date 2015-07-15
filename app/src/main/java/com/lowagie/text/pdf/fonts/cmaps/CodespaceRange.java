@@ -1,19 +1,19 @@
 /**
  * Copyright (c) 2005, www.fontbox.org
  * All rights reserved.
- *
+ * <p/>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * <p/>
  * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
+ * this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
  * 3. Neither the name of fontbox; nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,9 +24,8 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ * <p/>
  * http://www.fontbox.org
- *
  */
 package com.lowagie.text.pdf.fonts.cmaps;
 
@@ -35,55 +34,59 @@ package com.lowagie.text.pdf.fonts.cmaps;
  *
  * @author Ben Litchfield (ben@benlitchfield.com)
  * @version $Revision: 3646 $
- * @since	2.1.4
+ * @since 2.1.4
  */
 public class CodespaceRange
 {
 
-    private byte[] start;
-    private byte[] end;
+	private byte[] start;
+	private byte[] end;
 
-    /**
-     * Creates a new instance of CodespaceRange.
-     */
-    public CodespaceRange()
-    {
-    }
+	/**
+	 * Creates a new instance of CodespaceRange.
+	 */
+	public CodespaceRange()
+	{
+	}
 
-    /** Getter for property end.
-     * @return Value of property end.
-     *
-     */
-    public byte[] getEnd()
-    {
-        return this.end;
-    }
+	/**
+	 * Getter for property end.
+	 *
+	 * @return Value of property end.
+	 */
+	public byte[] getEnd()
+	{
+		return this.end;
+	}
 
-    /** Setter for property end.
-     * @param endBytes New value of property end.
-     *
-     */
-    public void setEnd(byte[] endBytes)
-    {
-        end = endBytes;
-    }
+	/**
+	 * Setter for property end.
+	 *
+	 * @param endBytes New value of property end.
+	 */
+	public void setEnd(byte[] endBytes)
+	{
+		end = endBytes;
+	}
 
-    /** Getter for property start.
-     * @return Value of property start.
-     *
-     */
-    public byte[] getStart()
-    {
-        return this.start;
-    }
+	/**
+	 * Getter for property start.
+	 *
+	 * @return Value of property start.
+	 */
+	public byte[] getStart()
+	{
+		return this.start;
+	}
 
-    /** Setter for property start.
-     * @param startBytes New value of property start.
-     *
-     */
-    public void setStart(byte[] startBytes)
-    {
-        start = startBytes;
-    }
+	/**
+	 * Setter for property start.
+	 *
+	 * @param startBytes New value of property start.
+	 */
+	public void setStart(byte[] startBytes)
+	{
+		start = startBytes;
+	}
 
 }

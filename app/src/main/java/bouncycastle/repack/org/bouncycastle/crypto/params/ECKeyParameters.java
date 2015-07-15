@@ -1,21 +1,21 @@
 package repack.org.bouncycastle.crypto.params;
 
 public class ECKeyParameters
-    extends AsymmetricKeyParameter
+		extends AsymmetricKeyParameter
 {
-    ECDomainParameters params;
+	ECDomainParameters params;
 
-    protected ECKeyParameters(
-        boolean             isPrivate,
-        ECDomainParameters  params)
-    {
-        super(isPrivate);
+	protected ECKeyParameters(
+			boolean isPrivate,
+			ECDomainParameters params)
+	{
+		super(isPrivate);
 
-        this.params = params;
-    }
+		this.params = params;
+	}
 
-    public ECDomainParameters getParameters()
-    {
-        return params;
-    }
+	public ECDomainParameters getParameters()
+	{
+		return params;
+	}
 }

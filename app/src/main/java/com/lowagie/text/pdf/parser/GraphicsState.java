@@ -50,62 +50,87 @@ import com.lowagie.text.pdf.CMapAwareDocumentFont;
 
 /**
  * Keeps all the parameters of the graphics state.
- * @since	2.1.4
+ *
+ * @since 2.1.4
  */
-public class GraphicsState {
-    /** The current transformation matrix. */
-    Matrix ctm;
-    /** The current character spacing. */
-    float characterSpacing;
-    /** The current word spacing. */
-    float wordSpacing;
-    /** The current horizontal scaling */
-    float horizontalScaling;
-    /** The current leading. */
-    float leading;
-    /** The active font. */
-    CMapAwareDocumentFont font;
-    /** The current font size. */
-    float fontSize;
-    /** The current render mode. */
-    int renderMode;
-    /** The current text rise */
-    float rise;
-    /** The current knockout value. */
-    boolean knockout;
-    
-    /**
-     * Constructs a new Graphics State object with the default values.
-     */
-    public GraphicsState(){
-        ctm = new Matrix();
-        characterSpacing = 0;
-        wordSpacing = 0;
-        horizontalScaling = 1.0f;
-        leading = 0;
-        font = null;
-        fontSize = 0;
-        renderMode = 0;
-        rise = 0;
-        knockout = true;
-    }
-    
-    /**
-     * Copy constructor.
-     * @param source	another GraphicsState object
-     */
-    public GraphicsState(GraphicsState source){
-        // note: all of the following are immutable, with the possible exception of font
-        // so it is safe to copy them as-is
-        ctm = source.ctm;
-        characterSpacing = source.characterSpacing;
-        wordSpacing = source.wordSpacing;
-        horizontalScaling = source.horizontalScaling;
-        leading = source.leading;
-        font = source.font;
-        fontSize = source.fontSize;
-        renderMode = source.renderMode;
-        rise = source.rise;
-        knockout = source.knockout;
-    }
+public class GraphicsState
+{
+	/**
+	 * The current transformation matrix.
+	 */
+	Matrix ctm;
+	/**
+	 * The current character spacing.
+	 */
+	float characterSpacing;
+	/**
+	 * The current word spacing.
+	 */
+	float wordSpacing;
+	/**
+	 * The current horizontal scaling
+	 */
+	float horizontalScaling;
+	/**
+	 * The current leading.
+	 */
+	float leading;
+	/**
+	 * The active font.
+	 */
+	CMapAwareDocumentFont font;
+	/**
+	 * The current font size.
+	 */
+	float fontSize;
+	/**
+	 * The current render mode.
+	 */
+	int renderMode;
+	/**
+	 * The current text rise
+	 */
+	float rise;
+	/**
+	 * The current knockout value.
+	 */
+	boolean knockout;
+
+	/**
+	 * Constructs a new Graphics State object with the default values.
+	 */
+	public GraphicsState()
+	{
+		ctm = new Matrix();
+		characterSpacing = 0;
+		wordSpacing = 0;
+		horizontalScaling = 1.0f;
+		leading = 0;
+		font = null;
+		fontSize = 0;
+		renderMode = 0;
+		rise = 0;
+		knockout = true;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param source another GraphicsState object
+	 */
+	public GraphicsState(GraphicsState source)
+	{
+		// note: all of the following are immutable, with the possible exception of font
+		// so it is safe to copy them as-is
+		ctm = source.ctm;
+		characterSpacing = source.characterSpacing;
+		wordSpacing = source.wordSpacing;
+		horizontalScaling = source.horizontalScaling;
+		leading = source.leading;
+		font = source.font;
+		fontSize = source.fontSize;
+		renderMode = source.renderMode;
+		rise = source.rise;
+		knockout = source.knockout;
+	}
 }

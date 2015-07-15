@@ -5,240 +5,240 @@ package repack.org.bouncycastle.util;
  */
 public final class Arrays
 {
-    private Arrays() 
-    {
-        // static class, hide constructor
-    }
-    
-    public static boolean areEqual(
-        boolean[]  a,
-        boolean[]  b)
-    {
-        if (a == b)
-        {
-            return true;
-        }
+	private Arrays()
+	{
+		// static class, hide constructor
+	}
 
-        if (a == null || b == null)
-        {
-            return false;
-        }
+	public static boolean areEqual(
+			boolean[] a,
+			boolean[] b)
+	{
+		if(a == b)
+		{
+			return true;
+		}
 
-        if (a.length != b.length)
-        {
-            return false;
-        }
+		if(a == null || b == null)
+		{
+			return false;
+		}
 
-        for (int i = 0; i != a.length; i++)
-        {
-            if (a[i] != b[i])
-            {
-                return false;
-            }
-        }
+		if(a.length != b.length)
+		{
+			return false;
+		}
 
-        return true;
-    }
+		for(int i = 0; i != a.length; i++)
+		{
+			if(a[i] != b[i])
+			{
+				return false;
+			}
+		}
 
-    public static boolean areEqual(
-        char[]  a,
-        char[]  b)
-    {
-        if (a == b)
-        {
-            return true;
-        }
+		return true;
+	}
 
-        if (a == null || b == null)
-        {
-            return false;
-        }
+	public static boolean areEqual(
+			char[] a,
+			char[] b)
+	{
+		if(a == b)
+		{
+			return true;
+		}
 
-        if (a.length != b.length)
-        {
-            return false;
-        }
+		if(a == null || b == null)
+		{
+			return false;
+		}
 
-        for (int i = 0; i != a.length; i++)
-        {
-            if (a[i] != b[i])
-            {
-                return false;
-            }
-        }
+		if(a.length != b.length)
+		{
+			return false;
+		}
 
-        return true;
-    }
+		for(int i = 0; i != a.length; i++)
+		{
+			if(a[i] != b[i])
+			{
+				return false;
+			}
+		}
 
-    public static boolean areEqual(
-        byte[]  a,
-        byte[]  b)
-    {
-        if (a == b)
-        {
-            return true;
-        }
+		return true;
+	}
 
-        if (a == null || b == null)
-        {
-            return false;
-        }
+	public static boolean areEqual(
+			byte[] a,
+			byte[] b)
+	{
+		if(a == b)
+		{
+			return true;
+		}
 
-        if (a.length != b.length)
-        {
-            return false;
-        }
+		if(a == null || b == null)
+		{
+			return false;
+		}
 
-        for (int i = 0; i != a.length; i++)
-        {
-            if (a[i] != b[i])
-            {
-                return false;
-            }
-        }
+		if(a.length != b.length)
+		{
+			return false;
+		}
 
-        return true;
-    }
+		for(int i = 0; i != a.length; i++)
+		{
+			if(a[i] != b[i])
+			{
+				return false;
+			}
+		}
 
-    /**
-     * A constant time equals comparison - does not terminate early if
-     * test will fail.
-     *
-     * @param a first array
-     * @param b second array
-     * @return true if arrays equal, false otherwise.
-     */
-    public static boolean constantTimeAreEqual(
-        byte[]  a,
-        byte[]  b)
-    {
-        if (a == b)
-        {
-            return true;
-        }
+		return true;
+	}
 
-        if (a == null || b == null)
-        {
-            return false;
-        }
+	/**
+	 * A constant time equals comparison - does not terminate early if
+	 * test will fail.
+	 *
+	 * @param a first array
+	 * @param b second array
+	 * @return true if arrays equal, false otherwise.
+	 */
+	public static boolean constantTimeAreEqual(
+			byte[] a,
+			byte[] b)
+	{
+		if(a == b)
+		{
+			return true;
+		}
 
-        if (a.length != b.length)
-        {
-            return false;
-        }
+		if(a == null || b == null)
+		{
+			return false;
+		}
 
-        int nonEqual = 0;
+		if(a.length != b.length)
+		{
+			return false;
+		}
 
-        for (int i = 0; i != a.length; i++)
-        {
-            nonEqual |= (a[i] ^ b[i]);
-        }
+		int nonEqual = 0;
 
-        return nonEqual == 0;
-    }
+		for(int i = 0; i != a.length; i++)
+		{
+			nonEqual |= (a[i] ^ b[i]);
+		}
 
-    public static boolean areEqual(
-        int[]  a,
-        int[]  b)
-    {
-        if (a == b)
-        {
-            return true;
-        }
+		return nonEqual == 0;
+	}
 
-        if (a == null || b == null)
-        {
-            return false;
-        }
+	public static boolean areEqual(
+			int[] a,
+			int[] b)
+	{
+		if(a == b)
+		{
+			return true;
+		}
 
-        if (a.length != b.length)
-        {
-            return false;
-        }
+		if(a == null || b == null)
+		{
+			return false;
+		}
 
-        for (int i = 0; i != a.length; i++)
-        {
-            if (a[i] != b[i])
-            {
-                return false;
-            }
-        }
+		if(a.length != b.length)
+		{
+			return false;
+		}
 
-        return true;
-    }
+		for(int i = 0; i != a.length; i++)
+		{
+			if(a[i] != b[i])
+			{
+				return false;
+			}
+		}
 
-    public static void fill(
-        byte[] array,
-        byte value)
-    {
-        for (int i = 0; i < array.length; i++)
-        {
-            array[i] = value;
-        }
-    }
-    
-    public static void fill(
-        long[] array,
-        long value)
-    {
-        for (int i = 0; i < array.length; i++)
-        {
-            array[i] = value;
-        }
-    }
+		return true;
+	}
 
-    public static void fill(
-        short[] array, 
-        short value)
-    {
-        for (int i = 0; i < array.length; i++)
-        {
-            array[i] = value;
-        }
-    }
+	public static void fill(
+			byte[] array,
+			byte value)
+	{
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = value;
+		}
+	}
 
-    public static int hashCode(byte[] data)
-    {
-        if (data == null)
-        {
-            return 0;
-        }
+	public static void fill(
+			long[] array,
+			long value)
+	{
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = value;
+		}
+	}
 
-        int i = data.length;
-        int hc = i + 1;
+	public static void fill(
+			short[] array,
+			short value)
+	{
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = value;
+		}
+	}
 
-        while (--i >= 0)
-        {
-            hc *= 257;
-            hc ^= data[i];
-        }
+	public static int hashCode(byte[] data)
+	{
+		if(data == null)
+		{
+			return 0;
+		}
 
-        return hc;
-    }
+		int i = data.length;
+		int hc = i + 1;
 
-    public static byte[] clone(byte[] data)
-    {
-        if (data == null)
-        {
-            return null;
-        }
-        byte[] copy = new byte[data.length];
+		while(--i >= 0)
+		{
+			hc *= 257;
+			hc ^= data[i];
+		}
 
-        System.arraycopy(data, 0, copy, 0, data.length);
+		return hc;
+	}
 
-        return copy;
-    }
+	public static byte[] clone(byte[] data)
+	{
+		if(data == null)
+		{
+			return null;
+		}
+		byte[] copy = new byte[data.length];
 
-    public static int[] clone(int[] data)
-    {
-        if (data == null)
-        {
-            return null;
-        }
-        int[] copy = new int[data.length];
+		System.arraycopy(data, 0, copy, 0, data.length);
 
-        System.arraycopy(data, 0, copy, 0, data.length);
+		return copy;
+	}
 
-        return copy;
-    }
+	public static int[] clone(int[] data)
+	{
+		if(data == null)
+		{
+			return null;
+		}
+		int[] copy = new int[data.length];
+
+		System.arraycopy(data, 0, copy, 0, data.length);
+
+		return copy;
+	}
 }

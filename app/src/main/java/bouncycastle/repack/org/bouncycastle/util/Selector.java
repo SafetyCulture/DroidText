@@ -1,9 +1,9 @@
 package repack.org.bouncycastle.util;
 
 public interface Selector
-    extends Cloneable
+		extends Cloneable
 {
-    boolean match(Object obj);
+	boolean match(Object obj);
 
-    Object clone();
+	Object clone();
 }

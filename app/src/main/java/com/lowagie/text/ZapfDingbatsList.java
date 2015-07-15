@@ -47,14 +47,14 @@
 package com.lowagie.text;
 
 /**
- * 
  * A special-version of <CODE>LIST</CODE> which use zapfdingbats-letters.
- * 
- * @see com.lowagie.text.List
+ *
  * @author Michael Niedermair and Bruno Lowagie
+ * @see com.lowagie.text.List
  */
 
-public class ZapfDingbatsList extends List {
+public class ZapfDingbatsList extends List
+{
 
 	/**
 	 * char-number in zapfdingbats
@@ -63,10 +63,11 @@ public class ZapfDingbatsList extends List {
 
 	/**
 	 * Creates a ZapfDingbatsList
-	 * 
+	 *
 	 * @param zn a char-number
 	 */
-	public ZapfDingbatsList(int zn) {
+	public ZapfDingbatsList(int zn)
+	{
 		super(true);
 		this.zn = zn;
 		float fontsize = symbol.getFont().getSize();
@@ -76,11 +77,12 @@ public class ZapfDingbatsList extends List {
 
 	/**
 	 * Creates a ZapfDingbatsList
-	 * 
-	 * @param zn a char-number
-	 * @param symbolIndent	indent
+	 *
+	 * @param zn           a char-number
+	 * @param symbolIndent indent
 	 */
-	public ZapfDingbatsList(int zn, int symbolIndent) {
+	public ZapfDingbatsList(int zn, int symbolIndent)
+	{
 		super(true, symbolIndent);
 		this.zn = zn;
 		float fontsize = symbol.getFont().getSize();
@@ -89,44 +91,53 @@ public class ZapfDingbatsList extends List {
 	}
 
 	/**
-	 * set the char-number 
+	 * set the char-number
+	 *
 	 * @param zn a char-number
 	 */
-	public void setCharNumber(int zn) {
+	public void setCharNumber(int zn)
+	{
 		this.zn = zn;
 	}
 
 	/**
 	 * get the char-number
 	 *
-	 * @return	char-number
+	 * @return char-number
 	 */
-	public int getCharNumber() {
+	public int getCharNumber()
+	{
 		return zn;
 	}
 
 	/**
 	 * Adds an <CODE>Object</CODE> to the <CODE>List</CODE>.
 	 *
-	 * @param	o	the object to add.
+	 * @param o the object to add.
 	 * @return true if adding the object succeeded
 	 */
-	public boolean add(Object o) {
-		if (o instanceof ListItem) {
+	public boolean add(Object o)
+	{
+		if(o instanceof ListItem)
+		{
 			ListItem item = (ListItem) o;
 			Chunk chunk = new Chunk(preSymbol, symbol.getFont());
-			chunk.append(String.valueOf((char)zn));
+			chunk.append(String.valueOf((char) zn));
 			chunk.append(postSymbol);
 			item.setListSymbol(chunk);
 			item.setIndentationLeft(symbolIndent, autoindent);
 			item.setIndentationRight(0);
 			list.add(item);
-		} else if (o instanceof List) {
+		}
+		else if(o instanceof List)
+		{
 			List nested = (List) o;
 			nested.setIndentationLeft(nested.getIndentationLeft() + symbolIndent);
 			first--;
 			return list.add(nested);
-		} else if (o instanceof String) {
+		}
+		else if(o instanceof String)
+		{
 			return this.add(new ListItem((String) o));
 		}
 		return false;

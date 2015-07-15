@@ -50,14 +50,14 @@
 
 package com.lowagie.text.pdf;
 
+import com.lowagie.text.DocWriter;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.lowagie.text.DocWriter;
-
 /**
  * <CODE>PdfIndirectObject</CODE> is the Pdf indirect object.
- * <P>
+ * <p/>
  * An <I>indirect object</I> is an object that has been labeled so that it can be referenced by
  * other objects. Any type of <CODE>PdfObject</CODE> may be labeled as an indirect object.<BR>
  * An indirect object consists of an object identifier, a direct object, and the <B>endobj</B>
@@ -66,102 +66,113 @@ import com.lowagie.text.DocWriter;
  * This object is described in the 'Portable Document Format Reference Manual version 1.7'
  * section 3.2.9 (page 63-65).
  *
- * @see		PdfObject
- * @see		PdfIndirectReference
+ * @see PdfObject
+ * @see PdfIndirectReference
  */
 
-public class PdfIndirectObject {
-    
-    // membervariables
-    
-/** The object number */
-    protected int number;
-    
-/** the generation number */
-    protected int generation = 0;
-    
-    static final byte STARTOBJ[] = DocWriter.getISOBytes(" obj\n");
-    static final byte ENDOBJ[] = DocWriter.getISOBytes("\nendobj\n");
-    static final int SIZEOBJ = STARTOBJ.length + ENDOBJ.length;
-    PdfObject object;
-    PdfWriter writer;
-    
-    // constructors
-    
-/**
- * Constructs a <CODE>PdfIndirectObject</CODE>.
- *
- * @param		number			the object number
- * @param		object			the direct object
- */
-    
-    PdfIndirectObject(int number, PdfObject object, PdfWriter writer) {
-        this(number, 0, object, writer);
-    }
-    
-    PdfIndirectObject(PdfIndirectReference ref, PdfObject object, PdfWriter writer) {
-        this(ref.getNumber(),ref.getGeneration(),object,writer);
-    }
-/**
- * Constructs a <CODE>PdfIndirectObject</CODE>.
- *
- * @param		number			the object number
- * @param		generation		the generation number
- * @param		object			the direct object
- */
-    
-    PdfIndirectObject(int number, int generation, PdfObject object, PdfWriter writer) {
-        this.writer = writer;
-        this.number = number;
-        this.generation = generation;
-        this.object = object;
-        PdfEncryption crypto = null;
-        if (writer != null)
-            crypto = writer.getEncryption();
-        if (crypto != null) {
-            crypto.setHashKey(number, generation);
-        }
-    }
-    
-    // methods
-    
+public class PdfIndirectObject
+{
+
+	// membervariables
+
+	/**
+	 * The object number
+	 */
+	protected int number;
+
+	/**
+	 * the generation number
+	 */
+	protected int generation = 0;
+
+	static final byte STARTOBJ[] = DocWriter.getISOBytes(" obj\n");
+	static final byte ENDOBJ[] = DocWriter.getISOBytes("\nendobj\n");
+	static final int SIZEOBJ = STARTOBJ.length + ENDOBJ.length;
+	PdfObject object;
+	PdfWriter writer;
+
+	// constructors
+
+	/**
+	 * Constructs a <CODE>PdfIndirectObject</CODE>.
+	 *
+	 * @param number the object number
+	 * @param object the direct object
+	 */
+
+	PdfIndirectObject(int number, PdfObject object, PdfWriter writer)
+	{
+		this(number, 0, object, writer);
+	}
+
+	PdfIndirectObject(PdfIndirectReference ref, PdfObject object, PdfWriter writer)
+	{
+		this(ref.getNumber(), ref.getGeneration(), object, writer);
+	}
+
+	/**
+	 * Constructs a <CODE>PdfIndirectObject</CODE>.
+	 *
+	 * @param number     the object number
+	 * @param generation the generation number
+	 * @param object     the direct object
+	 */
+
+	PdfIndirectObject(int number, int generation, PdfObject object, PdfWriter writer)
+	{
+		this.writer = writer;
+		this.number = number;
+		this.generation = generation;
+		this.object = object;
+		PdfEncryption crypto = null;
+		if(writer != null)
+			crypto = writer.getEncryption();
+		if(crypto != null)
+		{
+			crypto.setHashKey(number, generation);
+		}
+	}
+
+	// methods
+
 /**
  * Return the length of this <CODE>PdfIndirectObject</CODE>.
  *
- * @return		the length of the PDF-representation of this indirect object.
+ * @return the length of the PDF-representation of this indirect object.
  */
-    
+
 //    public int length() {
 //        if (isStream)
 //            return bytes.size() + SIZEOBJ + stream.getStreamLength(writer);
 //        else
 //            return bytes.size();
 //    }
-    
-    
-/**
- * Returns a <CODE>PdfIndirectReference</CODE> to this <CODE>PdfIndirectObject</CODE>.
- *
- * @return		a <CODE>PdfIndirectReference</CODE>
- */
-    
-    public PdfIndirectReference getIndirectReference() {
-        return new PdfIndirectReference(object.type(), number, generation);
-    }
-    
-/**
- * Writes efficiently to a stream
- *
- * @param os the stream to write to
- * @throws IOException on write error
- */
-    void writeTo(OutputStream os) throws IOException
-    {
-        os.write(DocWriter.getISOBytes(String.valueOf(number)));
-        os.write(' ');
-        os.write(DocWriter.getISOBytes(String.valueOf(generation)));
-        os.write(STARTOBJ);
-        object.toPdf(writer, os);
-        os.write(ENDOBJ);
-    }
+
+
+	/**
+	 * Returns a <CODE>PdfIndirectReference</CODE> to this <CODE>PdfIndirectObject</CODE>.
+	 *
+	 * @return a <CODE>PdfIndirectReference</CODE>
+	 */
+
+	public PdfIndirectReference getIndirectReference()
+	{
+		return new PdfIndirectReference(object.type(), number, generation);
+	}
+
+	/**
+	 * Writes efficiently to a stream
+	 *
+	 * @param os the stream to write to
+	 * @throws IOException on write error
+	 */
+	void writeTo(OutputStream os) throws IOException
+	{
+		os.write(DocWriter.getISOBytes(String.valueOf(number)));
+		os.write(' ');
+		os.write(DocWriter.getISOBytes(String.valueOf(generation)));
+		os.write(STARTOBJ);
+		object.toPdf(writer, os);
+		os.write(ENDOBJ);
+	}
 }

@@ -5,5 +5,5 @@ package repack.org.bouncycastle.openssl;
  */
 public interface PasswordFinder
 {
-    public char[] getPassword();
+	public char[] getPassword();
 }

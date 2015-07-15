@@ -4,9 +4,9 @@ package repack.org.bouncycastle.ocsp;
  * wrapper for the UnknownInfo object
  */
 public class UnknownStatus
-    implements CertificateStatus
+		implements CertificateStatus
 {
-    public UnknownStatus()
-    {
-    }
+	public UnknownStatus()
+	{
+	}
 }

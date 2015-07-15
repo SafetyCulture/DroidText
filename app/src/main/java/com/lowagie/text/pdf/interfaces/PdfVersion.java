@@ -60,38 +60,46 @@ import com.lowagie.text.pdf.PdfName;
  * and 3.3 (Version history).
  */
 
-public interface PdfVersion {
-    
-    /**
+public interface PdfVersion
+{
+
+	/**
 	 * If the PDF Header hasn't been written yet,
 	 * this changes the version as it will appear in the PDF Header.
 	 * If the PDF header was already written to the OutputStream,
 	 * this changes the version as it will appear in the Catalog.
-	 * @param version	a character representing the PDF version
+	 *
+	 * @param version a character representing the PDF version
 	 */
 	public void setPdfVersion(char version);
-    /**
+
+	/**
 	 * If the PDF Header hasn't been written yet,
 	 * this changes the version as it will appear in the PDF Header,
 	 * but only if the parameter refers to a higher version.
 	 * If the PDF header was already written to the OutputStream,
 	 * this changes the version as it will appear in the Catalog.
-	 * @param version	a character representing the PDF version
+	 *
+	 * @param version a character representing the PDF version
 	 */
 	public void setAtLeastPdfVersion(char version);
+
 	/**
 	 * Sets the PDF version as it will appear in the Catalog.
 	 * Note that this only has effect if you use a later version
 	 * than the one that appears in the header; this method
 	 * ignores the parameter if you try to set a lower version.
-	 * @param version	the PDF name that will be used for the Version key in the catalog
+	 *
+	 * @param version the PDF name that will be used for the Version key in the catalog
 	 */
 	public void setPdfVersion(PdfName version);
+
 	/**
 	 * Adds a developer extension to the Extensions dictionary
 	 * in the Catalog.
-	 * @param de	an object that contains the extensions prefix and dictionary
-	 * @since	2.1.6
+	 *
+	 * @param de an object that contains the extensions prefix and dictionary
+	 * @since 2.1.6
 	 */
 	public void addDeveloperExtension(PdfDeveloperExtension de);
 }

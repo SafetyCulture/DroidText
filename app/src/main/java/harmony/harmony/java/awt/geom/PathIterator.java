@@ -19,7 +19,8 @@
  */
 package harmony.java.awt.geom;
 
-public interface PathIterator {
+public interface PathIterator
+{
 
 	public static final int WIND_EVEN_ODD = 0;
 	public static final int WIND_NON_ZERO = 1;

@@ -1,19 +1,19 @@
 package repack.org.bouncycastle.operator;
 
 public class RuntimeOperatorException
-    extends RuntimeException
+		extends RuntimeException
 {
-    private Throwable cause;
+	private Throwable cause;
 
-    public RuntimeOperatorException(String msg, Throwable cause)
-    {
-        super(msg);
+	public RuntimeOperatorException(String msg, Throwable cause)
+	{
+		super(msg);
 
-        this.cause = cause;
-    }
+		this.cause = cause;
+	}
 
-    public Throwable getCause()
-    {
-        return cause;
-    }
+	public Throwable getCause()
+	{
+		return cause;
+	}
 }

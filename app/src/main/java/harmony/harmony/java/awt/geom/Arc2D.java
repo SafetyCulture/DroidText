@@ -19,17 +19,19 @@
  */
 package harmony.java.awt.geom;
 
-import java.util.NoSuchElementException;
-
 import org.apache.harmony.awt.internal.nls.Messages;
 
-public abstract class Arc2D extends RectangularShape {
+import java.util.NoSuchElementException;
+
+public abstract class Arc2D extends RectangularShape
+{
 
 	public final static int OPEN = 0;
 	public final static int CHORD = 1;
 	public final static int PIE = 2;
 
-	public static class Float extends Arc2D {
+	public static class Float extends Arc2D
+	{
 
 		public float x;
 		public float y;
@@ -38,15 +40,18 @@ public abstract class Arc2D extends RectangularShape {
 		public float start;
 		public float extent;
 
-		public Float() {
+		public Float()
+		{
 			super(OPEN);
 		}
 
-		public Float(int type) {
+		public Float(int type)
+		{
 			super(type);
 		}
 
-		public Float(float x, float y, float width, float height, float start, float extent, int type) {
+		public Float(float x, float y, float width, float height, float start, float extent, int type)
+		{
 			super(type);
 			this.x = x;
 			this.y = y;
@@ -56,7 +61,8 @@ public abstract class Arc2D extends RectangularShape {
 			this.extent = extent;
 		}
 
-		public Float(Rectangle2D bounds, float start, float extent, int type) {
+		public Float(Rectangle2D bounds, float start, float extent, int type)
+		{
 			super(type);
 			this.x = (float) bounds.getX();
 			this.y = (float) bounds.getY();
@@ -67,42 +73,50 @@ public abstract class Arc2D extends RectangularShape {
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public double getAngleStart() {
+		public double getAngleStart()
+		{
 			return start;
 		}
 
 		@Override
-		public double getAngleExtent() {
+		public double getAngleExtent()
+		{
 			return extent;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0f || height <= 0.0f;
 		}
 
 		@Override
-		public void setArc(double x, double y, double width, double height, double start, double extent, int type) {
+		public void setArc(double x, double y, double width, double height, double start, double extent, int type)
+		{
 			this.setArcType(type);
 			this.x = (float) x;
 			this.y = (float) y;
@@ -113,23 +127,27 @@ public abstract class Arc2D extends RectangularShape {
 		}
 
 		@Override
-		public void setAngleStart(double start) {
+		public void setAngleStart(double start)
+		{
 			this.start = (float) start;
 		}
 
 		@Override
-		public void setAngleExtent(double extent) {
+		public void setAngleExtent(double extent)
+		{
 			this.extent = (float) extent;
 		}
 
 		@Override
-		protected Rectangle2D makeBounds(double x, double y, double width, double height) {
+		protected Rectangle2D makeBounds(double x, double y, double width, double height)
+		{
 			return new Rectangle2D.Float((float) x, (float) y, (float) width, (float) height);
 		}
 
 	}
 
-	public static class Double extends Arc2D {
+	public static class Double extends Arc2D
+	{
 
 		public double x;
 		public double y;
@@ -138,15 +156,18 @@ public abstract class Arc2D extends RectangularShape {
 		public double start;
 		public double extent;
 
-		public Double() {
+		public Double()
+		{
 			super(OPEN);
 		}
 
-		public Double(int type) {
+		public Double(int type)
+		{
 			super(type);
 		}
 
-		public Double(double x, double y, double width, double height, double start, double extent, int type) {
+		public Double(double x, double y, double width, double height, double start, double extent, int type)
+		{
 			super(type);
 			this.x = x;
 			this.y = y;
@@ -156,7 +177,8 @@ public abstract class Arc2D extends RectangularShape {
 			this.extent = extent;
 		}
 
-		public Double(Rectangle2D bounds, double start, double extent, int type) {
+		public Double(Rectangle2D bounds, double start, double extent, int type)
+		{
 			super(type);
 			this.x = bounds.getX();
 			this.y = bounds.getY();
@@ -167,42 +189,50 @@ public abstract class Arc2D extends RectangularShape {
 		}
 
 		@Override
-		public double getX() {
+		public double getX()
+		{
 			return x;
 		}
 
 		@Override
-		public double getY() {
+		public double getY()
+		{
 			return y;
 		}
 
 		@Override
-		public double getWidth() {
+		public double getWidth()
+		{
 			return width;
 		}
 
 		@Override
-		public double getHeight() {
+		public double getHeight()
+		{
 			return height;
 		}
 
 		@Override
-		public double getAngleStart() {
+		public double getAngleStart()
+		{
 			return start;
 		}
 
 		@Override
-		public double getAngleExtent() {
+		public double getAngleExtent()
+		{
 			return extent;
 		}
 
 		@Override
-		public boolean isEmpty() {
+		public boolean isEmpty()
+		{
 			return width <= 0.0 || height <= 0.0;
 		}
 
 		@Override
-		public void setArc(double x, double y, double width, double height, double start, double extent, int type) {
+		public void setArc(double x, double y, double width, double height, double start, double extent, int type)
+		{
 			this.setArcType(type);
 			this.x = x;
 			this.y = y;
@@ -213,17 +243,20 @@ public abstract class Arc2D extends RectangularShape {
 		}
 
 		@Override
-		public void setAngleStart(double start) {
+		public void setAngleStart(double start)
+		{
 			this.start = start;
 		}
 
 		@Override
-		public void setAngleExtent(double extent) {
+		public void setAngleExtent(double extent)
+		{
 			this.extent = extent;
 		}
 
 		@Override
-		protected Rectangle2D makeBounds(double x, double y, double width, double height) {
+		protected Rectangle2D makeBounds(double x, double y, double width, double height)
+		{
 			return new Rectangle2D.Double(x, y, width, height);
 		}
 
@@ -232,7 +265,8 @@ public abstract class Arc2D extends RectangularShape {
 	/*
 	 * Arc2D path iterator
 	 */
-	class Iterator implements PathIterator {
+	class Iterator implements PathIterator
+	{
 
 		/**
 		 * The x coordinate of left-upper corner of the arc rectangle bounds
@@ -334,14 +368,14 @@ public abstract class Arc2D extends RectangularShape {
 
 		/**
 		 * Constructs a new Arc2D.Iterator for given line and transformation
-		 * 
-		 * @param a
-		 *            - the source Arc2D object
-		 * @param at
-		 *            - the AffineTransform object to apply rectangle path
+		 *
+		 * @param a  - the source Arc2D object
+		 * @param at - the AffineTransform object to apply rectangle path
 		 */
-		Iterator(Arc2D a, AffineTransform t) {
-			if (width < 0 || height < 0) {
+		Iterator(Arc2D a, AffineTransform t)
+		{
+			if(width < 0 || height < 0)
+			{
 				arcCount = 0;
 				lineCount = 0;
 				index = 1;
@@ -357,48 +391,61 @@ public abstract class Arc2D extends RectangularShape {
 			this.type = a.getArcType();
 			this.t = t;
 
-			if (Math.abs(extent) >= 360.0) {
+			if(Math.abs(extent) >= 360.0)
+			{
 				arcCount = 4;
 				k = 4.0 / 3.0 * (Math.sqrt(2.0) - 1.0);
 				step = Math.PI / 2.0;
-				if (extent < 0.0) {
+				if(extent < 0.0)
+				{
 					step = -step;
 					k = -k;
 				}
-			} else {
+			}
+			else
+			{
 				arcCount = (int) Math.rint(Math.abs(extent) / 90.0);
 				step = Math.toRadians(extent / arcCount);
 				k = 4.0 / 3.0 * (1.0 - Math.cos(step / 2.0)) / Math.sin(step / 2.0);
 			}
 
 			lineCount = 0;
-			if (type == Arc2D.CHORD) {
+			if(type == Arc2D.CHORD)
+			{
 				lineCount++;
-			} else if (type == Arc2D.PIE) {
+			}
+			else if(type == Arc2D.PIE)
+			{
 				lineCount += 2;
 			}
 		}
 
-		public int getWindingRule() {
+		public int getWindingRule()
+		{
 			return WIND_NON_ZERO;
 		}
 
-		public boolean isDone() {
+		public boolean isDone()
+		{
 			return index > arcCount + lineCount;
 		}
 
-		public void next() {
+		public void next()
+		{
 			index++;
 		}
 
-		public int currentSegment(double[] coords) {
-			if (isDone()) {
+		public int currentSegment(double[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
 			int type;
 			int count;
-			if (index == 0) {
+			if(index == 0)
+			{
 				type = SEG_MOVETO;
 				count = 1;
 				cos = Math.cos(angle);
@@ -407,7 +454,9 @@ public abstract class Arc2D extends RectangularShape {
 				ky = k * height * cos;
 				coords[0] = mx = x + cos * width;
 				coords[1] = my = y + sin * height;
-			} else if (index <= arcCount) {
+			}
+			else if(index <= arcCount)
+			{
 				type = SEG_CUBICTO;
 				count = 3;
 				coords[0] = mx - kx;
@@ -421,29 +470,37 @@ public abstract class Arc2D extends RectangularShape {
 				coords[5] = my = y + sin * height;
 				coords[2] = mx + kx;
 				coords[3] = my - ky;
-			} else if (index == arcCount + lineCount) {
+			}
+			else if(index == arcCount + lineCount)
+			{
 				type = SEG_CLOSE;
 				count = 0;
-			} else {
+			}
+			else
+			{
 				type = SEG_LINETO;
 				count = 1;
 				coords[0] = x;
 				coords[1] = y;
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, count);
 			}
 			return type;
 		}
 
-		public int currentSegment(float[] coords) {
-			if (isDone()) {
+		public int currentSegment(float[] coords)
+		{
+			if(isDone())
+			{
 				// awt.4B=Iterator out of bounds
 				throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 			}
 			int type;
 			int count;
-			if (index == 0) {
+			if(index == 0)
+			{
 				type = SEG_MOVETO;
 				count = 1;
 				cos = Math.cos(angle);
@@ -452,7 +509,9 @@ public abstract class Arc2D extends RectangularShape {
 				ky = k * height * cos;
 				coords[0] = (float) (mx = x + cos * width);
 				coords[1] = (float) (my = y + sin * height);
-			} else if (index <= arcCount) {
+			}
+			else if(index <= arcCount)
+			{
 				type = SEG_CUBICTO;
 				count = 3;
 				coords[0] = (float) (mx - kx);
@@ -466,16 +525,21 @@ public abstract class Arc2D extends RectangularShape {
 				coords[5] = (float) (my = y + sin * height);
 				coords[2] = (float) (mx + kx);
 				coords[3] = (float) (my - ky);
-			} else if (index == arcCount + lineCount) {
+			}
+			else if(index == arcCount + lineCount)
+			{
 				type = SEG_CLOSE;
 				count = 0;
-			} else {
+			}
+			else
+			{
 				type = SEG_LINETO;
 				count = 1;
 				coords[0] = (float) x;
 				coords[1] = (float) y;
 			}
-			if (t != null) {
+			if(t != null)
+			{
 				t.transform(coords, 0, coords, 0, count);
 			}
 			return type;
@@ -488,7 +552,8 @@ public abstract class Arc2D extends RectangularShape {
 	 */
 	private int type;
 
-	protected Arc2D(int type) {
+	protected Arc2D(int type)
+	{
 		setArcType(type);
 	}
 
@@ -504,32 +569,39 @@ public abstract class Arc2D extends RectangularShape {
 
 	public abstract void setArc(double x, double y, double width, double height, double start, double extent, int type);
 
-	public int getArcType() {
+	public int getArcType()
+	{
 		return type;
 	}
 
-	public void setArcType(int type) {
-		if (type != OPEN && type != CHORD && type != PIE) {
+	public void setArcType(int type)
+	{
+		if(type != OPEN && type != CHORD && type != PIE)
+		{
 			// awt.205=Invalid type of Arc: {0}
 			throw new IllegalArgumentException(Messages.getString("awt.205", type)); //$NON-NLS-1$
 		}
 		this.type = type;
 	}
 
-	public Point2D getStartPoint() {
+	public Point2D getStartPoint()
+	{
 		double a = Math.toRadians(getAngleStart());
 		return new Point2D.Double(getX() + (1.0 + Math.cos(a)) * getWidth() / 2.0, getY() + (1.0 - Math.sin(a))
 				* getHeight() / 2.0);
 	}
 
-	public Point2D getEndPoint() {
+	public Point2D getEndPoint()
+	{
 		double a = Math.toRadians(getAngleStart() + getAngleExtent());
 		return new Point2D.Double(getX() + (1.0 + Math.cos(a)) * getWidth() / 2.0, getY() + (1.0 - Math.sin(a))
 				* getHeight() / 2.0);
 	}
 
-	public Rectangle2D getBounds2D() {
-		if (isEmpty()) {
+	public Rectangle2D getBounds2D()
+	{
+		if(isEmpty())
+		{
 			return makeBounds(getX(), getY(), getWidth(), getHeight());
 		}
 		double rx1 = getX();
@@ -545,7 +617,8 @@ public abstract class Arc2D extends RectangularShape {
 		double bx2 = containsAngle(0.0) ? rx2 : Math.max(p1.getX(), p2.getX());
 		double by2 = containsAngle(270.0) ? ry2 : Math.max(p1.getY(), p2.getY());
 
-		if (type == PIE) {
+		if(type == PIE)
+		{
 			double cx = getCenterX();
 			double cy = getCenterY();
 			bx1 = Math.min(bx1, cx);
@@ -557,28 +630,34 @@ public abstract class Arc2D extends RectangularShape {
 	}
 
 	@Override
-	public void setFrame(double x, double y, double width, double height) {
+	public void setFrame(double x, double y, double width, double height)
+	{
 		setArc(x, y, width, height, getAngleStart(), getAngleExtent(), type);
 	}
 
-	public void setArc(Point2D point, Dimension2D size, double start, double extent, int type) {
+	public void setArc(Point2D point, Dimension2D size, double start, double extent, int type)
+	{
 		setArc(point.getX(), point.getY(), size.getWidth(), size.getHeight(), start, extent, type);
 	}
 
-	public void setArc(Rectangle2D rect, double start, double extent, int type) {
+	public void setArc(Rectangle2D rect, double start, double extent, int type)
+	{
 		setArc(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), start, extent, type);
 	}
 
-	public void setArc(Arc2D arc) {
+	public void setArc(Arc2D arc)
+	{
 		setArc(arc.getX(), arc.getY(), arc.getWidth(), arc.getHeight(), arc.getAngleStart(), arc.getAngleExtent(), arc
 				.getArcType());
 	}
 
-	public void setArcByCenter(double x, double y, double radius, double start, double extent, int type) {
+	public void setArcByCenter(double x, double y, double radius, double start, double extent, int type)
+	{
 		setArc(x - radius, y - radius, radius * 2.0, radius * 2.0, start, extent, type);
 	}
 
-	public void setArcByTangent(Point2D p1, Point2D p2, Point2D p3, double radius) {
+	public void setArcByTangent(Point2D p1, Point2D p2, Point2D p3, double radius)
+	{
 		// Used simple geometric calculations of arc center, radius and angles
 		// by tangents
 		double a1 = -Math.atan2(p1.getY() - p2.getY(), p1.getX() - p2.getX());
@@ -592,83 +671,97 @@ public abstract class Arc2D extends RectangularShape {
 		a1 = getNormAngle(Math.toDegrees(am - ah));
 		a2 = getNormAngle(Math.toDegrees(am + ah));
 		double delta = a2 - a1;
-		if (delta <= 0.0) {
+		if(delta <= 0.0)
+		{
 			delta += 360.0;
 		}
 		setArcByCenter(x, y, radius, a1, delta, type);
 	}
 
-	public void setAngleStart(Point2D point) {
+	public void setAngleStart(Point2D point)
+	{
 		double angle = Math.atan2(point.getY() - getCenterY(), point.getX() - getCenterX());
 		setAngleStart(getNormAngle(-Math.toDegrees(angle)));
 	}
 
-	public void setAngles(double x1, double y1, double x2, double y2) {
+	public void setAngles(double x1, double y1, double x2, double y2)
+	{
 		double cx = getCenterX();
 		double cy = getCenterY();
 		double a1 = getNormAngle(-Math.toDegrees(Math.atan2(y1 - cy, x1 - cx)));
 		double a2 = getNormAngle(-Math.toDegrees(Math.atan2(y2 - cy, x2 - cx)));
 		a2 -= a1;
-		if (a2 <= 0.0) {
+		if(a2 <= 0.0)
+		{
 			a2 += 360.0;
 		}
 		setAngleStart(a1);
 		setAngleExtent(a2);
 	}
 
-	public void setAngles(Point2D p1, Point2D p2) {
+	public void setAngles(Point2D p1, Point2D p2)
+	{
 		setAngles(p1.getX(), p1.getY(), p2.getX(), p2.getY());
 	}
 
 	/**
 	 * Normalizes angle
-	 * 
-	 * @param angle
-	 *            - the source angle in degrees
+	 *
+	 * @param angle - the source angle in degrees
 	 * @return a normalized angle
 	 */
-	double getNormAngle(double angle) {
+	double getNormAngle(double angle)
+	{
 		double n = Math.floor(angle / 360.0);
 		return angle - n * 360.0;
 	}
 
-	public boolean containsAngle(double angle) {
+	public boolean containsAngle(double angle)
+	{
 		double extent = getAngleExtent();
-		if (extent >= 360.0) {
+		if(extent >= 360.0)
+		{
 			return true;
 		}
 		angle = getNormAngle(angle);
 		double a1 = getNormAngle(getAngleStart());
 		double a2 = a1 + extent;
-		if (a2 > 360.0) {
+		if(a2 > 360.0)
+		{
 			return angle >= a1 || angle <= a2 - 360.0;
 		}
-		if (a2 < 0.0) {
+		if(a2 < 0.0)
+		{
 			return angle >= a2 + 360.0 || angle <= a1;
 		}
 		return extent > 0.0 ? a1 <= angle && angle <= a2 : a2 <= angle && angle <= a1;
 	}
 
-	public boolean contains(double px, double py) {
+	public boolean contains(double px, double py)
+	{
 		// Normalize point
 		double nx = (px - getX()) / getWidth() - 0.5;
 		double ny = (py - getY()) / getHeight() - 0.5;
 
-		if ((nx * nx + ny * ny) > 0.25) {
+		if((nx * nx + ny * ny) > 0.25)
+		{
 			return false;
 		}
 
 		double extent = getAngleExtent();
 		double absExtent = Math.abs(extent);
-		if (absExtent >= 360.0) {
+		if(absExtent >= 360.0)
+		{
 			return true;
 		}
 
 		boolean containsAngle = containsAngle(Math.toDegrees(-Math.atan2(ny, nx)));
-		if (type == PIE) {
+		if(type == PIE)
+		{
 			return containsAngle;
 		}
-		if (absExtent <= 180.0 && !containsAngle) {
+		if(absExtent <= 180.0 && !containsAngle)
+		{
 			return false;
 		}
 
@@ -678,14 +771,17 @@ public abstract class Arc2D extends RectangularShape {
 		return ccw1 == 0 || ccw2 == 0 || ((ccw1 + ccw2) == 0 ^ absExtent > 180.0);
 	}
 
-	public boolean contains(double rx, double ry, double rw, double rh) {
+	public boolean contains(double rx, double ry, double rw, double rh)
+	{
 
-		if (!(contains(rx, ry) && contains(rx + rw, ry) && contains(rx + rw, ry + rh) && contains(rx, ry + rh))) {
+		if(!(contains(rx, ry) && contains(rx + rw, ry) && contains(rx + rw, ry + rh) && contains(rx, ry + rh)))
+		{
 			return false;
 		}
 
 		double absExtent = Math.abs(getAngleExtent());
-		if (type != PIE || absExtent <= 180.0 || absExtent >= 360.0) {
+		if(type != PIE || absExtent <= 180.0 || absExtent >= 360.0)
+		{
 			return true;
 		}
 
@@ -693,7 +789,8 @@ public abstract class Arc2D extends RectangularShape {
 
 		double cx = getCenterX();
 		double cy = getCenterY();
-		if (r.contains(cx, cy)) {
+		if(r.contains(cx, cy))
+		{
 			return false;
 		}
 
@@ -704,18 +801,22 @@ public abstract class Arc2D extends RectangularShape {
 	}
 
 	@Override
-	public boolean contains(Rectangle2D rect) {
+	public boolean contains(Rectangle2D rect)
+	{
 		return contains(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 	}
 
-	public boolean intersects(double rx, double ry, double rw, double rh) {
+	public boolean intersects(double rx, double ry, double rw, double rh)
+	{
 
-		if (isEmpty() || rw <= 0.0 || rh <= 0.0) {
+		if(isEmpty() || rw <= 0.0 || rh <= 0.0)
+		{
 			return false;
 		}
 
 		// Check: Does arc contain rectangle's points
-		if (contains(rx, ry) || contains(rx + rw, ry) || contains(rx, ry + rh) || contains(rx + rw, ry + rh)) {
+		if(contains(rx, ry) || contains(rx + rw, ry) || contains(rx, ry + rh) || contains(rx + rw, ry + rh))
+		{
 			return true;
 		}
 
@@ -726,16 +827,22 @@ public abstract class Arc2D extends RectangularShape {
 		Rectangle2D r = new Rectangle2D.Double(rx, ry, rw, rh);
 
 		// Check: Does rectangle contain arc's points
-		if (r.contains(p1) || r.contains(p2) || (type == PIE && r.contains(cx, cy))) {
+		if(r.contains(p1) || r.contains(p2) || (type == PIE && r.contains(cx, cy)))
+		{
 			return true;
 		}
 
-		if (type == PIE) {
-			if (r.intersectsLine(p1.getX(), p1.getY(), cx, cy) || r.intersectsLine(p2.getX(), p2.getY(), cx, cy)) {
+		if(type == PIE)
+		{
+			if(r.intersectsLine(p1.getX(), p1.getY(), cx, cy) || r.intersectsLine(p2.getX(), p2.getY(), cx, cy))
+			{
 				return true;
 			}
-		} else {
-			if (r.intersectsLine(p1.getX(), p1.getY(), p2.getX(), p2.getY())) {
+		}
+		else
+		{
+			if(r.intersectsLine(p1.getX(), p1.getY(), p2.getX(), p2.getY()))
+			{
 				return true;
 			}
 		}
@@ -746,7 +853,8 @@ public abstract class Arc2D extends RectangularShape {
 		return contains(nx, ny);
 	}
 
-	public PathIterator getPathIterator(AffineTransform at) {
+	public PathIterator getPathIterator(AffineTransform at)
+	{
 		return new Iterator(this, at);
 	}
 

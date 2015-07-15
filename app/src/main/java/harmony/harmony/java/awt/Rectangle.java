@@ -23,7 +23,8 @@ import harmony.java.awt.geom.Rectangle2D;
 
 import java.io.Serializable;
 
-public class Rectangle extends Rectangle2D implements Shape, Serializable {
+public class Rectangle extends Rectangle2D implements Shape, Serializable
+{
 
 	private static final long serialVersionUID = -4345857070255674764L;
 
@@ -32,82 +33,100 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	public int width;
 	public int height;
 
-	public Rectangle() {
+	public Rectangle()
+	{
 		setBounds(0, 0, 0, 0);
 	}
 
-	public Rectangle(Point p) {
+	public Rectangle(Point p)
+	{
 		setBounds(p.x, p.y, 0, 0);
 	}
 
-	public Rectangle(Point p, Dimension d) {
+	public Rectangle(Point p, Dimension d)
+	{
 		setBounds(p.x, p.y, d.width, d.height);
 	}
 
-	public Rectangle(int x, int y, int width, int height) {
+	public Rectangle(int x, int y, int width, int height)
+	{
 		setBounds(x, y, width, height);
 	}
 
-	public Rectangle(int width, int height) {
+	public Rectangle(int width, int height)
+	{
 		setBounds(0, 0, width, height);
 	}
 
-	public Rectangle(Rectangle r) {
+	public Rectangle(Rectangle r)
+	{
 		setBounds(r.x, r.y, r.width, r.height);
 	}
 
-	public Rectangle(Dimension d) {
+	public Rectangle(Dimension d)
+	{
 		setBounds(0, 0, d.width, d.height);
 	}
 
 	@Override
-	public double getX() {
+	public double getX()
+	{
 		return x;
 	}
 
 	@Override
-	public double getY() {
+	public double getY()
+	{
 		return y;
 	}
 
 	@Override
-	public double getHeight() {
+	public double getHeight()
+	{
 		return height;
 	}
 
 	@Override
-	public double getWidth() {
+	public double getWidth()
+	{
 		return width;
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
 		return width <= 0 || height <= 0;
 	}
 
-	public Dimension getSize() {
+	public Dimension getSize()
+	{
 		return new Dimension(width, height);
 	}
 
-	public void setSize(int width, int height) {
+	public void setSize(int width, int height)
+	{
 		this.width = width;
 		this.height = height;
 	}
 
-	public void setSize(Dimension d) {
+	public void setSize(Dimension d)
+	{
 		setSize(d.width, d.height);
 	}
 
-	public Point getLocation() {
+	public Point getLocation()
+	{
 		return new Point(x, y);
 	}
 
-	public void setLocation(int x, int y) {
+	public void setLocation(int x, int y)
+	{
 		this.x = x;
 		this.y = y;
 	}
 
-	public void setLocation(Point p) {
+	public void setLocation(Point p)
+	{
 		setLocation(p.x, p.y);
 	}
 
@@ -115,12 +134,14 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public void move(int x, int y) {
+	public void move(int x, int y)
+	{
 		setLocation(x, y);
 	}
 
 	@Override
-	public void setRect(double x, double y, double width, double height) {
+	public void setRect(double x, double y, double width, double height)
+	{
 		int x1 = (int) Math.floor(x);
 		int y1 = (int) Math.floor(y);
 		int x2 = (int) Math.ceil(x + width);
@@ -132,7 +153,8 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public void resize(int width, int height) {
+	public void resize(int width, int height)
+	{
 		setBounds(x, y, width, height);
 	}
 
@@ -140,44 +162,52 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public void reshape(int x, int y, int width, int height) {
+	public void reshape(int x, int y, int width, int height)
+	{
 		setBounds(x, y, width, height);
 	}
 
 	@Override
-	public Rectangle getBounds() {
+	public Rectangle getBounds()
+	{
 		return new Rectangle(x, y, width, height);
 	}
 
 	@Override
-	public Rectangle2D getBounds2D() {
+	public Rectangle2D getBounds2D()
+	{
 		return getBounds();
 	}
 
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(int x, int y, int width, int height)
+	{
 		this.x = x;
 		this.y = y;
 		this.height = height;
 		this.width = width;
 	}
 
-	public void setBounds(Rectangle r) {
+	public void setBounds(Rectangle r)
+	{
 		setBounds(r.x, r.y, r.width, r.height);
 	}
 
-	public void grow(int dx, int dy) {
+	public void grow(int dx, int dy)
+	{
 		x -= dx;
 		y -= dy;
 		width += dx + dx;
 		height += dy + dy;
 	}
 
-	public void translate(int mx, int my) {
+	public void translate(int mx, int my)
+	{
 		x += mx;
 		y += my;
 	}
 
-	public void add(int px, int py) {
+	public void add(int px, int py)
+	{
 		int x1 = Math.min(x, px);
 		int x2 = Math.max(x + width, px);
 		int y1 = Math.min(y, py);
@@ -185,11 +215,13 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		setBounds(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public void add(Point p) {
+	public void add(Point p)
+	{
 		add(p.x, p.y);
 	}
 
-	public void add(Rectangle r) {
+	public void add(Rectangle r)
+	{
 		int x1 = Math.min(x, r.x);
 		int x2 = Math.max(x + width, r.x + r.width);
 		int y1 = Math.min(y, r.y);
@@ -197,11 +229,14 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		setBounds(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public boolean contains(int px, int py) {
-		if (isEmpty()) {
+	public boolean contains(int px, int py)
+	{
+		if(isEmpty())
+		{
 			return false;
 		}
-		if (px < x || py < y) {
+		if(px < x || py < y)
+		{
 			return false;
 		}
 		px -= x;
@@ -209,15 +244,18 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		return px < width && py < height;
 	}
 
-	public boolean contains(Point p) {
+	public boolean contains(Point p)
+	{
 		return contains(p.x, p.y);
 	}
 
-	public boolean contains(int rx, int ry, int rw, int rh) {
+	public boolean contains(int rx, int ry, int rw, int rh)
+	{
 		return contains(rx, ry) && contains(rx + rw - 1, ry + rh - 1);
 	}
 
-	public boolean contains(Rectangle r) {
+	public boolean contains(Rectangle r)
+	{
 		return contains(r.x, r.y, r.width, r.height);
 	}
 
@@ -225,13 +263,16 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public boolean inside(int px, int py) {
+	public boolean inside(int px, int py)
+	{
 		return contains(px, py);
 	}
 
 	@Override
-	public Rectangle2D createIntersection(Rectangle2D r) {
-		if (r instanceof Rectangle) {
+	public Rectangle2D createIntersection(Rectangle2D r)
+	{
+		if(r instanceof Rectangle)
+		{
 			return intersection((Rectangle) r);
 		}
 		Rectangle2D dst = new Rectangle2D.Double();
@@ -239,7 +280,8 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		return dst;
 	}
 
-	public Rectangle intersection(Rectangle r) {
+	public Rectangle intersection(Rectangle r)
+	{
 		int x1 = Math.max(x, r.x);
 		int y1 = Math.max(y, r.y);
 		int x2 = Math.min(x + width, r.x + r.width);
@@ -247,27 +289,39 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 	}
 
-	public boolean intersects(Rectangle r) {
+	public boolean intersects(Rectangle r)
+	{
 		return !intersection(r).isEmpty();
 	}
 
 	@Override
-	public int outcode(double px, double py) {
+	public int outcode(double px, double py)
+	{
 		int code = 0;
 
-		if (width <= 0) {
+		if(width <= 0)
+		{
 			code |= OUT_LEFT | OUT_RIGHT;
-		} else if (px < x) {
+		}
+		else if(px < x)
+		{
 			code |= OUT_LEFT;
-		} else if (px > x + width) {
+		}
+		else if(px > x + width)
+		{
 			code |= OUT_RIGHT;
 		}
 
-		if (height <= 0) {
+		if(height <= 0)
+		{
 			code |= OUT_TOP | OUT_BOTTOM;
-		} else if (py < y) {
+		}
+		else if(py < y)
+		{
 			code |= OUT_TOP;
-		} else if (py > y + height) {
+		}
+		else if(py > y + height)
+		{
 			code |= OUT_BOTTOM;
 		}
 
@@ -275,8 +329,10 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	}
 
 	@Override
-	public Rectangle2D createUnion(Rectangle2D r) {
-		if (r instanceof Rectangle) {
+	public Rectangle2D createUnion(Rectangle2D r)
+	{
+		if(r instanceof Rectangle)
+		{
 			return union((Rectangle) r);
 		}
 		Rectangle2D dst = new Rectangle2D.Double();
@@ -284,18 +340,22 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 		return dst;
 	}
 
-	public Rectangle union(Rectangle r) {
+	public Rectangle union(Rectangle r)
+	{
 		Rectangle dst = new Rectangle(this);
 		dst.add(r);
 		return dst;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
 			return true;
 		}
-		if (obj instanceof Rectangle) {
+		if(obj instanceof Rectangle)
+		{
 			Rectangle r = (Rectangle) obj;
 			return r.x == x && r.y == y && r.width == width && r.height == height;
 		}
@@ -303,7 +363,8 @@ public class Rectangle extends Rectangle2D implements Shape, Serializable {
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		// The output format based on 1.5 release behaviour. It could be
 		// obtained in the following way
 		// System.out.println(new Rectangle().toString())

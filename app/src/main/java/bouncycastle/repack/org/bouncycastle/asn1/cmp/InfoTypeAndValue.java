@@ -51,81 +51,82 @@ import repack.org.bouncycastle.asn1.DERSequence;
  * </pre>
  */
 public class InfoTypeAndValue
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    private DERObjectIdentifier infoType;
-    private ASN1Encodable       infoValue;
+	private DERObjectIdentifier infoType;
+	private ASN1Encodable infoValue;
 
-    private InfoTypeAndValue(ASN1Sequence seq)
-    {
-        infoType = DERObjectIdentifier.getInstance(seq.getObjectAt(0));
+	private InfoTypeAndValue(ASN1Sequence seq)
+	{
+		infoType = DERObjectIdentifier.getInstance(seq.getObjectAt(0));
 
-        if (seq.size() > 1)
-        {
-            infoValue = (ASN1Encodable)seq.getObjectAt(1);
-        }
-    }
+		if(seq.size() > 1)
+		{
+			infoValue = (ASN1Encodable) seq.getObjectAt(1);
+		}
+	}
 
-    public static InfoTypeAndValue getInstance(Object o)
-    {
-        if (o instanceof InfoTypeAndValue)
-        {
-            return (InfoTypeAndValue)o;
-        }
+	public static InfoTypeAndValue getInstance(Object o)
+	{
+		if(o instanceof InfoTypeAndValue)
+		{
+			return (InfoTypeAndValue) o;
+		}
 
-        if (o instanceof ASN1Sequence)
-        {
-            return new InfoTypeAndValue((ASN1Sequence)o);
-        }
+		if(o instanceof ASN1Sequence)
+		{
+			return new InfoTypeAndValue((ASN1Sequence) o);
+		}
 
-        throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
-    }
+		throw new IllegalArgumentException("Invalid object: " + o.getClass().getName());
+	}
 
-    public InfoTypeAndValue(
-        DERObjectIdentifier infoType)
-    {
-        this.infoType = infoType;
-        this.infoValue = null;
-    }
+	public InfoTypeAndValue(
+			DERObjectIdentifier infoType)
+	{
+		this.infoType = infoType;
+		this.infoValue = null;
+	}
 
-    public InfoTypeAndValue(
-        DERObjectIdentifier infoType,
-        ASN1Encodable optionalValue)
-    {
-        this.infoType = infoType;
-        this.infoValue = optionalValue;
-    }
+	public InfoTypeAndValue(
+			DERObjectIdentifier infoType,
+			ASN1Encodable optionalValue)
+	{
+		this.infoType = infoType;
+		this.infoValue = optionalValue;
+	}
 
-    public DERObjectIdentifier getInfoType()
-    {
-        return infoType;
-    }
+	public DERObjectIdentifier getInfoType()
+	{
+		return infoType;
+	}
 
-    public ASN1Encodable getInfoValue()
-    {
-        return infoValue;
-    }
+	public ASN1Encodable getInfoValue()
+	{
+		return infoValue;
+	}
 
-    /**
-     * <pre>
-     * InfoTypeAndValue ::= SEQUENCE {
-     *                         infoType               OBJECT IDENTIFIER,
-     *                         infoValue              ANY DEFINED BY infoType  OPTIONAL
-     * }
-     * </pre>
-     * @return a basic ASN.1 object representation.
-     */
-    public DERObject toASN1Object()
-    {
-        ASN1EncodableVector v = new ASN1EncodableVector();
+	/**
+	 * <pre>
+	 * InfoTypeAndValue ::= SEQUENCE {
+	 *                         infoType               OBJECT IDENTIFIER,
+	 *                         infoValue              ANY DEFINED BY infoType  OPTIONAL
+	 * }
+	 * </pre>
+	 *
+	 * @return a basic ASN.1 object representation.
+	 */
+	public DERObject toASN1Object()
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(infoType);
+		v.add(infoType);
 
-        if (infoValue != null)
-        {
-            v.add(infoValue);
-        }
+		if(infoValue != null)
+		{
+			v.add(infoValue);
+		}
 
-        return new DERSequence(v);
-    }
+		return new DERSequence(v);
+	}
 }

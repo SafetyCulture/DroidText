@@ -11,40 +11,40 @@ import repack.org.bouncycastle.asn1.DERSequence;
  */
 public class SMIMECapabilityVector
 {
-    private ASN1EncodableVector    capabilities = new ASN1EncodableVector();
+	private ASN1EncodableVector capabilities = new ASN1EncodableVector();
 
-    public void addCapability(
-        DERObjectIdentifier capability)
-    {
-        capabilities.add(new DERSequence(capability));
-    }
+	public void addCapability(
+			DERObjectIdentifier capability)
+	{
+		capabilities.add(new DERSequence(capability));
+	}
 
-    public void addCapability(
-        DERObjectIdentifier capability,
-        int                 value)
-    {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	public void addCapability(
+			DERObjectIdentifier capability,
+			int value)
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(capability);
-        v.add(new DERInteger(value));
+		v.add(capability);
+		v.add(new DERInteger(value));
 
-        capabilities.add(new DERSequence(v));
-    }
+		capabilities.add(new DERSequence(v));
+	}
 
-    public void addCapability(
-        DERObjectIdentifier capability,
-        DEREncodable        params)
-    {
-        ASN1EncodableVector  v = new ASN1EncodableVector();
+	public void addCapability(
+			DERObjectIdentifier capability,
+			DEREncodable params)
+	{
+		ASN1EncodableVector v = new ASN1EncodableVector();
 
-        v.add(capability);
-        v.add(params);
+		v.add(capability);
+		v.add(params);
 
-        capabilities.add(new DERSequence(v));
-    }
+		capabilities.add(new DERSequence(v));
+	}
 
-    public ASN1EncodableVector toASN1EncodableVector()
-    {
-        return capabilities;
-    }
+	public ASN1EncodableVector toASN1EncodableVector()
+	{
+		return capabilities;
+	}
 }

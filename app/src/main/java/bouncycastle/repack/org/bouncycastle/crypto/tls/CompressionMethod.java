@@ -5,15 +5,15 @@ package repack.org.bouncycastle.crypto.tls;
  */
 public class CompressionMethod
 {
-    public static final short NULL = 0;
+	public static final short NULL = 0;
+
+	/*
+	 * RFC 3749 2
+	 */
+	public static final short DEFLATE = 1;
 
     /*
-     * RFC 3749 2
-     */
-    public static final short DEFLATE = 1;
-
-    /*
-     * Values from 224 decimal (0xE0) through 255 decimal (0xFF)
+	 * Values from 224 decimal (0xE0) through 255 decimal (0xFF)
      * inclusive are reserved for private use.
      */
 }

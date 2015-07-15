@@ -54,12 +54,12 @@ import java.util.ArrayList;
 
 /**
  * A <CODE>Chapter</CODE> is a special <CODE>Section</CODE>.
- * <P>
+ * <p/>
  * A chapter number has to be created using a <CODE>Paragraph</CODE> as title
  * and an <CODE>int</CODE> as chapter number. The chapter number is shown be
  * default. If you don't want to see the chapter number, you have to set the
  * numberdepth to <VAR>0</VAR>.
- * <P>
+ * <p/>
  * Example:
  * <BLOCKQUOTE><PRE>
  * Paragraph title2 = new Paragraph("This is Chapter 2", FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLDITALIC, new Color(0, 0, 255)));
@@ -74,62 +74,69 @@ import java.util.ArrayList;
  * </PRE></BLOCKQUOTE>
  */
 
-public class Chapter extends Section {
-    
-    // constant
+public class Chapter extends Section
+{
+
+	// constant
 	private static final long serialVersionUID = 1791000695779357361L;
-	
-	/**
-	 * Constructs a new <CODE>Chapter</CODE>.
-	 * @param	number		the Chapter number
-     */
-    public Chapter(int number) {
-        super(null, 1);
-        numbers = new ArrayList();
-        numbers.add(new Integer(number));
-        triggerNewPage = true;
-    }
-	
+
 	/**
 	 * Constructs a new <CODE>Chapter</CODE>.
 	 *
-	 * @param	title		the Chapter title (as a <CODE>Paragraph</CODE>)
-	 * @param	number		the Chapter number
-     */
-    
-    public Chapter(Paragraph title, int number) {
-        super(title, 1);
-        numbers = new ArrayList();
-        numbers.add(new Integer(number));
-        triggerNewPage = true;
-    }
-    
-    /**
-     * Constructs a new <CODE>Chapter</CODE>.
-     *
-     * @param	title		the Chapter title (as a <CODE>String</CODE>)
-     * @param	number		the Chapter number
-     */
-    public Chapter(String title, int number) {
-        this(new Paragraph(title), number);
-    }
-    
-    // implementation of the Element-methods
-    
-    /**
-     * Gets the type of the text element.
-     *
-     * @return	a type
-     */
-    public int type() {
-        return Element.CHAPTER;
-    }
+	 * @param number the Chapter number
+	 */
+	public Chapter(int number)
+	{
+		super(null, 1);
+		numbers = new ArrayList();
+		numbers.add(new Integer(number));
+		triggerNewPage = true;
+	}
+
+	/**
+	 * Constructs a new <CODE>Chapter</CODE>.
+	 *
+	 * @param title  the Chapter title (as a <CODE>Paragraph</CODE>)
+	 * @param number the Chapter number
+	 */
+
+	public Chapter(Paragraph title, int number)
+	{
+		super(title, 1);
+		numbers = new ArrayList();
+		numbers.add(new Integer(number));
+		triggerNewPage = true;
+	}
+
+	/**
+	 * Constructs a new <CODE>Chapter</CODE>.
+	 *
+	 * @param title  the Chapter title (as a <CODE>String</CODE>)
+	 * @param number the Chapter number
+	 */
+	public Chapter(String title, int number)
+	{
+		this(new Paragraph(title), number);
+	}
+
+	// implementation of the Element-methods
+
+	/**
+	 * Gets the type of the text element.
+	 *
+	 * @return a type
+	 */
+	public int type()
+	{
+		return Element.CHAPTER;
+	}
 
 	/**
 	 * @see com.lowagie.text.Element#isNestable()
-	 * @since	iText 2.0.8
+	 * @since iText 2.0.8
 	 */
-	public boolean isNestable() {
+	public boolean isNestable()
+	{
 		return false;
 	}
 

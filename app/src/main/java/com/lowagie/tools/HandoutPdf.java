@@ -49,8 +49,6 @@
 
 package com.lowagie.tools;
 
-import java.io.FileOutputStream;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
@@ -60,26 +58,34 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 
+import java.io.FileOutputStream;
+
 /**
  * Takes an existing PDF file and makes handouts.
- * 
+ *
  * @since 2.1.1 (renamed to follow Java naming conventions)
  */
-public class HandoutPdf extends java.lang.Object {
+public class HandoutPdf extends java.lang.Object
+{
 
 	/**
 	 * Makes handouts based on an existing PDF file.
-	 * 
-	 * @param args
-	 *            the command line arguments
+	 *
+	 * @param args the command line arguments
 	 */
-	public static void main(String args[]) {
-		if (args.length != 3) {
+	public static void main(String args[])
+	{
+		if(args.length != 3)
+		{
 			System.err.println("arguments: srcfile destfile pages");
-		} else {
-			try {
+		}
+		else
+		{
+			try
+			{
 				int pages = Integer.parseInt(args[2]);
-				if (pages < 2 || pages > 8) {
+				if(pages < 2 || pages > 8)
+				{
 					throw new DocumentException("You can't have " + pages
 							+ " pages on one page (minimum 2; maximum 8).");
 				}
@@ -96,7 +102,8 @@ public class HandoutPdf extends java.lang.Object {
 				y1[0] = 812f;
 				y2[0] = 812f - height;
 
-				for (int i = 1; i < pages; i++) {
+				for(int i = 1; i < pages; i++)
+				{
 					y1[i] = y2[i - 1] - 20f;
 					y2[i] = y1[i] - height;
 				}
@@ -119,7 +126,8 @@ public class HandoutPdf extends java.lang.Object {
 				int i = 0;
 				int p = 0;
 				// step 4: we add content
-				while (i < n) {
+				while(i < n)
+				{
 					i++;
 					Rectangle rect = reader.getPageSizeWithRotation(i);
 					float factorx = (x2 - x1) / rect.getWidth();
@@ -129,14 +137,18 @@ public class HandoutPdf extends java.lang.Object {
 					float dy = (factory == factor ? 0f : ((y1[p] - y2[p]) - rect.getHeight() * factor) / 2f);
 					page = writer.getImportedPage(reader, i);
 					rotation = reader.getPageRotation(i);
-					if (rotation == 90 || rotation == 270) {
+					if(rotation == 90 || rotation == 270)
+					{
 						cb.addTemplate(page, 0, -factor, factor, 0, x1 + dx, y2[p] + dy + rect.getHeight() * factor);
-					} else {
+					}
+					else
+					{
 						cb.addTemplate(page, factor, 0, 0, factor, x1 + dx, y2[p] + dy);
 					}
 					cb.setRGBColorStroke(0xC0, 0xC0, 0xC0);
 					cb.rectangle(x3 - 5f, y2[p] - 5f, x4 - x3 + 10f, y1[p] - y2[p] + 10f);
-					for (float l = y1[p] - 19; l > y2[p]; l -= 16) {
+					for(float l = y1[p] - 19; l > y2[p]; l -= 16)
+					{
 						cb.moveTo(x3, l);
 						cb.lineTo(x4, l);
 					}
@@ -144,14 +156,17 @@ public class HandoutPdf extends java.lang.Object {
 					cb.stroke();
 					System.out.println("Processed page " + i);
 					p++;
-					if (p == pages) {
+					if(p == pages)
+					{
 						p = 0;
 						document.newPage();
 					}
 				}
 				// step 5: we close the document
 				document.close();
-			} catch (Exception e) {
+			}
+			catch(Exception e)
+			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		}

@@ -1,15 +1,5 @@
 package repack.org.bouncycastle.jce.provider.symmetric;
 
-import java.io.IOException;
-import java.security.AlgorithmParameters;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.SecureRandom;
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.InvalidParameterSpecException;
-import java.util.HashMap;
-
-import javax.crypto.spec.IvParameterSpec;
-
 import repack.org.bouncycastle.asn1.ASN1InputStream;
 import repack.org.bouncycastle.asn1.ASN1Sequence;
 import repack.org.bouncycastle.asn1.misc.IDEACBCPar;
@@ -26,227 +16,236 @@ import repack.org.bouncycastle.jce.provider.JCESecretKeyFactory;
 import repack.org.bouncycastle.jce.provider.JDKAlgorithmParameterGenerator;
 import repack.org.bouncycastle.jce.provider.JDKAlgorithmParameters;
 
+import javax.crypto.spec.IvParameterSpec;
+import java.io.IOException;
+import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.InvalidParameterSpecException;
+import java.util.HashMap;
+
 public final class IDEA
 {
-    private IDEA()
-    {
-    }
-    
-    public static class ECB
-        extends JCEBlockCipher
-    {
-        public ECB()
-        {
-            super(new IDEAEngine());
-        }
-    }
+	private IDEA()
+	{
+	}
 
-    public static class CBC
-       extends JCEBlockCipher
-    {
-        public CBC()
-        {
-            super(new CBCBlockCipher(new IDEAEngine()), 64);
-        }
-    }
+	public static class ECB
+			extends JCEBlockCipher
+	{
+		public ECB()
+		{
+			super(new IDEAEngine());
+		}
+	}
 
-    public static class KeyGen
-        extends JCEKeyGenerator
-    {
-        public KeyGen()
-        {
-            super("IDEA", 128, new CipherKeyGenerator());
-        }
-    }
+	public static class CBC
+			extends JCEBlockCipher
+	{
+		public CBC()
+		{
+			super(new CBCBlockCipher(new IDEAEngine()), 64);
+		}
+	}
 
-    public static class PBEWithSHAAndIDEAKeyGen
-       extends JCESecretKeyFactory.PBEKeyFactory
-    {
-       public PBEWithSHAAndIDEAKeyGen()
-       {
-           super("PBEwithSHAandIDEA-CBC", null, true, PKCS12, SHA1, 128, 64);
-       }
-    }
+	public static class KeyGen
+			extends JCEKeyGenerator
+	{
+		public KeyGen()
+		{
+			super("IDEA", 128, new CipherKeyGenerator());
+		}
+	}
 
-    static public class PBEWithSHAAndIDEA
-        extends JCEBlockCipher
-    {
-        public PBEWithSHAAndIDEA()
-        {
-            super(new CBCBlockCipher(new IDEAEngine()));
-        }
-    }
+	public static class PBEWithSHAAndIDEAKeyGen
+			extends JCESecretKeyFactory.PBEKeyFactory
+	{
+		public PBEWithSHAAndIDEAKeyGen()
+		{
+			super("PBEwithSHAandIDEA-CBC", null, true, PKCS12, SHA1, 128, 64);
+		}
+	}
 
-    public static class AlgParamGen
-        extends JDKAlgorithmParameterGenerator
-    {
-        protected void engineInit(
-            AlgorithmParameterSpec genParamSpec,
-            SecureRandom random)
-            throws InvalidAlgorithmParameterException
-        {
-            throw new InvalidAlgorithmParameterException("No supported AlgorithmParameterSpec for IDEA parameter generation.");
-        }
+	static public class PBEWithSHAAndIDEA
+			extends JCEBlockCipher
+	{
+		public PBEWithSHAAndIDEA()
+		{
+			super(new CBCBlockCipher(new IDEAEngine()));
+		}
+	}
 
-        protected AlgorithmParameters engineGenerateParameters()
-        {
-            byte[] iv = new byte[8];
+	public static class AlgParamGen
+			extends JDKAlgorithmParameterGenerator
+	{
+		protected void engineInit(
+				AlgorithmParameterSpec genParamSpec,
+				SecureRandom random)
+				throws InvalidAlgorithmParameterException
+		{
+			throw new InvalidAlgorithmParameterException("No supported AlgorithmParameterSpec for IDEA parameter generation.");
+		}
 
-            if (random == null)
-            {
-                random = new SecureRandom();
-            }
+		protected AlgorithmParameters engineGenerateParameters()
+		{
+			byte[] iv = new byte[8];
 
-            random.nextBytes(iv);
+			if(random == null)
+			{
+				random = new SecureRandom();
+			}
 
-            AlgorithmParameters params;
+			random.nextBytes(iv);
 
-            try
-            {
-                params = AlgorithmParameters.getInstance("IDEA", BouncyCastleProvider.PROVIDER_NAME);
-                params.init(new IvParameterSpec(iv));
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e.getMessage());
-            }
+			AlgorithmParameters params;
 
-            return params;
-        }
-    }
+			try
+			{
+				params = AlgorithmParameters.getInstance("IDEA", BouncyCastleProvider.PROVIDER_NAME);
+				params.init(new IvParameterSpec(iv));
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException(e.getMessage());
+			}
 
-    public static class AlgParams
-        extends JDKAlgorithmParameters
-    {
-        private byte[]  iv;
+			return params;
+		}
+	}
 
-        protected byte[] engineGetEncoded()
-            throws IOException
-        {
-            return engineGetEncoded("ASN.1");
-        }
+	public static class AlgParams
+			extends JDKAlgorithmParameters
+	{
+		private byte[] iv;
 
-        protected byte[] engineGetEncoded(
-            String format)
-            throws IOException
-        {
-            if (isASN1FormatString(format))
-            {
-                return new IDEACBCPar(engineGetEncoded("RAW")).getEncoded();
-            }
+		protected byte[] engineGetEncoded()
+				throws IOException
+		{
+			return engineGetEncoded("ASN.1");
+		}
 
-            if (format.equals("RAW"))
-            {
-                byte[]  tmp = new byte[iv.length];
+		protected byte[] engineGetEncoded(
+				String format)
+				throws IOException
+		{
+			if(isASN1FormatString(format))
+			{
+				return new IDEACBCPar(engineGetEncoded("RAW")).getEncoded();
+			}
 
-                System.arraycopy(iv, 0, tmp, 0, iv.length);
-                return tmp;
-            }
+			if(format.equals("RAW"))
+			{
+				byte[] tmp = new byte[iv.length];
 
-            return null;
-        }
+				System.arraycopy(iv, 0, tmp, 0, iv.length);
+				return tmp;
+			}
 
-        protected AlgorithmParameterSpec localEngineGetParameterSpec(
-            Class paramSpec)
-            throws InvalidParameterSpecException
-        {
-            if (paramSpec == IvParameterSpec.class)
-            {
-                return new IvParameterSpec(iv);
-            }
+			return null;
+		}
 
-            throw new InvalidParameterSpecException("unknown parameter spec passed to IV parameters object.");
-        }
+		protected AlgorithmParameterSpec localEngineGetParameterSpec(
+				Class paramSpec)
+				throws InvalidParameterSpecException
+		{
+			if(paramSpec == IvParameterSpec.class)
+			{
+				return new IvParameterSpec(iv);
+			}
 
-        protected void engineInit(
-            AlgorithmParameterSpec paramSpec)
-            throws InvalidParameterSpecException
-        {
-            if (!(paramSpec instanceof IvParameterSpec))
-            {
-                throw new InvalidParameterSpecException("IvParameterSpec required to initialise a IV parameters algorithm parameters object");
-            }
+			throw new InvalidParameterSpecException("unknown parameter spec passed to IV parameters object.");
+		}
 
-            this.iv = ((IvParameterSpec)paramSpec).getIV();
-        }
+		protected void engineInit(
+				AlgorithmParameterSpec paramSpec)
+				throws InvalidParameterSpecException
+		{
+			if(!(paramSpec instanceof IvParameterSpec))
+			{
+				throw new InvalidParameterSpecException("IvParameterSpec required to initialise a IV parameters algorithm parameters object");
+			}
 
-        protected void engineInit(
-            byte[] params)
-            throws IOException
-        {
-            this.iv = new byte[params.length];
+			this.iv = ((IvParameterSpec) paramSpec).getIV();
+		}
 
-            System.arraycopy(params, 0, iv, 0, iv.length);
-        }
+		protected void engineInit(
+				byte[] params)
+				throws IOException
+		{
+			this.iv = new byte[params.length];
 
-        protected void engineInit(
-            byte[] params,
-            String format)
-            throws IOException
-        {
-            if (format.equals("RAW"))
-            {
-                engineInit(params);
-                return;
-            }
-            if (format.equals("ASN.1"))
-            {
-                ASN1InputStream aIn = new ASN1InputStream(params);
-                IDEACBCPar      oct = new IDEACBCPar((ASN1Sequence)aIn.readObject());
+			System.arraycopy(params, 0, iv, 0, iv.length);
+		}
 
-                engineInit(oct.getIV());
-                return;
-            }
+		protected void engineInit(
+				byte[] params,
+				String format)
+				throws IOException
+		{
+			if(format.equals("RAW"))
+			{
+				engineInit(params);
+				return;
+			}
+			if(format.equals("ASN.1"))
+			{
+				ASN1InputStream aIn = new ASN1InputStream(params);
+				IDEACBCPar oct = new IDEACBCPar((ASN1Sequence) aIn.readObject());
 
-            throw new IOException("Unknown parameters format in IV parameters object");
-        }
+				engineInit(oct.getIV());
+				return;
+			}
 
-        protected String engineToString()
-        {
-            return "IDEA Parameters";
-        }
-    }
-    
-    public static class Mac
-        extends JCEMac
-    {
-        public Mac()
-        {
-            super(new CBCBlockCipherMac(new IDEAEngine()));
-        }
-    }
+			throw new IOException("Unknown parameters format in IV parameters object");
+		}
 
-    public static class CFB8Mac
-        extends JCEMac
-    {
-        public CFB8Mac()
-        {
-            super(new CFBBlockCipherMac(new IDEAEngine()));
-        }
-    }
+		protected String engineToString()
+		{
+			return "IDEA Parameters";
+		}
+	}
 
-    public static class Mappings
-        extends HashMap
-    {
-        public Mappings()
-        {
-            put("AlgorithmParameterGenerator.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParamGen");
-            put("AlgorithmParameterGenerator.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParamGen");
-            put("AlgorithmParameters.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParams");
-            put("AlgorithmParameters.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParams");
-            put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA", "PKCS12PBE");
-            put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA", "PKCS12PBE");
-            put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA-CBC", "PKCS12PBE");
-            put("Cipher.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$ECB");
-            put("Cipher.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$CBC");
-            put("Cipher.PBEWITHSHAANDIDEA-CBC", "org.bouncycastle.jce.provider.symmetric.IDEA$PBEWithSHAAndIDEA");
-            put("KeyGenerator.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$KeyGen");
-            put("KeyGenerator.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$KeyGen");
-            put("SecretKeyFactory.PBEWITHSHAANDIDEA-CBC", "org.bouncycastle.jce.provider.symmetric.IDEA$PBEWithSHAAndIDEAKeyGen");
-            put("Mac.IDEAMAC", "org.bouncycastle.jce.provider.symmetric.IDEA$Mac");
-            put("Alg.Alias.Mac.IDEA", "IDEAMAC");
-            put("Mac.IDEAMAC/CFB8", "org.bouncycastle.jce.provider.symmetric.IDEA$CFB8Mac");
-            put("Alg.Alias.Mac.IDEA/CFB8", "IDEAMAC/CFB8");
-        }
-    }
+	public static class Mac
+			extends JCEMac
+	{
+		public Mac()
+		{
+			super(new CBCBlockCipherMac(new IDEAEngine()));
+		}
+	}
+
+	public static class CFB8Mac
+			extends JCEMac
+	{
+		public CFB8Mac()
+		{
+			super(new CFBBlockCipherMac(new IDEAEngine()));
+		}
+	}
+
+	public static class Mappings
+			extends HashMap
+	{
+		public Mappings()
+		{
+			put("AlgorithmParameterGenerator.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParamGen");
+			put("AlgorithmParameterGenerator.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParamGen");
+			put("AlgorithmParameters.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParams");
+			put("AlgorithmParameters.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$AlgParams");
+			put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA", "PKCS12PBE");
+			put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA", "PKCS12PBE");
+			put("Alg.Alias.AlgorithmParameters.PBEWITHSHAANDIDEA-CBC", "PKCS12PBE");
+			put("Cipher.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$ECB");
+			put("Cipher.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$CBC");
+			put("Cipher.PBEWITHSHAANDIDEA-CBC", "org.bouncycastle.jce.provider.symmetric.IDEA$PBEWithSHAAndIDEA");
+			put("KeyGenerator.IDEA", "org.bouncycastle.jce.provider.symmetric.IDEA$KeyGen");
+			put("KeyGenerator.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.symmetric.IDEA$KeyGen");
+			put("SecretKeyFactory.PBEWITHSHAANDIDEA-CBC", "org.bouncycastle.jce.provider.symmetric.IDEA$PBEWithSHAAndIDEAKeyGen");
+			put("Mac.IDEAMAC", "org.bouncycastle.jce.provider.symmetric.IDEA$Mac");
+			put("Alg.Alias.Mac.IDEA", "IDEAMAC");
+			put("Mac.IDEAMAC/CFB8", "org.bouncycastle.jce.provider.symmetric.IDEA$CFB8Mac");
+			put("Alg.Alias.Mac.IDEA/CFB8", "IDEAMAC/CFB8");
+		}
+	}
 }

@@ -24,112 +24,134 @@ import java.io.Serializable;
  *
  * @author Carlos Villegas <cav@uniscope.co.jp>
  */
-public class CharVector implements Cloneable, Serializable {
+public class CharVector implements Cloneable, Serializable
+{
 
-    private static final long serialVersionUID = -4875768298308363544L;
+	private static final long serialVersionUID = -4875768298308363544L;
 	/**
-     * Capacity increment size
-     */
-    private static final int DEFAULT_BLOCK_SIZE = 2048;
-    private int blockSize;
+	 * Capacity increment size
+	 */
+	private static final int DEFAULT_BLOCK_SIZE = 2048;
+	private int blockSize;
 
-    /**
-     * The encapsulated array
-     */
-    private char[] array;
+	/**
+	 * The encapsulated array
+	 */
+	private char[] array;
 
-    /**
-     * Points to next free item
-     */
-    private int n;
+	/**
+	 * Points to next free item
+	 */
+	private int n;
 
-    public CharVector() {
-        this(DEFAULT_BLOCK_SIZE);
-    }
+	public CharVector()
+	{
+		this(DEFAULT_BLOCK_SIZE);
+	}
 
-    public CharVector(int capacity) {
-        if (capacity > 0) {
-            blockSize = capacity;
-        } else {
-            blockSize = DEFAULT_BLOCK_SIZE;
-        }
-        array = new char[blockSize];
-        n = 0;
-    }
+	public CharVector(int capacity)
+	{
+		if(capacity > 0)
+		{
+			blockSize = capacity;
+		}
+		else
+		{
+			blockSize = DEFAULT_BLOCK_SIZE;
+		}
+		array = new char[blockSize];
+		n = 0;
+	}
 
-    public CharVector(char[] a) {
-        blockSize = DEFAULT_BLOCK_SIZE;
-        array = a;
-        n = a.length;
-    }
+	public CharVector(char[] a)
+	{
+		blockSize = DEFAULT_BLOCK_SIZE;
+		array = a;
+		n = a.length;
+	}
 
-    public CharVector(char[] a, int capacity) {
-        if (capacity > 0) {
-            blockSize = capacity;
-        } else {
-            blockSize = DEFAULT_BLOCK_SIZE;
-        }
-        array = a;
-        n = a.length;
-    }
+	public CharVector(char[] a, int capacity)
+	{
+		if(capacity > 0)
+		{
+			blockSize = capacity;
+		}
+		else
+		{
+			blockSize = DEFAULT_BLOCK_SIZE;
+		}
+		array = a;
+		n = a.length;
+	}
 
-    /**
-     * Reset Vector but don't resize or clear elements
-     */
-    public void clear() {
-        n = 0;
-    }
+	/**
+	 * Reset Vector but don't resize or clear elements
+	 */
+	public void clear()
+	{
+		n = 0;
+	}
 
-    public Object clone() {
-        CharVector cv = new CharVector((char[])array.clone(), blockSize);
-        cv.n = this.n;
-        return cv;
-    }
+	public Object clone()
+	{
+		CharVector cv = new CharVector((char[]) array.clone(), blockSize);
+		cv.n = this.n;
+		return cv;
+	}
 
-    public char[] getArray() {
-        return array;
-    }
+	public char[] getArray()
+	{
+		return array;
+	}
 
-    /**
-     * return number of items in array
-     */
-    public int length() {
-        return n;
-    }
+	/**
+	 * return number of items in array
+	 */
+	public int length()
+	{
+		return n;
+	}
 
-    /**
-     * returns current capacity of array
-     */
-    public int capacity() {
-        return array.length;
-    }
+	/**
+	 * returns current capacity of array
+	 */
+	public int capacity()
+	{
+		return array.length;
+	}
 
-    public void put(int index, char val) {
-        array[index] = val;
-    }
+	public void put(int index, char val)
+	{
+		array[index] = val;
+	}
 
-    public char get(int index) {
-        return array[index];
-    }
+	public char get(int index)
+	{
+		return array[index];
+	}
 
-    public int alloc(int size) {
-        int index = n;
-        int len = array.length;
-        if (n + size >= len) {
-            char[] aux = new char[len + blockSize];
-            System.arraycopy(array, 0, aux, 0, len);
-            array = aux;
-        }
-        n += size;
-        return index;
-    }
+	public int alloc(int size)
+	{
+		int index = n;
+		int len = array.length;
+		if(n + size >= len)
+		{
+			char[] aux = new char[len + blockSize];
+			System.arraycopy(array, 0, aux, 0, len);
+			array = aux;
+		}
+		n += size;
+		return index;
+	}
 
-    public void trimToSize() {
-        if (n < array.length) {
-            char[] aux = new char[n];
-            System.arraycopy(array, 0, aux, 0, n);
-            array = aux;
-        }
-    }
+	public void trimToSize()
+	{
+		if(n < array.length)
+		{
+			char[] aux = new char[n];
+			System.arraycopy(array, 0, aux, 0, n);
+			array = aux;
+		}
+	}
 
 }

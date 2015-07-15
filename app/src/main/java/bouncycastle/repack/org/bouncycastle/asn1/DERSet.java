@@ -8,93 +8,93 @@ import java.util.Enumeration;
  * A DER encoded set object
  */
 public class DERSet
-    extends ASN1Set
+		extends ASN1Set
 {
-    /**
-     * create an empty set
-     */
-    public DERSet()
-    {
-    }
+	/**
+	 * create an empty set
+	 */
+	public DERSet()
+	{
+	}
 
-    /**
-     * @param obj - a single object that makes up the set.
-     */
-    public DERSet(
-        DEREncodable   obj)
-    {
-        this.addObject(obj);
-    }
+	/**
+	 * @param obj - a single object that makes up the set.
+	 */
+	public DERSet(
+			DEREncodable obj)
+	{
+		this.addObject(obj);
+	}
 
-    /**
-     * @param v - a vector of objects making up the set.
-     */
-    public DERSet(
-        ASN1EncodableVector   v)
-    {
-        this(v, true);
-    }
-    
-    /**
-     * create a set from an array of objects.
-     */
-    public DERSet(
-        ASN1Encodable[]   a)
-    {
-        for (int i = 0; i != a.length; i++)
-        {
-            this.addObject(a[i]);
-        }
-        
-        this.sort();
-    }
-    
-    /**
-     * @param v - a vector of objects making up the set.
-     */
-    DERSet(
-        ASN1EncodableVector  v,
-        boolean              needsSorting)
-    {
-        for (int i = 0; i != v.size(); i++)
-        {
-            this.addObject(v.get(i));
-        }
+	/**
+	 * @param v - a vector of objects making up the set.
+	 */
+	public DERSet(
+			ASN1EncodableVector v)
+	{
+		this(v, true);
+	}
 
-        if (needsSorting)
-        {
-            this.sort();
-        }
-    }
+	/**
+	 * create a set from an array of objects.
+	 */
+	public DERSet(
+			ASN1Encodable[] a)
+	{
+		for(int i = 0; i != a.length; i++)
+		{
+			this.addObject(a[i]);
+		}
 
-    /*
-     * A note on the implementation:
-     * <p>
-     * As DER requires the constructed, definite-length model to
-     * be used for structured types, this varies slightly from the
-     * ASN.1 descriptions given. Rather than just outputing SET,
-     * we also have to specify CONSTRUCTED, and the objects length.
-     */
-    void encode(
-        DEROutputStream out)
-        throws IOException
-    {
-        // TODO Intermediate buffer could be avoided if we could calculate expected length
-        ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-        DEROutputStream         dOut = new DEROutputStream(bOut);
-        Enumeration             e = this.getObjects();
+		this.sort();
+	}
 
-        while (e.hasMoreElements())
-        {
-            Object    obj = e.nextElement();
+	/**
+	 * @param v - a vector of objects making up the set.
+	 */
+	DERSet(
+			ASN1EncodableVector v,
+			boolean needsSorting)
+	{
+		for(int i = 0; i != v.size(); i++)
+		{
+			this.addObject(v.get(i));
+		}
 
-            dOut.writeObject(obj);
-        }
+		if(needsSorting)
+		{
+			this.sort();
+		}
+	}
 
-        dOut.close();
+	/*
+	 * A note on the implementation:
+	 * <p>
+	 * As DER requires the constructed, definite-length model to
+	 * be used for structured types, this varies slightly from the
+	 * ASN.1 descriptions given. Rather than just outputing SET,
+	 * we also have to specify CONSTRUCTED, and the objects length.
+	 */
+	void encode(
+			DEROutputStream out)
+			throws IOException
+	{
+		// TODO Intermediate buffer could be avoided if we could calculate expected length
+		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+		DEROutputStream dOut = new DEROutputStream(bOut);
+		Enumeration e = this.getObjects();
 
-        byte[]  bytes = bOut.toByteArray();
+		while(e.hasMoreElements())
+		{
+			Object obj = e.nextElement();
 
-        out.writeEncoded(SET | CONSTRUCTED, bytes);
-    }
+			dOut.writeObject(obj);
+		}
+
+		dOut.close();
+
+		byte[] bytes = bOut.toByteArray();
+
+		out.writeEncoded(SET | CONSTRUCTED, bytes);
+	}
 }

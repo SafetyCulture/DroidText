@@ -5,31 +5,31 @@ import java.util.Hashtable;
 
 public interface TlsClient
 {
-    void init(TlsClientContext context);
+	void init(TlsClientContext context);
 
-    int[] getCipherSuites();
+	int[] getCipherSuites();
 
-    short[] getCompressionMethods();
+	short[] getCompressionMethods();
 
-    // Hashtable is (Integer -> byte[])
-    Hashtable getClientExtensions() throws IOException;
+	// Hashtable is (Integer -> byte[])
+	Hashtable getClientExtensions() throws IOException;
 
-    void notifySessionID(byte[] sessionID);
+	void notifySessionID(byte[] sessionID);
 
-    void notifySelectedCipherSuite(int selectedCipherSuite);
+	void notifySelectedCipherSuite(int selectedCipherSuite);
 
-    void notifySelectedCompressionMethod(short selectedCompressionMethod);
+	void notifySelectedCompressionMethod(short selectedCompressionMethod);
 
-    void notifySecureRenegotiation(boolean secureNegotiation) throws IOException;
+	void notifySecureRenegotiation(boolean secureNegotiation) throws IOException;
 
-    // Hashtable is (Integer -> byte[])
-    void processServerExtensions(Hashtable serverExtensions);
+	// Hashtable is (Integer -> byte[])
+	void processServerExtensions(Hashtable serverExtensions);
 
-    TlsKeyExchange getKeyExchange() throws IOException;
+	TlsKeyExchange getKeyExchange() throws IOException;
 
-    TlsAuthentication getAuthentication() throws IOException;
+	TlsAuthentication getAuthentication() throws IOException;
 
-    TlsCompression getCompression() throws IOException;
+	TlsCompression getCompression() throws IOException;
 
-    TlsCipher getCipher() throws IOException;
+	TlsCipher getCipher() throws IOException;
 }

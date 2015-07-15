@@ -6,6 +6,6 @@ package repack.org.bouncycastle.jce.interfaces;
 public interface GOST3410Key
 {
 
-    public GOST3410Params getParameters();
+	public GOST3410Params getParameters();
 
 }

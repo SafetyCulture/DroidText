@@ -5,243 +5,243 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public abstract class ASN1Sequence
-    extends ASN1Object
+		extends ASN1Object
 {
-    private Vector seq = new Vector();
+	private Vector seq = new Vector();
 
-    /**
-     * return an ASN1Sequence from the given object.
-     *
-     * @param obj the object we want converted.
-     * @exception IllegalArgumentException if the object cannot be converted.
-     */
-    public static ASN1Sequence getInstance(
-        Object  obj)
-    {
-        if (obj == null || obj instanceof ASN1Sequence)
-        {
-            return (ASN1Sequence)obj;
-        }
-        else if (obj instanceof byte[])
-        {
-            try
-            {
-                return ASN1Sequence.getInstance(ASN1Object.fromByteArray((byte[])obj));
-            }
-            catch (IOException e)
-            {
-                throw new IllegalArgumentException("failed to construct sequence from byte[]: " + e.getMessage());
-            }
-        }
+	/**
+	 * return an ASN1Sequence from the given object.
+	 *
+	 * @param obj the object we want converted.
+	 * @throws IllegalArgumentException if the object cannot be converted.
+	 */
+	public static ASN1Sequence getInstance(
+			Object obj)
+	{
+		if(obj == null || obj instanceof ASN1Sequence)
+		{
+			return (ASN1Sequence) obj;
+		}
+		else if(obj instanceof byte[])
+		{
+			try
+			{
+				return ASN1Sequence.getInstance(ASN1Object.fromByteArray((byte[]) obj));
+			}
+			catch(IOException e)
+			{
+				throw new IllegalArgumentException("failed to construct sequence from byte[]: " + e.getMessage());
+			}
+		}
 
-        throw new IllegalArgumentException("unknown object in getInstance: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("unknown object in getInstance: " + obj.getClass().getName());
+	}
 
-    /**
-     * Return an ASN1 sequence from a tagged object. There is a special
-     * case here, if an object appears to have been explicitly tagged on 
-     * reading but we were expecting it to be implicitly tagged in the 
-     * normal course of events it indicates that we lost the surrounding
-     * sequence - so we need to add it back (this will happen if the tagged
-     * object is a sequence that contains other sequences). If you are
-     * dealing with implicitly tagged sequences you really <b>should</b>
-     * be using this method.
-     *
-     * @param obj the tagged object.
-     * @param explicit true if the object is meant to be explicitly tagged,
-     *          false otherwise.
-     * @exception IllegalArgumentException if the tagged object cannot
-     *          be converted.
-     */
-    public static ASN1Sequence getInstance(
-        ASN1TaggedObject    obj,
-        boolean             explicit)
-    {
-        if (explicit)
-        {
-            if (!obj.isExplicit())
-            {
-                throw new IllegalArgumentException("object implicit - explicit expected.");
-            }
+	/**
+	 * Return an ASN1 sequence from a tagged object. There is a special
+	 * case here, if an object appears to have been explicitly tagged on
+	 * reading but we were expecting it to be implicitly tagged in the
+	 * normal course of events it indicates that we lost the surrounding
+	 * sequence - so we need to add it back (this will happen if the tagged
+	 * object is a sequence that contains other sequences). If you are
+	 * dealing with implicitly tagged sequences you really <b>should</b>
+	 * be using this method.
+	 *
+	 * @param obj      the tagged object.
+	 * @param explicit true if the object is meant to be explicitly tagged,
+	 *                 false otherwise.
+	 * @throws IllegalArgumentException if the tagged object cannot
+	 *                                  be converted.
+	 */
+	public static ASN1Sequence getInstance(
+			ASN1TaggedObject obj,
+			boolean explicit)
+	{
+		if(explicit)
+		{
+			if(!obj.isExplicit())
+			{
+				throw new IllegalArgumentException("object implicit - explicit expected.");
+			}
 
-            return (ASN1Sequence)obj.getObject();
-        }
-        else
-        {
-            //
-            // constructed object which appears to be explicitly tagged
-            // when it should be implicit means we have to add the
-            // surrounding sequence.
-            //
-            if (obj.isExplicit())
-            {
-                if (obj instanceof BERTaggedObject)
-                {
-                    return new BERSequence(obj.getObject());
-                }
-                else
-                {
-                    return new DERSequence(obj.getObject());
-                }
-            }
-            else
-            {
-                if (obj.getObject() instanceof ASN1Sequence)
-                {
-                    return (ASN1Sequence)obj.getObject();
-                }
-            }
-        }
+			return (ASN1Sequence) obj.getObject();
+		}
+		else
+		{
+			//
+			// constructed object which appears to be explicitly tagged
+			// when it should be implicit means we have to add the
+			// surrounding sequence.
+			//
+			if(obj.isExplicit())
+			{
+				if(obj instanceof BERTaggedObject)
+				{
+					return new BERSequence(obj.getObject());
+				}
+				else
+				{
+					return new DERSequence(obj.getObject());
+				}
+			}
+			else
+			{
+				if(obj.getObject() instanceof ASN1Sequence)
+				{
+					return (ASN1Sequence) obj.getObject();
+				}
+			}
+		}
 
-        throw new IllegalArgumentException("unknown object in getInstance: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("unknown object in getInstance: " + obj.getClass().getName());
+	}
 
-    public Enumeration getObjects()
-    {
-        return seq.elements();
-    }
+	public Enumeration getObjects()
+	{
+		return seq.elements();
+	}
 
-    public ASN1SequenceParser parser()
-    {
-        final ASN1Sequence outer = this;
+	public ASN1SequenceParser parser()
+	{
+		final ASN1Sequence outer = this;
 
-        return new ASN1SequenceParser()
-        {
-            private final int max = size();
+		return new ASN1SequenceParser()
+		{
+			private final int max = size();
 
-            private int index;
+			private int index;
 
-            public DEREncodable readObject() throws IOException
-            {
-                if (index == max)
-                {
-                    return null;
-                }
-                
-                DEREncodable obj = getObjectAt(index++);
-                if (obj instanceof ASN1Sequence)
-                {
-                    return ((ASN1Sequence)obj).parser();
-                }
-                if (obj instanceof ASN1Set)
-                {
-                    return ((ASN1Set)obj).parser();
-                }
+			public DEREncodable readObject() throws IOException
+			{
+				if(index == max)
+				{
+					return null;
+				}
 
-                return obj;
-            }
+				DEREncodable obj = getObjectAt(index++);
+				if(obj instanceof ASN1Sequence)
+				{
+					return ((ASN1Sequence) obj).parser();
+				}
+				if(obj instanceof ASN1Set)
+				{
+					return ((ASN1Set) obj).parser();
+				}
 
-            public DERObject getLoadedObject()
-            {
-                return outer;
-            }
-            
-            public DERObject getDERObject()
-            {
-                return outer;
-            }
-        };
-    }
+				return obj;
+			}
 
-    /**
-     * return the object at the sequence position indicated by index.
-     *
-     * @param index the sequence number (starting at zero) of the object
-     * @return the object at the sequence position indicated by index.
-     */
-    public DEREncodable getObjectAt(
-        int index)
-    {
-        return (DEREncodable)seq.elementAt(index);
-    }
+			public DERObject getLoadedObject()
+			{
+				return outer;
+			}
 
-    /**
-     * return the number of objects in this sequence.
-     *
-     * @return the number of objects in this sequence.
-     */
-    public int size()
-    {
-        return seq.size();
-    }
+			public DERObject getDERObject()
+			{
+				return outer;
+			}
+		};
+	}
 
-    public int hashCode()
-    {
-        Enumeration             e = this.getObjects();
-        int                     hashCode = size();
+	/**
+	 * return the object at the sequence position indicated by index.
+	 *
+	 * @param index the sequence number (starting at zero) of the object
+	 * @return the object at the sequence position indicated by index.
+	 */
+	public DEREncodable getObjectAt(
+			int index)
+	{
+		return (DEREncodable) seq.elementAt(index);
+	}
 
-        while (e.hasMoreElements())
-        {
-            Object o = getNext(e);
-            hashCode *= 17;
+	/**
+	 * return the number of objects in this sequence.
+	 *
+	 * @return the number of objects in this sequence.
+	 */
+	public int size()
+	{
+		return seq.size();
+	}
 
-            hashCode ^= o.hashCode();
-        }
+	public int hashCode()
+	{
+		Enumeration e = this.getObjects();
+		int hashCode = size();
 
-        return hashCode;
-    }
+		while(e.hasMoreElements())
+		{
+			Object o = getNext(e);
+			hashCode *= 17;
 
-    boolean asn1Equals(
-        DERObject  o)
-    {
-        if (!(o instanceof ASN1Sequence))
-        {
-            return false;
-        }
-        
-        ASN1Sequence   other = (ASN1Sequence)o;
+			hashCode ^= o.hashCode();
+		}
 
-        if (this.size() != other.size())
-        {
-            return false;
-        }
+		return hashCode;
+	}
 
-        Enumeration s1 = this.getObjects();
-        Enumeration s2 = other.getObjects();
+	boolean asn1Equals(
+			DERObject o)
+	{
+		if(!(o instanceof ASN1Sequence))
+		{
+			return false;
+		}
 
-        while (s1.hasMoreElements())
-        {
-            DEREncodable  obj1 = getNext(s1);
-            DEREncodable  obj2 = getNext(s2);
+		ASN1Sequence other = (ASN1Sequence) o;
 
-            DERObject  o1 = obj1.getDERObject();
-            DERObject  o2 = obj2.getDERObject();
+		if(this.size() != other.size())
+		{
+			return false;
+		}
 
-            if (o1 == o2 || o1.equals(o2))
-            {
-                continue;
-            }
+		Enumeration s1 = this.getObjects();
+		Enumeration s2 = other.getObjects();
 
-            return false;
-        }
+		while(s1.hasMoreElements())
+		{
+			DEREncodable obj1 = getNext(s1);
+			DEREncodable obj2 = getNext(s2);
 
-        return true;
-    }
+			DERObject o1 = obj1.getDERObject();
+			DERObject o2 = obj2.getDERObject();
 
-    private DEREncodable getNext(Enumeration e)
-    {
-        DEREncodable encObj = (DEREncodable)e.nextElement();
+			if(o1 == o2 || o1.equals(o2))
+			{
+				continue;
+			}
 
-        // unfortunately null was allowed as a substitute for DER null
-        if (encObj == null)
-        {
-            return DERNull.INSTANCE;
-        }
+			return false;
+		}
 
-        return encObj;
-    }
+		return true;
+	}
 
-    protected void addObject(
-        DEREncodable obj)
-    {
-        seq.addElement(obj);
-    }
+	private DEREncodable getNext(Enumeration e)
+	{
+		DEREncodable encObj = (DEREncodable) e.nextElement();
 
-    abstract void encode(DEROutputStream out)
-        throws IOException;
+		// unfortunately null was allowed as a substitute for DER null
+		if(encObj == null)
+		{
+			return DERNull.INSTANCE;
+		}
 
-    public String toString() 
-    {
-      return seq.toString();
-    }
+		return encObj;
+	}
+
+	protected void addObject(
+			DEREncodable obj)
+	{
+		seq.addElement(obj);
+	}
+
+	abstract void encode(DEROutputStream out)
+			throws IOException;
+
+	public String toString()
+	{
+		return seq.toString();
+	}
 }

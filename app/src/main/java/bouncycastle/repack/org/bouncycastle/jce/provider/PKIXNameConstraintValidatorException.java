@@ -1,10 +1,10 @@
 package repack.org.bouncycastle.jce.provider;
 
 public class PKIXNameConstraintValidatorException
-    extends Exception
+		extends Exception
 {
-    public PKIXNameConstraintValidatorException(String msg)
-    {
-        super(msg);
-    }
+	public PKIXNameConstraintValidatorException(String msg)
+	{
+		super(msg);
+	}
 }

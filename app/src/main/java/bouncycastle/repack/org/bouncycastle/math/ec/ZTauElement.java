@@ -12,26 +12,27 @@ import java.math.BigInteger;
  */
 class ZTauElement
 {
-    /**
-     * The &quot;real&quot; part of <code>&lambda;</code>.
-     */
-    public final BigInteger u;
+	/**
+	 * The &quot;real&quot; part of <code>&lambda;</code>.
+	 */
+	public final BigInteger u;
 
-    /**
-     * The &quot;<code>&tau;</code>-adic&quot; part of <code>&lambda;</code>.
-     */
-    public final BigInteger v;
+	/**
+	 * The &quot;<code>&tau;</code>-adic&quot; part of <code>&lambda;</code>.
+	 */
+	public final BigInteger v;
 
-    /**
-     * Constructor for an element <code>&lambda;</code> of
-     * <code><b>Z</b>[&tau;]</code>.
-     * @param u The &quot;real&quot; part of <code>&lambda;</code>.
-     * @param v The &quot;<code>&tau;</code>-adic&quot; part of
-     * <code>&lambda;</code>.
-     */
-    public ZTauElement(BigInteger u, BigInteger v)
-    {
-        this.u = u;
-        this.v = v;
-    }
+	/**
+	 * Constructor for an element <code>&lambda;</code> of
+	 * <code><b>Z</b>[&tau;]</code>.
+	 *
+	 * @param u The &quot;real&quot; part of <code>&lambda;</code>.
+	 * @param v The &quot;<code>&tau;</code>-adic&quot; part of
+	 *          <code>&lambda;</code>.
+	 */
+	public ZTauElement(BigInteger u, BigInteger v)
+	{
+		this.u = u;
+		this.v = v;
+	}
 }

@@ -25,109 +25,109 @@ import java.util.StringTokenizer;
  * </p>
  */
 public class ProviderConfigurationPermission
-    extends BasicPermission
+		extends BasicPermission
 {
-    private static final int  THREAD_LOCAL_EC_IMPLICITLY_CA = 0x01;
+	private static final int THREAD_LOCAL_EC_IMPLICITLY_CA = 0x01;
 
-    private static final int  EC_IMPLICITLY_CA = 0x02;
-    private static final int  ALL = THREAD_LOCAL_EC_IMPLICITLY_CA | EC_IMPLICITLY_CA;
+	private static final int EC_IMPLICITLY_CA = 0x02;
+	private static final int ALL = THREAD_LOCAL_EC_IMPLICITLY_CA | EC_IMPLICITLY_CA;
 
-    private static final String THREAD_LOCAL_EC_IMPLICITLY_CA_STR = "threadlocalecimplicitlyca";
-    private static final String EC_IMPLICITLY_CA_STR = "ecimplicitlyca";
-    private static final String ALL_STR = "all";
+	private static final String THREAD_LOCAL_EC_IMPLICITLY_CA_STR = "threadlocalecimplicitlyca";
+	private static final String EC_IMPLICITLY_CA_STR = "ecimplicitlyca";
+	private static final String ALL_STR = "all";
 
-    private final String actions;
-    private final int permissionMask;
+	private final String actions;
+	private final int permissionMask;
 
-    public ProviderConfigurationPermission(String name)
-    {
-        super(name);
-        this.actions = "all";
-        this.permissionMask = ALL;
-    }
+	public ProviderConfigurationPermission(String name)
+	{
+		super(name);
+		this.actions = "all";
+		this.permissionMask = ALL;
+	}
 
-    public ProviderConfigurationPermission(String name, String actions)
-    {
-        super(name, actions);
-        this.actions = actions;
-        this.permissionMask = calculateMask(actions);
-    }
+	public ProviderConfigurationPermission(String name, String actions)
+	{
+		super(name, actions);
+		this.actions = actions;
+		this.permissionMask = calculateMask(actions);
+	}
 
-    private int calculateMask(
-        String actions)
-    {
-        StringTokenizer tok = new StringTokenizer(Strings.toLowerCase(actions), " ,");
-        int             mask = 0;
+	private int calculateMask(
+			String actions)
+	{
+		StringTokenizer tok = new StringTokenizer(Strings.toLowerCase(actions), " ,");
+		int mask = 0;
 
-        while (tok.hasMoreTokens())
-        {
-            String s = tok.nextToken();
+		while(tok.hasMoreTokens())
+		{
+			String s = tok.nextToken();
 
-            if (s.equals(THREAD_LOCAL_EC_IMPLICITLY_CA_STR))
-            {
-                mask |= THREAD_LOCAL_EC_IMPLICITLY_CA;
-            }
-            else if (s.equals(EC_IMPLICITLY_CA_STR))
-            {
-                mask |= EC_IMPLICITLY_CA;
-            }
-            else if (s.equals(ALL_STR))
-            {
-                mask |= ALL;
-            }
-        }
+			if(s.equals(THREAD_LOCAL_EC_IMPLICITLY_CA_STR))
+			{
+				mask |= THREAD_LOCAL_EC_IMPLICITLY_CA;
+			}
+			else if(s.equals(EC_IMPLICITLY_CA_STR))
+			{
+				mask |= EC_IMPLICITLY_CA;
+			}
+			else if(s.equals(ALL_STR))
+			{
+				mask |= ALL;
+			}
+		}
 
-        if (mask == 0)
-        {
-            throw new IllegalArgumentException("unknown permissions passed to mask");
-        }
-        
-        return mask;
-    }
+		if(mask == 0)
+		{
+			throw new IllegalArgumentException("unknown permissions passed to mask");
+		}
 
-    public String getActions()
-    {
-        return actions;
-    }
+		return mask;
+	}
 
-    public boolean implies(
-        Permission permission)
-    {
-        if (!(permission instanceof ProviderConfigurationPermission))
-        {
-            return false;
-        }
+	public String getActions()
+	{
+		return actions;
+	}
 
-        if (!this.getName().equals(permission.getName()))
-        {
-            return false;
-        }
-        
-        ProviderConfigurationPermission other = (ProviderConfigurationPermission)permission;
-        
-        return (this.permissionMask & other.permissionMask) == other.permissionMask;
-    }
+	public boolean implies(
+			Permission permission)
+	{
+		if(!(permission instanceof ProviderConfigurationPermission))
+		{
+			return false;
+		}
 
-    public boolean equals(
-        Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
+		if(!this.getName().equals(permission.getName()))
+		{
+			return false;
+		}
 
-        if (obj instanceof ProviderConfigurationPermission)
-        {
-            ProviderConfigurationPermission other = (ProviderConfigurationPermission)obj;
+		ProviderConfigurationPermission other = (ProviderConfigurationPermission) permission;
 
-            return this.permissionMask == other.permissionMask && this.getName().equals(other.getName());
-        }
+		return (this.permissionMask & other.permissionMask) == other.permissionMask;
+	}
 
-        return false;
-    }
+	public boolean equals(
+			Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
 
-    public int hashCode()
-    {
-        return this.getName().hashCode() + this.permissionMask;
-    }
+		if(obj instanceof ProviderConfigurationPermission)
+		{
+			ProviderConfigurationPermission other = (ProviderConfigurationPermission) obj;
+
+			return this.permissionMask == other.permissionMask && this.getName().equals(other.getName());
+		}
+
+		return false;
+	}
+
+	public int hashCode()
+	{
+		return this.getName().hashCode() + this.permissionMask;
+	}
 }

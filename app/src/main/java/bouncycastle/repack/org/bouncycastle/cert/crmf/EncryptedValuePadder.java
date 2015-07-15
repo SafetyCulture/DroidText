@@ -6,19 +6,19 @@ package repack.org.bouncycastle.cert.crmf;
  */
 public interface EncryptedValuePadder
 {
-    /**
-     * Return a byte array of padded data.
-     *
-     * @param data the data to be padded.
-     * @return a padded byte array containing data.
-     */
-    byte[] getPaddedData(byte[] data);
+	/**
+	 * Return a byte array of padded data.
+	 *
+	 * @param data the data to be padded.
+	 * @return a padded byte array containing data.
+	 */
+	byte[] getPaddedData(byte[] data);
 
-    /**
-     * Return a byte array of with padding removed.
-     *
-     * @param paddedData the data to be padded.
-     * @return an array containing the original unpadded data.
-     */
-    byte[] getUnpaddedData(byte[] paddedData);
+	/**
+	 * Return a byte array of with padding removed.
+	 *
+	 * @param paddedData the data to be padded.
+	 * @return an array containing the original unpadded data.
+	 */
+	byte[] getUnpaddedData(byte[] paddedData);
 }

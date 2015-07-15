@@ -52,46 +52,51 @@ package com.lowagie.text;
 /**
  * This is an <CODE>Element</CODE> that contains
  * some user defined meta information about the document.
- * <P>
+ * <p/>
  * <B>Example:</B>
  * <BLOCKQUOTE><PRE>
  * <STRONG>Header header = new Header("inspired by", "William Shakespeare");</STRONG>
  * </PRE></BLOCKQUOTE>
  *
- * @see		Element
- * @see		Meta
+ * @see Element
+ * @see Meta
  */
 
-public class Header extends Meta {
-    
-    // membervariables
-    
-	/** This is the content of this chunk of text. */
-    private StringBuffer name;
-    
-    // constructors
-    
-    /**
-     * Constructs a <CODE>Meta</CODE>.
-     *
-     * @param	name		the name of the meta-information
-     * @param	content		the content
-     */
-    
-    public Header(String name, String content) {
-        super(Element.HEADER, content);
-        this.name = new StringBuffer(name);
-    }
-    
-    // methods to retrieve information
+public class Header extends Meta
+{
+
+	// membervariables
 
 	/**
-     * Returns the name of the meta information.
-     *
-     * @return	a <CODE>String</CODE>
-     */
-    public String getName() {
-        return name.toString();
-    }
+	 * This is the content of this chunk of text.
+	 */
+	private StringBuffer name;
+
+	// constructors
+
+	/**
+	 * Constructs a <CODE>Meta</CODE>.
+	 *
+	 * @param name    the name of the meta-information
+	 * @param content the content
+	 */
+
+	public Header(String name, String content)
+	{
+		super(Element.HEADER, content);
+		this.name = new StringBuffer(name);
+	}
+
+	// methods to retrieve information
+
+	/**
+	 * Returns the name of the meta information.
+	 *
+	 * @return a <CODE>String</CODE>
+	 */
+	public String getName()
+	{
+		return name.toString();
+	}
 
 }

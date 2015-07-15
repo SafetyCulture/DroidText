@@ -19,11 +19,12 @@
  */
 package harmony.java.awt.geom;
 
-import java.util.NoSuchElementException;
-
 import org.apache.harmony.awt.internal.nls.Messages;
 
-public class FlatteningPathIterator implements PathIterator {
+import java.util.NoSuchElementException;
+
+public class FlatteningPathIterator implements PathIterator
+{
 
 	/**
 	 * The default points buffer size
@@ -105,20 +106,25 @@ public class FlatteningPathIterator implements PathIterator {
 	 */
 	double coords[] = new double[6];
 
-	public FlatteningPathIterator(PathIterator path, double flatness) {
+	public FlatteningPathIterator(PathIterator path, double flatness)
+	{
 		this(path, flatness, BUFFER_LIMIT);
 	}
 
-	public FlatteningPathIterator(PathIterator path, double flatness, int limit) {
-		if (flatness < 0.0) {
+	public FlatteningPathIterator(PathIterator path, double flatness, int limit)
+	{
+		if(flatness < 0.0)
+		{
 			// awt.206=Flatness is less then zero
 			throw new IllegalArgumentException(Messages.getString("awt.206")); //$NON-NLS-1$
 		}
-		if (limit < 0) {
+		if(limit < 0)
+		{
 			// awt.207=Limit is less then zero
 			throw new IllegalArgumentException(Messages.getString("awt.207")); //$NON-NLS-1$
 		}
-		if (path == null) {
+		if(path == null)
+		{
 			// awt.208=Path is null
 			throw new NullPointerException(Messages.getString("awt.208")); //$NON-NLS-1$
 		}
@@ -131,25 +137,29 @@ public class FlatteningPathIterator implements PathIterator {
 		this.bufIndex = bufSize;
 	}
 
-	public double getFlatness() {
+	public double getFlatness()
+	{
 		return flatness;
 	}
 
-	public int getRecursionLimit() {
+	public int getRecursionLimit()
+	{
 		return bufLimit;
 	}
 
-	public int getWindingRule() {
+	public int getWindingRule()
+	{
 		return p.getWindingRule();
 	}
 
-	public boolean isDone() {
+	public boolean isDone()
+	{
 		return bufEmpty && p.isDone();
 	}
 
 	/**
 	 * Calculates flat path points for current segment of the source shape.
-	 * 
+	 * <p/>
 	 * Line segment is flat by itself. Flatness of quad and cubic curves
 	 * evaluated by getFlatnessSq() method. Curves subdivided until current
 	 * flatness is bigger than user defined and subdivision limit isn't
@@ -158,133 +168,156 @@ public class FlatteningPathIterator implements PathIterator {
 	 * one point from the buffer. When series completed evaluate() takes next
 	 * source shape segment.
 	 */
-	void evaluate() {
-		if (bufEmpty) {
+	void evaluate()
+	{
+		if(bufEmpty)
+		{
 			bufType = p.currentSegment(coords);
 		}
 
-		switch (bufType) {
-		case SEG_MOVETO:
-		case SEG_LINETO:
-			px = coords[0];
-			py = coords[1];
-			break;
-		case SEG_QUADTO:
-			if (bufEmpty) {
-				bufIndex -= 6;
-				buf[bufIndex + 0] = px;
-				buf[bufIndex + 1] = py;
-				System.arraycopy(coords, 0, buf, bufIndex + 2, 4);
-				bufSubdiv = 0;
-			}
-
-			while (bufSubdiv < bufLimit) {
-				if (QuadCurve2D.getFlatnessSq(buf, bufIndex) < flatness2) {
-					break;
+		switch(bufType)
+		{
+			case SEG_MOVETO:
+			case SEG_LINETO:
+				px = coords[0];
+				py = coords[1];
+				break;
+			case SEG_QUADTO:
+				if(bufEmpty)
+				{
+					bufIndex -= 6;
+					buf[bufIndex + 0] = px;
+					buf[bufIndex + 1] = py;
+					System.arraycopy(coords, 0, buf, bufIndex + 2, 4);
+					bufSubdiv = 0;
 				}
 
-				// Realloc buffer
-				if (bufIndex <= 4) {
-					double tmp[] = new double[bufSize + BUFFER_CAPACITY];
-					System.arraycopy(buf, bufIndex, tmp, bufIndex + BUFFER_CAPACITY, bufSize - bufIndex);
-					buf = tmp;
-					bufSize += BUFFER_CAPACITY;
-					bufIndex += BUFFER_CAPACITY;
+				while(bufSubdiv < bufLimit)
+				{
+					if(QuadCurve2D.getFlatnessSq(buf, bufIndex) < flatness2)
+					{
+						break;
+					}
+
+					// Realloc buffer
+					if(bufIndex <= 4)
+					{
+						double tmp[] = new double[bufSize + BUFFER_CAPACITY];
+						System.arraycopy(buf, bufIndex, tmp, bufIndex + BUFFER_CAPACITY, bufSize - bufIndex);
+						buf = tmp;
+						bufSize += BUFFER_CAPACITY;
+						bufIndex += BUFFER_CAPACITY;
+					}
+
+					QuadCurve2D.subdivide(buf, bufIndex, buf, bufIndex - 4, buf, bufIndex);
+
+					bufIndex -= 4;
+					bufSubdiv++;
 				}
 
-				QuadCurve2D.subdivide(buf, bufIndex, buf, bufIndex - 4, buf, bufIndex);
+				bufIndex += 4;
+				px = buf[bufIndex];
+				py = buf[bufIndex + 1];
 
-				bufIndex -= 4;
-				bufSubdiv++;
-			}
-
-			bufIndex += 4;
-			px = buf[bufIndex];
-			py = buf[bufIndex + 1];
-
-			bufEmpty = (bufIndex == bufSize - 2);
-			if (bufEmpty) {
-				bufIndex = bufSize;
-				bufType = SEG_LINETO;
-			}
-			break;
-		case SEG_CUBICTO:
-			if (bufEmpty) {
-				bufIndex -= 8;
-				buf[bufIndex + 0] = px;
-				buf[bufIndex + 1] = py;
-				System.arraycopy(coords, 0, buf, bufIndex + 2, 6);
-				bufSubdiv = 0;
-			}
-
-			while (bufSubdiv < bufLimit) {
-				if (CubicCurve2D.getFlatnessSq(buf, bufIndex) < flatness2) {
-					break;
+				bufEmpty = (bufIndex == bufSize - 2);
+				if(bufEmpty)
+				{
+					bufIndex = bufSize;
+					bufType = SEG_LINETO;
+				}
+				break;
+			case SEG_CUBICTO:
+				if(bufEmpty)
+				{
+					bufIndex -= 8;
+					buf[bufIndex + 0] = px;
+					buf[bufIndex + 1] = py;
+					System.arraycopy(coords, 0, buf, bufIndex + 2, 6);
+					bufSubdiv = 0;
 				}
 
-				// Realloc buffer
-				if (bufIndex <= 6) {
-					double tmp[] = new double[bufSize + BUFFER_CAPACITY];
-					System.arraycopy(buf, bufIndex, tmp, bufIndex + BUFFER_CAPACITY, bufSize - bufIndex);
-					buf = tmp;
-					bufSize += BUFFER_CAPACITY;
-					bufIndex += BUFFER_CAPACITY;
+				while(bufSubdiv < bufLimit)
+				{
+					if(CubicCurve2D.getFlatnessSq(buf, bufIndex) < flatness2)
+					{
+						break;
+					}
+
+					// Realloc buffer
+					if(bufIndex <= 6)
+					{
+						double tmp[] = new double[bufSize + BUFFER_CAPACITY];
+						System.arraycopy(buf, bufIndex, tmp, bufIndex + BUFFER_CAPACITY, bufSize - bufIndex);
+						buf = tmp;
+						bufSize += BUFFER_CAPACITY;
+						bufIndex += BUFFER_CAPACITY;
+					}
+
+					CubicCurve2D.subdivide(buf, bufIndex, buf, bufIndex - 6, buf, bufIndex);
+
+					bufIndex -= 6;
+					bufSubdiv++;
 				}
 
-				CubicCurve2D.subdivide(buf, bufIndex, buf, bufIndex - 6, buf, bufIndex);
+				bufIndex += 6;
+				px = buf[bufIndex];
+				py = buf[bufIndex + 1];
 
-				bufIndex -= 6;
-				bufSubdiv++;
-			}
-
-			bufIndex += 6;
-			px = buf[bufIndex];
-			py = buf[bufIndex + 1];
-
-			bufEmpty = (bufIndex == bufSize - 2);
-			if (bufEmpty) {
-				bufIndex = bufSize;
-				bufType = SEG_LINETO;
-			}
-			break;
+				bufEmpty = (bufIndex == bufSize - 2);
+				if(bufEmpty)
+				{
+					bufIndex = bufSize;
+					bufType = SEG_LINETO;
+				}
+				break;
 		}
 
 	}
 
-	public void next() {
-		if (bufEmpty) {
+	public void next()
+	{
+		if(bufEmpty)
+		{
 			p.next();
 		}
 	}
 
-	public int currentSegment(float[] coords) {
-		if (isDone()) {
+	public int currentSegment(float[] coords)
+	{
+		if(isDone())
+		{
 			// awt.4B=Iterator out of bounds
 			throw new NoSuchElementException(Messages.getString("awt.4Bx")); //$NON-NLS-1$
 		}
 		evaluate();
 		int type = bufType;
-		if (type != SEG_CLOSE) {
+		if(type != SEG_CLOSE)
+		{
 			coords[0] = (float) px;
 			coords[1] = (float) py;
-			if (type != SEG_MOVETO) {
+			if(type != SEG_MOVETO)
+			{
 				type = SEG_LINETO;
 			}
 		}
 		return type;
 	}
 
-	public int currentSegment(double[] coords) {
-		if (isDone()) {
+	public int currentSegment(double[] coords)
+	{
+		if(isDone())
+		{
 			// awt.4B=Iterator out of bounds
 			throw new NoSuchElementException(Messages.getString("awt.4B")); //$NON-NLS-1$
 		}
 		evaluate();
 		int type = bufType;
-		if (type != SEG_CLOSE) {
+		if(type != SEG_CLOSE)
+		{
 			coords[0] = px;
 			coords[1] = py;
-			if (type != SEG_MOVETO) {
+			if(type != SEG_MOVETO)
+			{
 				type = SEG_LINETO;
 			}
 		}

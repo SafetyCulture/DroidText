@@ -3,18 +3,18 @@ package repack.org.bouncycastle.jce.spec;
 import java.security.spec.KeySpec;
 
 public class ElGamalKeySpec
-    implements KeySpec
+		implements KeySpec
 {
-    private ElGamalParameterSpec  spec;
+	private ElGamalParameterSpec spec;
 
-    public ElGamalKeySpec(
-        ElGamalParameterSpec  spec)
-    {
-        this.spec = spec;
-    }
+	public ElGamalKeySpec(
+			ElGamalParameterSpec spec)
+	{
+		this.spec = spec;
+	}
 
-    public ElGamalParameterSpec getParams()
-    {
-        return spec;
-    }
+	public ElGamalParameterSpec getParams()
+	{
+		return spec;
+	}
 }

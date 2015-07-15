@@ -6,30 +6,30 @@ import repack.org.bouncycastle.math.ec.ECPoint;
  * Elliptic Curve public key specification
  */
 public class ECPublicKeySpec
-    extends ECKeySpec
+		extends ECKeySpec
 {
-    private ECPoint    q;
+	private ECPoint q;
 
-    /**
-     * base constructor
-     *
-     * @param q the public point on the curve.
-     * @param spec the domain parameters for the curve.
-     */
-    public ECPublicKeySpec(
-        ECPoint         q,
-        ECParameterSpec spec)
-    {
-        super(spec);
+	/**
+	 * base constructor
+	 *
+	 * @param q    the public point on the curve.
+	 * @param spec the domain parameters for the curve.
+	 */
+	public ECPublicKeySpec(
+			ECPoint q,
+			ECParameterSpec spec)
+	{
+		super(spec);
 
-        this.q = q;
-    }
+		this.q = q;
+	}
 
-    /**
-     * return the public point q
-     */
-    public ECPoint getQ()
-    {
-        return q;
-    }
+	/**
+	 * return the public point q
+	 */
+	public ECPoint getQ()
+	{
+		return q;
+	}
 }

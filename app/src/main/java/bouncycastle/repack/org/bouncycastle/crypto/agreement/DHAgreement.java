@@ -1,8 +1,5 @@
 package repack.org.bouncycastle.crypto.agreement;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import repack.org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import repack.org.bouncycastle.crypto.CipherParameters;
 import repack.org.bouncycastle.crypto.generators.DHKeyPairGenerator;
@@ -13,82 +10,85 @@ import repack.org.bouncycastle.crypto.params.DHPrivateKeyParameters;
 import repack.org.bouncycastle.crypto.params.DHPublicKeyParameters;
 import repack.org.bouncycastle.crypto.params.ParametersWithRandom;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 /**
  * a Diffie-Hellman key exchange engine.
- * <p>
+ * <p/>
  * note: This uses MTI/A0 key agreement in order to make the key agreement
  * secure against passive attacks. If you're doing Diffie-Hellman and both
  * parties have long term public keys you should look at using this. For
  * further information have a look at RFC 2631.
- * <p>
+ * <p/>
  * It's possible to extend this to more than two parties as well, for the moment
  * that is left as an exercise for the reader.
  */
 public class DHAgreement
 {
-    private DHPrivateKeyParameters  key;
-    private DHParameters            dhParams;
-    private BigInteger              privateValue;
-    private SecureRandom            random;
+	private DHPrivateKeyParameters key;
+	private DHParameters dhParams;
+	private BigInteger privateValue;
+	private SecureRandom random;
 
-    public void init(
-        CipherParameters    param)
-    {
-        AsymmetricKeyParameter  kParam;
+	public void init(
+			CipherParameters param)
+	{
+		AsymmetricKeyParameter kParam;
 
-        if (param instanceof ParametersWithRandom)
-        {
-            ParametersWithRandom    rParam = (ParametersWithRandom)param;
+		if(param instanceof ParametersWithRandom)
+		{
+			ParametersWithRandom rParam = (ParametersWithRandom) param;
 
-            this.random = rParam.getRandom();
-            kParam = (AsymmetricKeyParameter)rParam.getParameters();
-        }
-        else
-        {
-            this.random = new SecureRandom();
-            kParam = (AsymmetricKeyParameter)param;
-        }
+			this.random = rParam.getRandom();
+			kParam = (AsymmetricKeyParameter) rParam.getParameters();
+		}
+		else
+		{
+			this.random = new SecureRandom();
+			kParam = (AsymmetricKeyParameter) param;
+		}
 
-        
-        if (!(kParam instanceof DHPrivateKeyParameters))
-        {
-            throw new IllegalArgumentException("DHEngine expects DHPrivateKeyParameters");
-        }
 
-        this.key = (DHPrivateKeyParameters)kParam;
-        this.dhParams = key.getParameters();
-    }
+		if(!(kParam instanceof DHPrivateKeyParameters))
+		{
+			throw new IllegalArgumentException("DHEngine expects DHPrivateKeyParameters");
+		}
 
-    /**
-     * calculate our initial message.
-     */
-    public BigInteger calculateMessage()
-    {
-        DHKeyPairGenerator dhGen = new DHKeyPairGenerator();
-        dhGen.init(new DHKeyGenerationParameters(random, dhParams));
-        AsymmetricCipherKeyPair dhPair = dhGen.generateKeyPair();
+		this.key = (DHPrivateKeyParameters) kParam;
+		this.dhParams = key.getParameters();
+	}
 
-        this.privateValue = ((DHPrivateKeyParameters)dhPair.getPrivate()).getX();
+	/**
+	 * calculate our initial message.
+	 */
+	public BigInteger calculateMessage()
+	{
+		DHKeyPairGenerator dhGen = new DHKeyPairGenerator();
+		dhGen.init(new DHKeyGenerationParameters(random, dhParams));
+		AsymmetricCipherKeyPair dhPair = dhGen.generateKeyPair();
 
-        return ((DHPublicKeyParameters)dhPair.getPublic()).getY();
-    }
+		this.privateValue = ((DHPrivateKeyParameters) dhPair.getPrivate()).getX();
 
-    /**
-     * given a message from a given party and the corresponding public key,
-     * calculate the next message in the agreement sequence. In this case
-     * this will represent the shared secret.
-     */
-    public BigInteger calculateAgreement(
-        DHPublicKeyParameters   pub,
-        BigInteger              message)
-    {
-        if (!pub.getParameters().equals(dhParams))
-        {
-            throw new IllegalArgumentException("Diffie-Hellman public key has wrong parameters.");
-        }
+		return ((DHPublicKeyParameters) dhPair.getPublic()).getY();
+	}
 
-        BigInteger p = dhParams.getP();
+	/**
+	 * given a message from a given party and the corresponding public key,
+	 * calculate the next message in the agreement sequence. In this case
+	 * this will represent the shared secret.
+	 */
+	public BigInteger calculateAgreement(
+			DHPublicKeyParameters pub,
+			BigInteger message)
+	{
+		if(!pub.getParameters().equals(dhParams))
+		{
+			throw new IllegalArgumentException("Diffie-Hellman public key has wrong parameters.");
+		}
 
-        return message.modPow(key.getX(), p).multiply(pub.getY().modPow(privateValue, p)).mod(p);
-    }
+		BigInteger p = dhParams.getP();
+
+		return message.modPow(key.getX(), p).multiply(pub.getY().modPow(privateValue, p)).mod(p);
+	}
 }

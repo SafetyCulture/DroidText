@@ -10,9 +10,9 @@ import repack.org.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * The Holder object.
- * <p>
+ * <p/>
  * For an v2 attribute certificate this is:
- * 
+ * <p/>
  * <pre>
  *            Holder ::= SEQUENCE {
  *                  baseCertificateID   [0] IssuerSerial OPTIONAL,
@@ -25,10 +25,10 @@ import repack.org.bouncycastle.asn1.DERTaggedObject;
  *                           -- for example, an executable
  *            }
  * </pre>
- * 
- * <p>
+ * <p/>
+ * <p/>
  * For an v1 attribute certificate this is:
- * 
+ * <p/>
  * <pre>
  *         subject CHOICE {
  *          baseCertificateID [0] IssuerSerial,
@@ -38,205 +38,207 @@ import repack.org.bouncycastle.asn1.DERTaggedObject;
  * </pre>
  */
 public class Holder
-    extends ASN1Encodable
+		extends ASN1Encodable
 {
-    IssuerSerial baseCertificateID;
+	IssuerSerial baseCertificateID;
 
-    GeneralNames entityName;
+	GeneralNames entityName;
 
-    ObjectDigestInfo objectDigestInfo;
+	ObjectDigestInfo objectDigestInfo;
 
-    private int version = 1;
+	private int version = 1;
 
-    public static Holder getInstance(Object obj)
-    {
-        if (obj instanceof Holder)
-        {
-            return (Holder)obj;
-        }
-        else if (obj instanceof ASN1Sequence)
-        {
-            return new Holder((ASN1Sequence)obj);
-        }
-        else if (obj instanceof ASN1TaggedObject)
-        {
-            return new Holder((ASN1TaggedObject)obj);
-        }
+	public static Holder getInstance(Object obj)
+	{
+		if(obj instanceof Holder)
+		{
+			return (Holder) obj;
+		}
+		else if(obj instanceof ASN1Sequence)
+		{
+			return new Holder((ASN1Sequence) obj);
+		}
+		else if(obj instanceof ASN1TaggedObject)
+		{
+			return new Holder((ASN1TaggedObject) obj);
+		}
 
-        throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
-    }
+		throw new IllegalArgumentException("unknown object in factory: " + obj.getClass().getName());
+	}
 
-    /**
-     * Constructor for a holder for an v1 attribute certificate.
-     * 
-     * @param tagObj The ASN.1 tagged holder object.
-     */
-    public Holder(ASN1TaggedObject tagObj)
-    {
-        switch (tagObj.getTagNo())
-        {
-        case 0:
-            baseCertificateID = IssuerSerial.getInstance(tagObj, false);
-            break;
-        case 1:
-            entityName = GeneralNames.getInstance(tagObj, false);
-            break;
-        default:
-            throw new IllegalArgumentException("unknown tag in Holder");
-        }
-        version = 0;
-    }
+	/**
+	 * Constructor for a holder for an v1 attribute certificate.
+	 *
+	 * @param tagObj The ASN.1 tagged holder object.
+	 */
+	public Holder(ASN1TaggedObject tagObj)
+	{
+		switch(tagObj.getTagNo())
+		{
+			case 0:
+				baseCertificateID = IssuerSerial.getInstance(tagObj, false);
+				break;
+			case 1:
+				entityName = GeneralNames.getInstance(tagObj, false);
+				break;
+			default:
+				throw new IllegalArgumentException("unknown tag in Holder");
+		}
+		version = 0;
+	}
 
-    /**
-     * Constructor for a holder for an v2 attribute certificate. *
-     * 
-     * @param seq The ASN.1 sequence.
-     */
-    public Holder(ASN1Sequence seq)
-    {
-        if (seq.size() > 3)
-        {
-            throw new IllegalArgumentException("Bad sequence size: "
-                + seq.size());
-        }
+	/**
+	 * Constructor for a holder for an v2 attribute certificate. *
+	 *
+	 * @param seq The ASN.1 sequence.
+	 */
+	public Holder(ASN1Sequence seq)
+	{
+		if(seq.size() > 3)
+		{
+			throw new IllegalArgumentException("Bad sequence size: "
+					+ seq.size());
+		}
 
-        for (int i = 0; i != seq.size(); i++)
-        {
-            ASN1TaggedObject tObj = ASN1TaggedObject.getInstance(seq
-                .getObjectAt(i));
+		for(int i = 0; i != seq.size(); i++)
+		{
+			ASN1TaggedObject tObj = ASN1TaggedObject.getInstance(seq
+					.getObjectAt(i));
 
-            switch (tObj.getTagNo())
-            {
-            case 0:
-                baseCertificateID = IssuerSerial.getInstance(tObj, false);
-                break;
-            case 1:
-                entityName = GeneralNames.getInstance(tObj, false);
-                break;
-            case 2:
-                objectDigestInfo = ObjectDigestInfo.getInstance(tObj, false);
-                break;
-            default:
-                throw new IllegalArgumentException("unknown tag in Holder");
-            }
-        }
-        version = 1;
-    }
+			switch(tObj.getTagNo())
+			{
+				case 0:
+					baseCertificateID = IssuerSerial.getInstance(tObj, false);
+					break;
+				case 1:
+					entityName = GeneralNames.getInstance(tObj, false);
+					break;
+				case 2:
+					objectDigestInfo = ObjectDigestInfo.getInstance(tObj, false);
+					break;
+				default:
+					throw new IllegalArgumentException("unknown tag in Holder");
+			}
+		}
+		version = 1;
+	}
 
-    public Holder(IssuerSerial baseCertificateID)
-    {
-        this.baseCertificateID = baseCertificateID;
-    }
+	public Holder(IssuerSerial baseCertificateID)
+	{
+		this.baseCertificateID = baseCertificateID;
+	}
 
-    /**
-     * Constructs a holder from a IssuerSerial.
-     * @param baseCertificateID The IssuerSerial.
-     * @param version The version of the attribute certificate. 
-     */
-    public Holder(IssuerSerial baseCertificateID, int version)
-    {
-        this.baseCertificateID = baseCertificateID;
-        this.version = version;
-    }
-    
-    /**
-     * Returns 1 for v2 attribute certificates or 0 for v1 attribute
-     * certificates. 
-     * @return The version of the attribute certificate.
-     */
-    public int getVersion()
-    {
-        return version;
-    }
+	/**
+	 * Constructs a holder from a IssuerSerial.
+	 *
+	 * @param baseCertificateID The IssuerSerial.
+	 * @param version           The version of the attribute certificate.
+	 */
+	public Holder(IssuerSerial baseCertificateID, int version)
+	{
+		this.baseCertificateID = baseCertificateID;
+		this.version = version;
+	}
 
-    /**
-     * Constructs a holder with an entityName for v2 attribute certificates or
-     * with a subjectName for v1 attribute certificates.
-     * 
-     * @param entityName The entity or subject name.
-     */
-    public Holder(GeneralNames entityName)
-    {
-        this.entityName = entityName;
-    }
+	/**
+	 * Returns 1 for v2 attribute certificates or 0 for v1 attribute
+	 * certificates.
+	 *
+	 * @return The version of the attribute certificate.
+	 */
+	public int getVersion()
+	{
+		return version;
+	}
 
-    /**
-     * Constructs a holder with an entityName for v2 attribute certificates or
-     * with a subjectName for v1 attribute certificates.
-     * 
-     * @param entityName The entity or subject name.
-     * @param version The version of the attribute certificate. 
-     */
-    public Holder(GeneralNames entityName, int version)
-    {
-        this.entityName = entityName;
-        this.version = version;
-    }
-    
-    /**
-     * Constructs a holder from an object digest info.
-     * 
-     * @param objectDigestInfo The object digest info object.
-     */
-    public Holder(ObjectDigestInfo objectDigestInfo)
-    {
-        this.objectDigestInfo = objectDigestInfo;
-    }
+	/**
+	 * Constructs a holder with an entityName for v2 attribute certificates or
+	 * with a subjectName for v1 attribute certificates.
+	 *
+	 * @param entityName The entity or subject name.
+	 */
+	public Holder(GeneralNames entityName)
+	{
+		this.entityName = entityName;
+	}
 
-    public IssuerSerial getBaseCertificateID()
-    {
-        return baseCertificateID;
-    }
+	/**
+	 * Constructs a holder with an entityName for v2 attribute certificates or
+	 * with a subjectName for v1 attribute certificates.
+	 *
+	 * @param entityName The entity or subject name.
+	 * @param version    The version of the attribute certificate.
+	 */
+	public Holder(GeneralNames entityName, int version)
+	{
+		this.entityName = entityName;
+		this.version = version;
+	}
 
-    /**
-     * Returns the entityName for an v2 attribute certificate or the subjectName
-     * for an v1 attribute certificate.
-     * 
-     * @return The entityname or subjectname.
-     */
-    public GeneralNames getEntityName()
-    {
-        return entityName;
-    }
+	/**
+	 * Constructs a holder from an object digest info.
+	 *
+	 * @param objectDigestInfo The object digest info object.
+	 */
+	public Holder(ObjectDigestInfo objectDigestInfo)
+	{
+		this.objectDigestInfo = objectDigestInfo;
+	}
 
-    public ObjectDigestInfo getObjectDigestInfo()
-    {
-        return objectDigestInfo;
-    }
+	public IssuerSerial getBaseCertificateID()
+	{
+		return baseCertificateID;
+	}
 
-    public DERObject toASN1Object()
-    {
-        if (version == 1)
-        {
-            ASN1EncodableVector v = new ASN1EncodableVector();
+	/**
+	 * Returns the entityName for an v2 attribute certificate or the subjectName
+	 * for an v1 attribute certificate.
+	 *
+	 * @return The entityname or subjectname.
+	 */
+	public GeneralNames getEntityName()
+	{
+		return entityName;
+	}
 
-            if (baseCertificateID != null)
-            {
-                v.add(new DERTaggedObject(false, 0, baseCertificateID));
-            }
+	public ObjectDigestInfo getObjectDigestInfo()
+	{
+		return objectDigestInfo;
+	}
 
-            if (entityName != null)
-            {
-                v.add(new DERTaggedObject(false, 1, entityName));
-            }
+	public DERObject toASN1Object()
+	{
+		if(version == 1)
+		{
+			ASN1EncodableVector v = new ASN1EncodableVector();
 
-            if (objectDigestInfo != null)
-            {
-                v.add(new DERTaggedObject(false, 2, objectDigestInfo));
-            }
+			if(baseCertificateID != null)
+			{
+				v.add(new DERTaggedObject(false, 0, baseCertificateID));
+			}
 
-            return new DERSequence(v);
-        }
-        else
-        {
-            if (entityName != null)
-            {
-                return new DERTaggedObject(false, 1, entityName);
-            }
-            else
-            {
-                return new DERTaggedObject(false, 0, baseCertificateID);
-            }
-        }
-    }
+			if(entityName != null)
+			{
+				v.add(new DERTaggedObject(false, 1, entityName));
+			}
+
+			if(objectDigestInfo != null)
+			{
+				v.add(new DERTaggedObject(false, 2, objectDigestInfo));
+			}
+
+			return new DERSequence(v);
+		}
+		else
+		{
+			if(entityName != null)
+			{
+				return new DERTaggedObject(false, 1, entityName);
+			}
+			else
+			{
+				return new DERTaggedObject(false, 0, baseCertificateID);
+			}
+		}
+	}
 }

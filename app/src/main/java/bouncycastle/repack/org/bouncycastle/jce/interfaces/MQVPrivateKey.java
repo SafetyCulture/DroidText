@@ -8,20 +8,20 @@ import java.security.PublicKey;
  * (Optionally provides the ephemeral public key)
  */
 public interface MQVPrivateKey
-    extends PrivateKey
+		extends PrivateKey
 {
-    /**
-     * return the static private key.
-     */
-    PrivateKey getStaticPrivateKey();
+	/**
+	 * return the static private key.
+	 */
+	PrivateKey getStaticPrivateKey();
 
-    /**
-     * return the ephemeral private key.
-     */
-    PrivateKey getEphemeralPrivateKey();
+	/**
+	 * return the ephemeral private key.
+	 */
+	PrivateKey getEphemeralPrivateKey();
 
-    /**
-     * return the ephemeral public key (may be null).
-     */
-    PublicKey getEphemeralPublicKey();
+	/**
+	 * return the ephemeral public key (may be null).
+	 */
+	PublicKey getEphemeralPublicKey();
 }

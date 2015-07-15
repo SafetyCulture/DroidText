@@ -4,24 +4,24 @@ package repack.org.bouncycastle.pkcs;
  * General checked Exception thrown in the cert package and its sub-packages.
  */
 public class PKCSException
-    extends Exception
+		extends Exception
 {
-    private Throwable cause;
+	private Throwable cause;
 
-    public PKCSException(String msg, Throwable cause)
-    {
-        super(msg);
+	public PKCSException(String msg, Throwable cause)
+	{
+		super(msg);
 
-        this.cause = cause;
-    }
+		this.cause = cause;
+	}
 
-    public PKCSException(String msg)
-    {
-        super(msg);
-    }
+	public PKCSException(String msg)
+	{
+		super(msg);
+	}
 
-    public Throwable getCause()
-    {
-        return cause;
-    }
+	public Throwable getCause()
+	{
+		return cause;
+	}
 }

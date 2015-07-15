@@ -1,13 +1,5 @@
 package repack.org.bouncycastle.jce.provider.symmetric;
 
-import java.security.AlgorithmParameters;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.SecureRandom;
-import java.security.spec.AlgorithmParameterSpec;
-import java.util.HashMap;
-
-import javax.crypto.spec.IvParameterSpec;
-
 import repack.org.bouncycastle.crypto.BufferedBlockCipher;
 import repack.org.bouncycastle.crypto.CipherKeyGenerator;
 import repack.org.bouncycastle.crypto.engines.RC6Engine;
@@ -20,112 +12,119 @@ import repack.org.bouncycastle.jce.provider.JCEKeyGenerator;
 import repack.org.bouncycastle.jce.provider.JDKAlgorithmParameterGenerator;
 import repack.org.bouncycastle.jce.provider.JDKAlgorithmParameters;
 
+import javax.crypto.spec.IvParameterSpec;
+import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.HashMap;
+
 public final class RC6
 {
-    private RC6()
-    {
-    }
-    
-    public static class ECB
-        extends JCEBlockCipher
-    {
-        public ECB()
-        {
-            super(new RC6Engine());
-        }
-    }
+	private RC6()
+	{
+	}
 
-    public static class CBC
-       extends JCEBlockCipher
-    {
-        public CBC()
-        {
-            super(new CBCBlockCipher(new RC6Engine()), 128);
-        }
-    }
+	public static class ECB
+			extends JCEBlockCipher
+	{
+		public ECB()
+		{
+			super(new RC6Engine());
+		}
+	}
 
-    static public class CFB
-        extends JCEBlockCipher
-    {
-        public CFB()
-        {
-            super(new BufferedBlockCipher(new CFBBlockCipher(new RC6Engine(), 128)), 128);
-        }
-    }
+	public static class CBC
+			extends JCEBlockCipher
+	{
+		public CBC()
+		{
+			super(new CBCBlockCipher(new RC6Engine()), 128);
+		}
+	}
 
-    static public class OFB
-        extends JCEBlockCipher
-    {
-        public OFB()
-        {
-            super(new BufferedBlockCipher(new OFBBlockCipher(new RC6Engine(), 128)), 128);
-        }
-    }
+	static public class CFB
+			extends JCEBlockCipher
+	{
+		public CFB()
+		{
+			super(new BufferedBlockCipher(new CFBBlockCipher(new RC6Engine(), 128)), 128);
+		}
+	}
 
-    public static class KeyGen
-        extends JCEKeyGenerator
-    {
-        public KeyGen()
-        {
-            super("RC6", 256, new CipherKeyGenerator());
-        }
-    }
+	static public class OFB
+			extends JCEBlockCipher
+	{
+		public OFB()
+		{
+			super(new BufferedBlockCipher(new OFBBlockCipher(new RC6Engine(), 128)), 128);
+		}
+	}
 
-    public static class AlgParamGen
-        extends JDKAlgorithmParameterGenerator
-    {
-        protected void engineInit(
-            AlgorithmParameterSpec genParamSpec,
-            SecureRandom random)
-            throws InvalidAlgorithmParameterException
-        {
-            throw new InvalidAlgorithmParameterException("No supported AlgorithmParameterSpec for RC6 parameter generation.");
-        }
+	public static class KeyGen
+			extends JCEKeyGenerator
+	{
+		public KeyGen()
+		{
+			super("RC6", 256, new CipherKeyGenerator());
+		}
+	}
 
-        protected AlgorithmParameters engineGenerateParameters()
-        {
-            byte[]  iv = new byte[16];
+	public static class AlgParamGen
+			extends JDKAlgorithmParameterGenerator
+	{
+		protected void engineInit(
+				AlgorithmParameterSpec genParamSpec,
+				SecureRandom random)
+				throws InvalidAlgorithmParameterException
+		{
+			throw new InvalidAlgorithmParameterException("No supported AlgorithmParameterSpec for RC6 parameter generation.");
+		}
 
-            if (random == null)
-            {
-                random = new SecureRandom();
-            }
+		protected AlgorithmParameters engineGenerateParameters()
+		{
+			byte[] iv = new byte[16];
 
-            random.nextBytes(iv);
+			if(random == null)
+			{
+				random = new SecureRandom();
+			}
 
-            AlgorithmParameters params;
+			random.nextBytes(iv);
 
-            try
-            {
-                params = AlgorithmParameters.getInstance("RC6", BouncyCastleProvider.PROVIDER_NAME);
-                params.init(new IvParameterSpec(iv));
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e.getMessage());
-            }
+			AlgorithmParameters params;
 
-            return params;
-        }
-    }
+			try
+			{
+				params = AlgorithmParameters.getInstance("RC6", BouncyCastleProvider.PROVIDER_NAME);
+				params.init(new IvParameterSpec(iv));
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException(e.getMessage());
+			}
 
-    public static class AlgParams
-        extends JDKAlgorithmParameters.IVAlgorithmParameters
-    {
-        protected String engineToString()
-        {
-            return "RC6 IV";
-        }
-    }
+			return params;
+		}
+	}
 
-    public static class Mappings
-        extends HashMap
-    {
-        public Mappings()
-        {
-            put("Cipher.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$ECB");
-            put("KeyGenerator.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$KeyGen");
-            put("AlgorithmParameters.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$AlgParams");
-        }
-    }
+	public static class AlgParams
+			extends JDKAlgorithmParameters.IVAlgorithmParameters
+	{
+		protected String engineToString()
+		{
+			return "RC6 IV";
+		}
+	}
+
+	public static class Mappings
+			extends HashMap
+	{
+		public Mappings()
+		{
+			put("Cipher.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$ECB");
+			put("KeyGenerator.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$KeyGen");
+			put("AlgorithmParameters.RC6", "org.bouncycastle.jce.provider.symmetric.RC6$AlgParams");
+		}
+	}
 }

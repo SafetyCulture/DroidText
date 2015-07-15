@@ -1,11 +1,11 @@
 package repack.org.bouncycastle.cms;
 
 public class CMSVerifierCertificateNotValidException
-    extends CMSException
+		extends CMSException
 {
-    public CMSVerifierCertificateNotValidException(
-        String msg)
-    {
-        super(msg);
-    }
+	public CMSVerifierCertificateNotValidException(
+			String msg)
+	{
+		super(msg);
+	}
 }

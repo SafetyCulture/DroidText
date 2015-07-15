@@ -1,17 +1,17 @@
 package repack.org.bouncycastle.jce.interfaces;
 
-import java.security.PublicKey;
-
 import repack.org.bouncycastle.math.ec.ECPoint;
+
+import java.security.PublicKey;
 
 /**
  * interface for elliptic curve public keys.
  */
 public interface ECPublicKey
-    extends ECKey, PublicKey
+		extends ECKey, PublicKey
 {
-    /**
-     * return the public point Q
-     */
-    public ECPoint getQ();
+	/**
+	 * return the public point Q
+	 */
+	public ECPoint getQ();
 }

@@ -1,5 +1,24 @@
 package repack.org.bouncycastle.jce.provider;
 
+import repack.org.bouncycastle.asn1.ASN1Encodable;
+import repack.org.bouncycastle.asn1.ASN1InputStream;
+import repack.org.bouncycastle.asn1.ASN1OutputStream;
+import repack.org.bouncycastle.asn1.ASN1Sequence;
+import repack.org.bouncycastle.asn1.DERInteger;
+import repack.org.bouncycastle.asn1.DERObjectIdentifier;
+import repack.org.bouncycastle.asn1.util.ASN1Dump;
+import repack.org.bouncycastle.asn1.x509.CRLDistPoint;
+import repack.org.bouncycastle.asn1.x509.CRLNumber;
+import repack.org.bouncycastle.asn1.x509.CertificateList;
+import repack.org.bouncycastle.asn1.x509.IssuingDistributionPoint;
+import repack.org.bouncycastle.asn1.x509.TBSCertList;
+import repack.org.bouncycastle.asn1.x509.X509Extension;
+import repack.org.bouncycastle.asn1.x509.X509Extensions;
+import repack.org.bouncycastle.jce.X509Principal;
+import repack.org.bouncycastle.util.encoders.Hex;
+import repack.org.bouncycastle.x509.extension.X509ExtensionUtil;
+
+import javax.security.auth.x500.X500Principal;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -22,29 +41,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.security.auth.x500.X500Principal;
-
-import repack.org.bouncycastle.asn1.ASN1Encodable;
-import repack.org.bouncycastle.asn1.ASN1InputStream;
-import repack.org.bouncycastle.asn1.ASN1OutputStream;
-import repack.org.bouncycastle.asn1.ASN1Sequence;
-import repack.org.bouncycastle.asn1.DERInteger;
-import repack.org.bouncycastle.asn1.DERObjectIdentifier;
-import repack.org.bouncycastle.asn1.util.ASN1Dump;
-import repack.org.bouncycastle.asn1.x509.CRLDistPoint;
-import repack.org.bouncycastle.asn1.x509.CRLNumber;
-import repack.org.bouncycastle.asn1.x509.CertificateList;
-import repack.org.bouncycastle.asn1.x509.IssuingDistributionPoint;
-import repack.org.bouncycastle.asn1.x509.TBSCertList;
-import repack.org.bouncycastle.asn1.x509.X509Extension;
-import repack.org.bouncycastle.asn1.x509.X509Extensions;
-import repack.org.bouncycastle.jce.X509Principal;
-import repack.org.bouncycastle.util.encoders.Hex;
-import repack.org.bouncycastle.x509.extension.X509ExtensionUtil;
-
 /**
  * The following extensions are listed in RFC 2459 as relevant to CRLs
- *
+ * <p/>
  * Authority Key Identifier
  * Issuer Alternative Name
  * CRL Number
@@ -52,479 +51,479 @@ import repack.org.bouncycastle.x509.extension.X509ExtensionUtil;
  * Issuing Distribution Point (critical)
  */
 public class X509CRLObject
-    extends X509CRL
+		extends X509CRL
 {
-    private CertificateList c;
-    private String sigAlgName;
-    private byte[] sigAlgParams;
-    private boolean isIndirect;
+	private CertificateList c;
+	private String sigAlgName;
+	private byte[] sigAlgParams;
+	private boolean isIndirect;
 
-    public X509CRLObject(
-        CertificateList c)
-        throws CRLException
-    {
-        this.c = c;
-        
-        try
-        {
-            this.sigAlgName = X509SignatureUtil.getSignatureName(c.getSignatureAlgorithm());
-            
-            if (c.getSignatureAlgorithm().getParameters() != null)
-            {
-                this.sigAlgParams = ((ASN1Encodable)c.getSignatureAlgorithm().getParameters()).getDEREncoded();
-            }
-            else
-            {
-                this.sigAlgParams = null;
-            }
+	public X509CRLObject(
+			CertificateList c)
+			throws CRLException
+	{
+		this.c = c;
 
-            this.isIndirect = isIndirectCRL();
-        }
-        catch (Exception e)
-        {
-            throw new CRLException("CRL contents invalid: " + e);
-        }
-    }
+		try
+		{
+			this.sigAlgName = X509SignatureUtil.getSignatureName(c.getSignatureAlgorithm());
 
-    /**
-     * Will return true if any extensions are present and marked
-     * as critical as we currently dont handle any extensions!
-     */
-    public boolean hasUnsupportedCriticalExtension()
-    {
-        Set extns = getCriticalExtensionOIDs();
+			if(c.getSignatureAlgorithm().getParameters() != null)
+			{
+				this.sigAlgParams = ((ASN1Encodable) c.getSignatureAlgorithm().getParameters()).getDEREncoded();
+			}
+			else
+			{
+				this.sigAlgParams = null;
+			}
 
-        if (extns == null)
-        {
-            return false;
-        }
+			this.isIndirect = isIndirectCRL();
+		}
+		catch(Exception e)
+		{
+			throw new CRLException("CRL contents invalid: " + e);
+		}
+	}
 
-        extns.remove(RFC3280CertPathUtilities.ISSUING_DISTRIBUTION_POINT);
-        extns.remove(RFC3280CertPathUtilities.DELTA_CRL_INDICATOR);
+	/**
+	 * Will return true if any extensions are present and marked
+	 * as critical as we currently dont handle any extensions!
+	 */
+	public boolean hasUnsupportedCriticalExtension()
+	{
+		Set extns = getCriticalExtensionOIDs();
 
-        return !extns.isEmpty();
-    }
+		if(extns == null)
+		{
+			return false;
+		}
 
-    private Set getExtensionOIDs(boolean critical)
-    {
-        if (this.getVersion() == 2)
-        {
-            X509Extensions extensions = c.getTBSCertList().getExtensions();
+		extns.remove(RFC3280CertPathUtilities.ISSUING_DISTRIBUTION_POINT);
+		extns.remove(RFC3280CertPathUtilities.DELTA_CRL_INDICATOR);
 
-            if (extensions != null)
-            {
-                Set set = new HashSet();
-                Enumeration e = extensions.oids();
+		return !extns.isEmpty();
+	}
 
-                while (e.hasMoreElements())
-                {
-                    DERObjectIdentifier oid = (DERObjectIdentifier)e.nextElement();
-                    X509Extension ext = extensions.getExtension(oid);
+	private Set getExtensionOIDs(boolean critical)
+	{
+		if(this.getVersion() == 2)
+		{
+			X509Extensions extensions = c.getTBSCertList().getExtensions();
 
-                    if (critical == ext.isCritical())
-                    {
-                        set.add(oid.getId());
-                    }
-                }
+			if(extensions != null)
+			{
+				Set set = new HashSet();
+				Enumeration e = extensions.oids();
 
-                return set;
-            }
-        }
+				while(e.hasMoreElements())
+				{
+					DERObjectIdentifier oid = (DERObjectIdentifier) e.nextElement();
+					X509Extension ext = extensions.getExtension(oid);
 
-        return null;
-    }
+					if(critical == ext.isCritical())
+					{
+						set.add(oid.getId());
+					}
+				}
 
-    public Set getCriticalExtensionOIDs()
-    {
-        return getExtensionOIDs(true);
-    }
+				return set;
+			}
+		}
 
-    public Set getNonCriticalExtensionOIDs()
-    {
-        return getExtensionOIDs(false);
-    }
+		return null;
+	}
 
-    public byte[] getExtensionValue(String oid)
-    {
-        X509Extensions exts = c.getTBSCertList().getExtensions();
+	public Set getCriticalExtensionOIDs()
+	{
+		return getExtensionOIDs(true);
+	}
 
-        if (exts != null)
-        {
-            X509Extension   ext = exts.getExtension(new DERObjectIdentifier(oid));
+	public Set getNonCriticalExtensionOIDs()
+	{
+		return getExtensionOIDs(false);
+	}
 
-            if (ext != null)
-            {
-                try
-                {
-                    return ext.getValue().getEncoded();
-                }
-                catch (Exception e)
-                {
-                    throw new IllegalStateException("error parsing " + e.toString());
-                }
-            }
-        }
+	public byte[] getExtensionValue(String oid)
+	{
+		X509Extensions exts = c.getTBSCertList().getExtensions();
 
-        return null;
-    }
+		if(exts != null)
+		{
+			X509Extension ext = exts.getExtension(new DERObjectIdentifier(oid));
 
-    public byte[] getEncoded()
-        throws CRLException
-    {
-        try
-        {
-            return c.getEncoded(ASN1Encodable.DER);
-        }
-        catch (IOException e)
-        {
-            throw new CRLException(e.toString());
-        }
-    }
+			if(ext != null)
+			{
+				try
+				{
+					return ext.getValue().getEncoded();
+				}
+				catch(Exception e)
+				{
+					throw new IllegalStateException("error parsing " + e.toString());
+				}
+			}
+		}
 
-    public void verify(PublicKey key)
-        throws CRLException,  NoSuchAlgorithmException,
-            InvalidKeyException, NoSuchProviderException, SignatureException
-    {
-        verify(key, BouncyCastleProvider.PROVIDER_NAME);
-    }
+		return null;
+	}
 
-    public void verify(PublicKey key, String sigProvider)
-        throws CRLException, NoSuchAlgorithmException,
-            InvalidKeyException, NoSuchProviderException, SignatureException
-    {
-        if (!c.getSignatureAlgorithm().equals(c.getTBSCertList().getSignature()))
-        {
-            throw new CRLException("Signature algorithm on CertificateList does not match TBSCertList.");
-        }
+	public byte[] getEncoded()
+			throws CRLException
+	{
+		try
+		{
+			return c.getEncoded(ASN1Encodable.DER);
+		}
+		catch(IOException e)
+		{
+			throw new CRLException(e.toString());
+		}
+	}
 
-        Signature sig = Signature.getInstance(getSigAlgName(), sigProvider);
+	public void verify(PublicKey key)
+			throws CRLException, NoSuchAlgorithmException,
+			InvalidKeyException, NoSuchProviderException, SignatureException
+	{
+		verify(key, BouncyCastleProvider.PROVIDER_NAME);
+	}
 
-        sig.initVerify(key);
-        sig.update(this.getTBSCertList());
-        if (!sig.verify(this.getSignature()))
-        {
-            throw new SignatureException("CRL does not verify with supplied public key.");
-        }
-    }
+	public void verify(PublicKey key, String sigProvider)
+			throws CRLException, NoSuchAlgorithmException,
+			InvalidKeyException, NoSuchProviderException, SignatureException
+	{
+		if(!c.getSignatureAlgorithm().equals(c.getTBSCertList().getSignature()))
+		{
+			throw new CRLException("Signature algorithm on CertificateList does not match TBSCertList.");
+		}
 
-    public int getVersion()
-    {
-        return c.getVersion();
-    }
+		Signature sig = Signature.getInstance(getSigAlgName(), sigProvider);
 
-    public Principal getIssuerDN()
-    {
-        return new X509Principal(c.getIssuer());
-    }
+		sig.initVerify(key);
+		sig.update(this.getTBSCertList());
+		if(!sig.verify(this.getSignature()))
+		{
+			throw new SignatureException("CRL does not verify with supplied public key.");
+		}
+	}
 
-    public X500Principal getIssuerX500Principal()
-    {
-        try
-        {
-            ByteArrayOutputStream   bOut = new ByteArrayOutputStream();
-            ASN1OutputStream        aOut = new ASN1OutputStream(bOut);
+	public int getVersion()
+	{
+		return c.getVersion();
+	}
 
-            aOut.writeObject(c.getIssuer());
+	public Principal getIssuerDN()
+	{
+		return new X509Principal(c.getIssuer());
+	}
 
-            return new X500Principal(bOut.toByteArray());
-        }
-        catch (IOException e)
-        {
-            throw new IllegalStateException("can't encode issuer DN");
-        }
-    }
+	public X500Principal getIssuerX500Principal()
+	{
+		try
+		{
+			ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+			ASN1OutputStream aOut = new ASN1OutputStream(bOut);
 
-    public Date getThisUpdate()
-    {
-        return c.getThisUpdate().getDate();
-    }
+			aOut.writeObject(c.getIssuer());
 
-    public Date getNextUpdate()
-    {
-        if (c.getNextUpdate() != null)
-        {
-            return c.getNextUpdate().getDate();
-        }
+			return new X500Principal(bOut.toByteArray());
+		}
+		catch(IOException e)
+		{
+			throw new IllegalStateException("can't encode issuer DN");
+		}
+	}
 
-        return null;
-    }
- 
-    private Set loadCRLEntries()
-    {
-        Set entrySet = new HashSet();
-        Enumeration certs = c.getRevokedCertificateEnumeration();
+	public Date getThisUpdate()
+	{
+		return c.getThisUpdate().getDate();
+	}
 
-        X500Principal previousCertificateIssuer = getIssuerX500Principal();
-        while (certs.hasMoreElements())
-        {
-            TBSCertList.CRLEntry entry = (TBSCertList.CRLEntry)certs.nextElement();
-            X509CRLEntryObject crlEntry = new X509CRLEntryObject(entry, isIndirect, previousCertificateIssuer);
-            entrySet.add(crlEntry);
-            previousCertificateIssuer = crlEntry.getCertificateIssuer();
-        }
+	public Date getNextUpdate()
+	{
+		if(c.getNextUpdate() != null)
+		{
+			return c.getNextUpdate().getDate();
+		}
 
-        return entrySet;
-    }
+		return null;
+	}
 
-    public X509CRLEntry getRevokedCertificate(BigInteger serialNumber)
-    {
-        Enumeration certs = c.getRevokedCertificateEnumeration();
+	private Set loadCRLEntries()
+	{
+		Set entrySet = new HashSet();
+		Enumeration certs = c.getRevokedCertificateEnumeration();
 
-        X500Principal previousCertificateIssuer = getIssuerX500Principal();
-        while (certs.hasMoreElements())
-        {
-            TBSCertList.CRLEntry entry = (TBSCertList.CRLEntry)certs.nextElement();
-            X509CRLEntryObject crlEntry = new X509CRLEntryObject(entry, isIndirect, previousCertificateIssuer);
+		X500Principal previousCertificateIssuer = getIssuerX500Principal();
+		while(certs.hasMoreElements())
+		{
+			TBSCertList.CRLEntry entry = (TBSCertList.CRLEntry) certs.nextElement();
+			X509CRLEntryObject crlEntry = new X509CRLEntryObject(entry, isIndirect, previousCertificateIssuer);
+			entrySet.add(crlEntry);
+			previousCertificateIssuer = crlEntry.getCertificateIssuer();
+		}
 
-            if (serialNumber.equals(entry.getUserCertificate().getValue()))
-            {
-                return crlEntry;
-            }
+		return entrySet;
+	}
 
-            previousCertificateIssuer = crlEntry.getCertificateIssuer();
-        }
+	public X509CRLEntry getRevokedCertificate(BigInteger serialNumber)
+	{
+		Enumeration certs = c.getRevokedCertificateEnumeration();
 
-        return null;
-    }
+		X500Principal previousCertificateIssuer = getIssuerX500Principal();
+		while(certs.hasMoreElements())
+		{
+			TBSCertList.CRLEntry entry = (TBSCertList.CRLEntry) certs.nextElement();
+			X509CRLEntryObject crlEntry = new X509CRLEntryObject(entry, isIndirect, previousCertificateIssuer);
 
-    public Set getRevokedCertificates()
-    {
-        Set entrySet = loadCRLEntries();
+			if(serialNumber.equals(entry.getUserCertificate().getValue()))
+			{
+				return crlEntry;
+			}
 
-        if (!entrySet.isEmpty())
-        {
-            return Collections.unmodifiableSet(entrySet);
-        }
+			previousCertificateIssuer = crlEntry.getCertificateIssuer();
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public byte[] getTBSCertList()
-        throws CRLException
-    {
-        try
-        {
-            return c.getTBSCertList().getEncoded("DER");
-        }
-        catch (IOException e)
-        {
-            throw new CRLException(e.toString());
-        }
-    }
+	public Set getRevokedCertificates()
+	{
+		Set entrySet = loadCRLEntries();
 
-    public byte[] getSignature()
-    {
-        return c.getSignature().getBytes();
-    }
+		if(!entrySet.isEmpty())
+		{
+			return Collections.unmodifiableSet(entrySet);
+		}
 
-    public String getSigAlgName()
-    {
-        return sigAlgName;
-    }
+		return null;
+	}
 
-    public String getSigAlgOID()
-    {
-        return c.getSignatureAlgorithm().getObjectId().getId();
-    }
+	public byte[] getTBSCertList()
+			throws CRLException
+	{
+		try
+		{
+			return c.getTBSCertList().getEncoded("DER");
+		}
+		catch(IOException e)
+		{
+			throw new CRLException(e.toString());
+		}
+	}
 
-    public byte[] getSigAlgParams()
-    {
-        if (sigAlgParams != null)
-        {
-            byte[] tmp = new byte[sigAlgParams.length];
-            
-            System.arraycopy(sigAlgParams, 0, tmp, 0, tmp.length);
-            
-            return tmp;
-        }
-        
-        return null;
-    }
+	public byte[] getSignature()
+	{
+		return c.getSignature().getBytes();
+	}
 
-    /**
-     * Returns a string representation of this CRL.
-     *
-     * @return a string representation of this CRL.
-     */
-    public String toString()
-    {
-        StringBuffer buf = new StringBuffer();
-        String nl = System.getProperty("line.separator");
+	public String getSigAlgName()
+	{
+		return sigAlgName;
+	}
 
-        buf.append("              Version: ").append(this.getVersion()).append(
-            nl);
-        buf.append("             IssuerDN: ").append(this.getIssuerDN())
-            .append(nl);
-        buf.append("          This update: ").append(this.getThisUpdate())
-            .append(nl);
-        buf.append("          Next update: ").append(this.getNextUpdate())
-            .append(nl);
-        buf.append("  Signature Algorithm: ").append(this.getSigAlgName())
-            .append(nl);
+	public String getSigAlgOID()
+	{
+		return c.getSignatureAlgorithm().getObjectId().getId();
+	}
 
-        byte[] sig = this.getSignature();
+	public byte[] getSigAlgParams()
+	{
+		if(sigAlgParams != null)
+		{
+			byte[] tmp = new byte[sigAlgParams.length];
 
-        buf.append("            Signature: ").append(
-            new String(Hex.encode(sig, 0, 20))).append(nl);
-        for (int i = 20; i < sig.length; i += 20)
-        {
-            if (i < sig.length - 20)
-            {
-                buf.append("                       ").append(
-                    new String(Hex.encode(sig, i, 20))).append(nl);
-            }
-            else
-            {
-                buf.append("                       ").append(
-                    new String(Hex.encode(sig, i, sig.length - i))).append(nl);
-            }
-        }
+			System.arraycopy(sigAlgParams, 0, tmp, 0, tmp.length);
 
-        X509Extensions extensions = c.getTBSCertList().getExtensions();
+			return tmp;
+		}
 
-        if (extensions != null)
-        {
-            Enumeration e = extensions.oids();
+		return null;
+	}
 
-            if (e.hasMoreElements())
-            {
-                buf.append("           Extensions: ").append(nl);
-            }
+	/**
+	 * Returns a string representation of this CRL.
+	 *
+	 * @return a string representation of this CRL.
+	 */
+	public String toString()
+	{
+		StringBuffer buf = new StringBuffer();
+		String nl = System.getProperty("line.separator");
 
-            while (e.hasMoreElements())
-            {
-                DERObjectIdentifier oid = (DERObjectIdentifier) e.nextElement();
-                X509Extension ext = extensions.getExtension(oid);
+		buf.append("              Version: ").append(this.getVersion()).append(
+				nl);
+		buf.append("             IssuerDN: ").append(this.getIssuerDN())
+				.append(nl);
+		buf.append("          This update: ").append(this.getThisUpdate())
+				.append(nl);
+		buf.append("          Next update: ").append(this.getNextUpdate())
+				.append(nl);
+		buf.append("  Signature Algorithm: ").append(this.getSigAlgName())
+				.append(nl);
 
-                if (ext.getValue() != null)
-                {
-                    byte[] octs = ext.getValue().getOctets();
-                    ASN1InputStream dIn = new ASN1InputStream(octs);
-                    buf.append("                       critical(").append(
-                        ext.isCritical()).append(") ");
-                    try
-                    {
-                        if (oid.equals(X509Extensions.CRLNumber))
-                        {
-                            buf.append(
-                                new CRLNumber(DERInteger.getInstance(
-                                    dIn.readObject()).getPositiveValue()))
-                                .append(nl);
-                        }
-                        else if (oid.equals(X509Extensions.DeltaCRLIndicator))
-                        {
-                            buf.append(
-                                "Base CRL: "
-                                    + new CRLNumber(DERInteger.getInstance(
-                                        dIn.readObject()).getPositiveValue()))
-                                .append(nl);
-                        }
-                        else if (oid
-                            .equals(X509Extensions.IssuingDistributionPoint))
-                        {
-                            buf.append(
-                                new IssuingDistributionPoint((ASN1Sequence) dIn
-                                    .readObject())).append(nl);
-                        }
-                        else if (oid
-                            .equals(X509Extensions.CRLDistributionPoints))
-                        {
-                            buf.append(
-                                new CRLDistPoint((ASN1Sequence) dIn
-                                    .readObject())).append(nl);
-                        }
-                        else if (oid.equals(X509Extensions.FreshestCRL))
-                        {
-                            buf.append(
-                                new CRLDistPoint((ASN1Sequence) dIn
-                                    .readObject())).append(nl);
-                        }
-                        else
-                        {
-                            buf.append(oid.getId());
-                            buf.append(" value = ").append(
-                                ASN1Dump.dumpAsString(dIn.readObject()))
-                                .append(nl);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        buf.append(oid.getId());
-                        buf.append(" value = ").append("*****").append(nl);
-                    }
-                }
-                else
-                {
-                    buf.append(nl);
-                }
-            }
-        }
-        Set set = getRevokedCertificates();
-        if (set != null)
-        {
-            Iterator it = set.iterator();
-            while (it.hasNext())
-            {
-                buf.append(it.next());
-                buf.append(nl);
-            }
-        }
-        return buf.toString();
-    }
+		byte[] sig = this.getSignature();
 
-    /**
-     * Checks whether the given certificate is on this CRL.
-     *
-     * @param cert the certificate to check for.
-     * @return true if the given certificate is on this CRL,
-     * false otherwise.
-     */
-    public boolean isRevoked(Certificate cert)
-    {
-        if (!cert.getType().equals("X.509"))
-        {
-            throw new RuntimeException("X.509 CRL used with non X.509 Cert");
-        }
+		buf.append("            Signature: ").append(
+				new String(Hex.encode(sig, 0, 20))).append(nl);
+		for(int i = 20; i < sig.length; i += 20)
+		{
+			if(i < sig.length - 20)
+			{
+				buf.append("                       ").append(
+						new String(Hex.encode(sig, i, 20))).append(nl);
+			}
+			else
+			{
+				buf.append("                       ").append(
+						new String(Hex.encode(sig, i, sig.length - i))).append(nl);
+			}
+		}
 
-        TBSCertList.CRLEntry[] certs = c.getRevokedCertificates();
+		X509Extensions extensions = c.getTBSCertList().getExtensions();
 
-        if (certs != null)
-        {
-            BigInteger serial = ((X509Certificate)cert).getSerialNumber();
+		if(extensions != null)
+		{
+			Enumeration e = extensions.oids();
 
-            for (int i = 0; i < certs.length; i++)
-            {
-                if (certs[i].getUserCertificate().getValue().equals(serial))
-                {
-                    return true;
-                }
-            }
-        }
+			if(e.hasMoreElements())
+			{
+				buf.append("           Extensions: ").append(nl);
+			}
 
-        return false;
-    }
+			while(e.hasMoreElements())
+			{
+				DERObjectIdentifier oid = (DERObjectIdentifier) e.nextElement();
+				X509Extension ext = extensions.getExtension(oid);
 
-    private boolean isIndirectCRL()
-        throws CRLException
-    {
-        byte[] idp = getExtensionValue(X509Extensions.IssuingDistributionPoint.getId());
-        boolean isIndirect = false;
-        try
-        {
-            if (idp != null)
-            {
-                isIndirect = IssuingDistributionPoint.getInstance(
-                        X509ExtensionUtil.fromExtensionValue(idp))
-                        .isIndirectCRL();
-            }
-        }
-        catch (Exception e)
-        {
-            throw new ExtCRLException(
-                    "Exception reading IssuingDistributionPoint", e);
-        }
+				if(ext.getValue() != null)
+				{
+					byte[] octs = ext.getValue().getOctets();
+					ASN1InputStream dIn = new ASN1InputStream(octs);
+					buf.append("                       critical(").append(
+							ext.isCritical()).append(") ");
+					try
+					{
+						if(oid.equals(X509Extensions.CRLNumber))
+						{
+							buf.append(
+									new CRLNumber(DERInteger.getInstance(
+											dIn.readObject()).getPositiveValue()))
+									.append(nl);
+						}
+						else if(oid.equals(X509Extensions.DeltaCRLIndicator))
+						{
+							buf.append(
+									"Base CRL: "
+											+ new CRLNumber(DERInteger.getInstance(
+											dIn.readObject()).getPositiveValue()))
+									.append(nl);
+						}
+						else if(oid
+								.equals(X509Extensions.IssuingDistributionPoint))
+						{
+							buf.append(
+									new IssuingDistributionPoint((ASN1Sequence) dIn
+											.readObject())).append(nl);
+						}
+						else if(oid
+								.equals(X509Extensions.CRLDistributionPoints))
+						{
+							buf.append(
+									new CRLDistPoint((ASN1Sequence) dIn
+											.readObject())).append(nl);
+						}
+						else if(oid.equals(X509Extensions.FreshestCRL))
+						{
+							buf.append(
+									new CRLDistPoint((ASN1Sequence) dIn
+											.readObject())).append(nl);
+						}
+						else
+						{
+							buf.append(oid.getId());
+							buf.append(" value = ").append(
+									ASN1Dump.dumpAsString(dIn.readObject()))
+									.append(nl);
+						}
+					}
+					catch(Exception ex)
+					{
+						buf.append(oid.getId());
+						buf.append(" value = ").append("*****").append(nl);
+					}
+				}
+				else
+				{
+					buf.append(nl);
+				}
+			}
+		}
+		Set set = getRevokedCertificates();
+		if(set != null)
+		{
+			Iterator it = set.iterator();
+			while(it.hasNext())
+			{
+				buf.append(it.next());
+				buf.append(nl);
+			}
+		}
+		return buf.toString();
+	}
 
-        return isIndirect;
-    }
+	/**
+	 * Checks whether the given certificate is on this CRL.
+	 *
+	 * @param cert the certificate to check for.
+	 * @return true if the given certificate is on this CRL,
+	 * false otherwise.
+	 */
+	public boolean isRevoked(Certificate cert)
+	{
+		if(!cert.getType().equals("X.509"))
+		{
+			throw new RuntimeException("X.509 CRL used with non X.509 Cert");
+		}
+
+		TBSCertList.CRLEntry[] certs = c.getRevokedCertificates();
+
+		if(certs != null)
+		{
+			BigInteger serial = ((X509Certificate) cert).getSerialNumber();
+
+			for(int i = 0; i < certs.length; i++)
+			{
+				if(certs[i].getUserCertificate().getValue().equals(serial))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private boolean isIndirectCRL()
+			throws CRLException
+	{
+		byte[] idp = getExtensionValue(X509Extensions.IssuingDistributionPoint.getId());
+		boolean isIndirect = false;
+		try
+		{
+			if(idp != null)
+			{
+				isIndirect = IssuingDistributionPoint.getInstance(
+						X509ExtensionUtil.fromExtensionValue(idp))
+						.isIndirectCRL();
+			}
+		}
+		catch(Exception e)
+		{
+			throw new ExtCRLException(
+					"Exception reading IssuingDistributionPoint", e);
+		}
+
+		return isIndirect;
+	}
 }
 

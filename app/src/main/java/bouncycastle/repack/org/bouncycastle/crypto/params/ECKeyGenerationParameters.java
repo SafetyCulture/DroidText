@@ -1,25 +1,25 @@
 package repack.org.bouncycastle.crypto.params;
 
-import java.security.SecureRandom;
-
 import repack.org.bouncycastle.crypto.KeyGenerationParameters;
 
+import java.security.SecureRandom;
+
 public class ECKeyGenerationParameters
-    extends KeyGenerationParameters
+		extends KeyGenerationParameters
 {
-    private ECDomainParameters  domainParams;
+	private ECDomainParameters domainParams;
 
-    public ECKeyGenerationParameters(
-        ECDomainParameters      domainParams,
-        SecureRandom            random)
-    {
-        super(random, domainParams.getN().bitLength());
+	public ECKeyGenerationParameters(
+			ECDomainParameters domainParams,
+			SecureRandom random)
+	{
+		super(random, domainParams.getN().bitLength());
 
-        this.domainParams = domainParams;
-    }
+		this.domainParams = domainParams;
+	}
 
-    public ECDomainParameters getDomainParameters()
-    {
-        return domainParams;
-    }
+	public ECDomainParameters getDomainParameters()
+	{
+		return domainParams;
+	}
 }

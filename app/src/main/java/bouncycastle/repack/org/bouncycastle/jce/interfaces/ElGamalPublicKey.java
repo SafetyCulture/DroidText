@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.security.PublicKey;
 
 public interface ElGamalPublicKey
-    extends ElGamalKey, PublicKey
+		extends ElGamalKey, PublicKey
 {
-    public BigInteger getY();
+	public BigInteger getY();
 }
