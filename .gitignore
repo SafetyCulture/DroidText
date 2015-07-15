@@ -1,6 +1,51 @@
-bin/AndroidManifest.xml
-bin/R.txt
-bin/classes/.gitignore
-bin/droidtext.jar
-bin/jarlist.cache
-libs/android-support-v4.jar
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+libs/libray/bin/
+gen/
+libs/library/gen/
+build/
+.gradle/
+.gradle
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+*.DS_Store
+
+# IDE
+
+## eclipse
+*.metadata
+*.settings
+project.properties
+
+## idea
+*.idea
+*.iml
+/.idea
+/out
+/DroidText.iml
+/proguard_logs/dump.txt
+
+#project properties
+project.properties
+
+/.apt_generated
+/google-play-services
+/project.properties
+
+
+/.gradle
+
+/.project
+manifest-merger-ci-release-report.txt
