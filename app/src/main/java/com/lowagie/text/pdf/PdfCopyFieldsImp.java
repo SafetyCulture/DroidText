@@ -47,6 +47,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -87,18 +88,18 @@ class PdfCopyFieldsImp extends PdfWriter
 	private ArrayList calculationOrderRefs;
 	private boolean hasSignature;
 
-	PdfCopyFieldsImp(OutputStream os) throws DocumentException
+	PdfCopyFieldsImp(OutputStream os, AssetManager manager) throws DocumentException
 	{
-		this(os, '\0');
+		this(os, '\0', manager);
 	}
 
-	PdfCopyFieldsImp(OutputStream os, char pdfVersion) throws DocumentException
+	PdfCopyFieldsImp(OutputStream os, char pdfVersion, AssetManager manager) throws DocumentException
 	{
-		super(new PdfDocument(), os);
+		super(new PdfDocument(manager), os);
 		pdf.addWriter(this);
 		if(pdfVersion != 0)
 			super.setPdfVersion(pdfVersion);
-		nd = new Document();
+		nd = new Document(manager);
 		nd.addDocListener(pdf);
 	}
 

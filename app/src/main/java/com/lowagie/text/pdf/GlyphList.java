@@ -49,7 +49,8 @@
 
 package com.lowagie.text.pdf;
 
-import com.lowagie.text.pdf.fonts.FontsResourceAnchor;
+import android.util.SparseArray;
+import com.lowagie.text.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -58,20 +59,18 @@ import java.util.StringTokenizer;
 
 public class GlyphList
 {
-	private static HashMap unicode2names = new HashMap();
-	private static HashMap names2unicode = new HashMap();
+	private static SparseArray<String> unicode2names = new SparseArray<>();
+	private static HashMap<String, int[]> names2unicode = new HashMap<>();
 
-	static
+	private static void initIfNeeded()
 	{
+		if(unicode2names.size() != 0 && !names2unicode.isEmpty())
+			return;
+
 		InputStream is = null;
 		try
 		{
-			is = BaseFont.getResourceStream(BaseFont.RESOURCE_PATH + "glyphlist.txt", new FontsResourceAnchor().getClass().getClassLoader());
-			if(is == null)
-			{
-				String msg = "glyphlist.txt not found as resource. (It must exist as resource in the package com.lowagie.text.pdf.fonts)";
-				throw new Exception(msg);
-			}
+			is = Document.assetManager.open("glyphlist.txt");
 			byte buf[] = new byte[1024];
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			while(true)
@@ -101,7 +100,7 @@ public class GlyphList
 				hex = t2.nextToken();
 				Integer num = Integer.valueOf(hex, 16);
 				unicode2names.put(num, name);
-				names2unicode.put(name, new int[]{num.intValue()});
+				names2unicode.put(name, new int[]{num});
 			}
 		}
 		catch(Exception e)
@@ -124,13 +123,18 @@ public class GlyphList
 		}
 	}
 
-	public static int[] nameToUnicode(String name)
+	public GlyphList()
 	{
-		return (int[]) names2unicode.get(name);
+		initIfNeeded();
 	}
 
-	public static String unicodeToName(int num)
+	public int[] nameToUnicode(String name)
 	{
-		return (String) unicode2names.get(new Integer(num));
+		return names2unicode.get(name);
+	}
+
+	public String unicodeToName(int num)
+	{
+		return unicode2names.get(num);
 	}
 }

@@ -49,10 +49,10 @@
 
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocumentException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -304,10 +304,6 @@ public abstract class BaseFont
 	 */
 	public static final boolean NOT_CACHED = false;
 
-	/**
-	 * The path to the font resources.
-	 */
-	public static final String RESOURCE_PATH = "com/lowagie/text/pdf/fonts/";
 	/**
 	 * The fake CID code that represents a newline.
 	 */
@@ -889,6 +885,8 @@ public abstract class BaseFont
 	 */
 	protected void createEncoding()
 	{
+		GlyphList glyphList = new GlyphList();
+
 		if(encoding.startsWith("#"))
 		{
 			specialMap = new IntHashtable();
@@ -922,7 +920,7 @@ public abstract class BaseFont
 				{
 					String hex = tok.nextToken();
 					int uni = Integer.parseInt(hex, 16) % 0x10000;
-					String name = GlyphList.unicodeToName(uni);
+					String name = glyphList.unicodeToName(uni);
 					if(name != null)
 					{
 						specialMap.put(uni, k);
@@ -968,7 +966,7 @@ public abstract class BaseFont
 				{
 					c = '?';
 				}
-				name = GlyphList.unicodeToName(c);
+				name = glyphList.unicodeToName(c);
 				if(name == null)
 					name = notdef;
 				differences[k] = name;
@@ -1590,61 +1588,6 @@ public abstract class BaseFont
 	public void setSubset(boolean subset)
 	{
 		this.subset = subset;
-	}
-
-	/**
-	 * Gets the font resources.
-	 *
-	 * @param key the full name of the resource
-	 * @return the <CODE>InputStream</CODE> to get the resource or
-	 * <CODE>null</CODE> if not found
-	 */
-	public static InputStream getResourceStream(String key)
-	{
-		return getResourceStream(key, null);
-	}
-
-	/**
-	 * Gets the font resources.
-	 *
-	 * @param key    the full name of the resource
-	 * @param loader the ClassLoader to load the resource or null to try the ones available
-	 * @return the <CODE>InputStream</CODE> to get the resource or
-	 * <CODE>null</CODE> if not found
-	 */
-	public static InputStream getResourceStream(String key, ClassLoader loader)
-	{
-		if(key.startsWith("/"))
-			key = key.substring(1);
-		InputStream is = null;
-		if(loader != null)
-		{
-			is = loader.getResourceAsStream(key);
-			if(is != null)
-				return is;
-		}
-		// Try to use Context Class Loader to load the properties file.
-		try
-		{
-			ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-			if(contextClassLoader != null)
-			{
-				is = contextClassLoader.getResourceAsStream(key);
-			}
-		}
-		catch(Throwable e)
-		{
-		}
-
-		if(is == null)
-		{
-			is = BaseFont.class.getResourceAsStream("/" + key);
-		}
-		if(is == null)
-		{
-			is = ClassLoader.getSystemResourceAsStream(key);
-		}
-		return is;
 	}
 
 	/**

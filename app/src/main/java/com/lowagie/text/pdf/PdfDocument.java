@@ -49,6 +49,7 @@
 
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Anchor;
 import com.lowagie.text.Annotation;
 import com.lowagie.text.BadElementException;
@@ -353,9 +354,9 @@ public class PdfDocument extends Document
 	/**
 	 * Constructs a new PDF document.
 	 */
-	public PdfDocument()
+	public PdfDocument(AssetManager assetManager)
 	{
-		super();
+		super(assetManager);
 		addProducer();
 		addCreationDate();
 	}

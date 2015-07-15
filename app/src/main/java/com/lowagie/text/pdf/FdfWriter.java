@@ -46,6 +46,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocWriter;
 
 import java.io.IOException;
@@ -84,9 +85,9 @@ public class FdfWriter
 	 * @param os the stream
 	 * @throws IOException on error
 	 */
-	public void writeTo(OutputStream os) throws IOException
+	public void writeTo(OutputStream os, AssetManager manager) throws IOException
 	{
-		Wrt wrt = new Wrt(os, this);
+		Wrt wrt = new Wrt(os, this, manager);
 		wrt.writeTo();
 	}
 
@@ -371,9 +372,9 @@ public class FdfWriter
 	{
 		private FdfWriter fdf;
 
-		Wrt(OutputStream os, FdfWriter fdf) throws IOException
+		Wrt(OutputStream os, FdfWriter fdf, AssetManager manager) throws IOException
 		{
-			super(new PdfDocument(), os);
+			super(new PdfDocument(manager), os);
 			this.fdf = fdf;
 			this.os.write(HEADER_FDF);
 			body = new PdfBody(this);

@@ -49,6 +49,7 @@
 
 package com.lowagie.tools;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
@@ -73,7 +74,7 @@ public class HandoutPdf extends java.lang.Object
 	 *
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[])
+	public static void main(String args[], AssetManager manager)
 	{
 		if(args.length != 3)
 		{
@@ -115,9 +116,9 @@ public class HandoutPdf extends java.lang.Object
 				System.out.println("There are " + n + " pages in the original file.");
 
 				// step 1: creation of a document-object
-				Document document = new Document(PageSize.A4);
+				Document document = new Document(PageSize.A4, manager);
 				// step 2: we create a writer that listens to the document
-				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(args[1]));
+				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(args[1]), manager);
 				// step 3: we open the document
 				document.open();
 				PdfContentByte cb = writer.getDirectContent();

@@ -46,6 +46,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocWriter;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -95,9 +96,9 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws DocumentException on error
 	 * @throws IOException       on error
 	 */
-	public PdfStamper(PdfReader reader, OutputStream os) throws DocumentException, IOException
+	public PdfStamper(PdfReader reader, OutputStream os, AssetManager manager) throws DocumentException, IOException
 	{
-		stamper = new PdfStamperImp(reader, os, '\0', false);
+		stamper = new PdfStamperImp(reader, os, '\0', false, manager);
 	}
 
 	/**
@@ -110,9 +111,9 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws DocumentException on error
 	 * @throws IOException       on error
 	 */
-	public PdfStamper(PdfReader reader, OutputStream os, char pdfVersion) throws DocumentException, IOException
+	public PdfStamper(PdfReader reader, OutputStream os, char pdfVersion, AssetManager manager) throws DocumentException, IOException
 	{
-		stamper = new PdfStamperImp(reader, os, pdfVersion, false);
+		stamper = new PdfStamperImp(reader, os, pdfVersion, false, manager);
 	}
 
 	/**
@@ -129,10 +130,10 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws DocumentException on error
 	 * @throws IOException       on error
 	 */
-	public PdfStamper(PdfReader reader, OutputStream os, char pdfVersion, boolean append) throws DocumentException,
+	public PdfStamper(PdfReader reader, OutputStream os, char pdfVersion, boolean append, AssetManager manager) throws DocumentException,
 			IOException
 	{
-		stamper = new PdfStamperImp(reader, os, pdfVersion, append);
+		stamper = new PdfStamperImp(reader, os, pdfVersion, append, manager);
 	}
 
 	/**
@@ -787,13 +788,13 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws IOException       on error
 	 */
 	public static PdfStamper createSignature(PdfReader reader, OutputStream os, char pdfVersion, File tempFile,
-											 boolean append) throws DocumentException, IOException
+											 boolean append, AssetManager manager) throws DocumentException, IOException
 	{
 		PdfStamper stp;
 		if(tempFile == null)
 		{
 			ByteBuffer bout = new ByteBuffer();
-			stp = new PdfStamper(reader, bout, pdfVersion, append);
+			stp = new PdfStamper(reader, bout, pdfVersion, append, manager);
 			stp.sigApp = new PdfSignatureAppearance(stp.stamper);
 			stp.sigApp.setSigout(bout);
 		}
@@ -802,7 +803,7 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 			if(tempFile.isDirectory())
 				tempFile = File.createTempFile("pdf", null, tempFile);
 			FileOutputStream fout = new FileOutputStream(android.os.Environment.getExternalStorageDirectory() + File.separator + "droidtext" + File.separator + tempFile);
-			stp = new PdfStamper(reader, fout, pdfVersion, append);
+			stp = new PdfStamper(reader, fout, pdfVersion, append, manager);
 			stp.sigApp = new PdfSignatureAppearance(stp.stamper);
 			stp.sigApp.setTempFile(tempFile);
 		}
@@ -854,10 +855,10 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws DocumentException on error
 	 * @throws IOException       on error
 	 */
-	public static PdfStamper createSignature(PdfReader reader, OutputStream os, char pdfVersion)
+	public static PdfStamper createSignature(PdfReader reader, OutputStream os, char pdfVersion, AssetManager manager)
 			throws DocumentException, IOException
 	{
-		return createSignature(reader, os, pdfVersion, null, false);
+		return createSignature(reader, os, pdfVersion, null, false, manager);
 	}
 
 	/**
@@ -901,10 +902,10 @@ public class PdfStamper implements PdfViewerPreferences, PdfEncryptionSettings
 	 * @throws DocumentException on error
 	 * @throws IOException       on error
 	 */
-	public static PdfStamper createSignature(PdfReader reader, OutputStream os, char pdfVersion, File tempFile)
+	public static PdfStamper createSignature(PdfReader reader, OutputStream os, char pdfVersion, File tempFile, AssetManager manager)
 			throws DocumentException, IOException
 	{
-		return createSignature(reader, os, pdfVersion, tempFile, false);
+		return createSignature(reader, os, pdfVersion, tempFile, false, manager);
 	}
 
 	/**

@@ -50,6 +50,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -80,9 +81,9 @@ public class PdfSmartCopy extends PdfCopy
 	/**
 	 * Creates a PdfSmartCopy instance.
 	 */
-	public PdfSmartCopy(Document document, OutputStream os) throws DocumentException
+	public PdfSmartCopy(Document document, OutputStream os, AssetManager manager) throws DocumentException
 	{
-		super(document, os);
+		super(document, os, manager);
 		this.streamMap = new HashMap();
 	}
 

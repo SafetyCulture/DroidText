@@ -48,6 +48,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -163,9 +164,9 @@ public class PdfCopy extends PdfWriter
 	 * @param document
 	 * @param os       outputstream
 	 */
-	public PdfCopy(Document document, OutputStream os) throws DocumentException
+	public PdfCopy(Document document, OutputStream os, AssetManager manager) throws DocumentException
 	{
-		super(new PdfDocument(), os);
+		super(new PdfDocument( manager), os);
 		document.addDocListener(pdf);
 		pdf.addWriter(this);
 		indirectMap = new HashMap();

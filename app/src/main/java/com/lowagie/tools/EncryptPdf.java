@@ -48,6 +48,7 @@
  */
 package com.lowagie.tools;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.pdf.PdfEncryptor;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
@@ -98,7 +99,7 @@ public class EncryptPdf
 	 * @param args input_file output_file user_password owner_password
 	 *             permissions 128|40 [new info string pairs]
 	 */
-	public static void main(String args[])
+	public static void main(String args[], AssetManager manager)
 	{
 		System.out.println("PDF document encryptor");
 		if(args.length <= STRENGTH || args[PERMISSIONS].length() != 8)
@@ -121,7 +122,7 @@ public class EncryptPdf
 			for(int k = MOREINFO; k < args.length - 1; k += 2)
 				moreInfo.put(args[k], args[k + 1]);
 			PdfEncryptor.encrypt(reader, new FileOutputStream(args[OUTPUT_FILE]), args[USER_PASSWORD].getBytes(),
-					args[OWNER_PASSWORD].getBytes(), permissions, args[STRENGTH].equals("128"), moreInfo);
+					args[OWNER_PASSWORD].getBytes(), permissions, args[STRENGTH].equals("128"), moreInfo, manager);
 			System.out.println("Done.");
 		}
 		catch(Exception e)

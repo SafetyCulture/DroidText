@@ -118,9 +118,7 @@ public class RandomAccessFileOrArray implements DataInput
 			}
 			else
 			{
-				InputStream is = BaseFont.getResourceStream(filename);
-				if(is == null)
-					throw new IOException(filename + " not found as file or resource.");
+				InputStream is = Document.assetManager.open(filename);
 				try
 				{
 					this.arrayIn = InputStreamToArray(is);

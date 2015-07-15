@@ -46,6 +46,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
@@ -108,9 +109,9 @@ class PdfStamperImp extends PdfWriter
 	 * @throws DocumentException on error
 	 * @throws IOException
 	 */
-	PdfStamperImp(PdfReader reader, OutputStream os, char pdfVersion, boolean append) throws DocumentException, IOException
+	PdfStamperImp(PdfReader reader, OutputStream os, char pdfVersion, boolean append, AssetManager manager) throws DocumentException, IOException
 	{
-		super(new PdfDocument(), os);
+		super(new PdfDocument( manager), os);
 		if(!reader.isOpenedWithFullPermissions())
 			throw new BadPasswordException("PdfReader not opened with owner password");
 		if(reader.isTampered())

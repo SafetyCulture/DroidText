@@ -49,6 +49,7 @@
 
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocWriter;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.interfaces.PdfEncryptionSettings;
@@ -81,9 +82,9 @@ public class PdfCopyForms
 	 * @param os the output stream
 	 * @throws DocumentException on error
 	 */
-	public PdfCopyForms(OutputStream os) throws DocumentException
+	public PdfCopyForms(OutputStream os, AssetManager manager) throws DocumentException
 	{
-		fc = new PdfCopyFormsImp(os);
+		fc = new PdfCopyFormsImp(os,  manager);
 	}
 
 	/**

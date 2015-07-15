@@ -313,6 +313,8 @@ public class DocumentFont extends BaseFont
 
 	private void doType1TT()
 	{
+		GlyphList glyphList = new GlyphList();
+
 		PdfObject enc = PdfReader.getPdfObject(font.get(PdfName.ENCODING));
 		if(enc == null)
 			fillEncoding(null);
@@ -340,7 +342,7 @@ public class DocumentFont extends BaseFont
 							currentNumber = ((PdfNumber) obj).intValue();
 						else
 						{
-							int c[] = GlyphList.nameToUnicode(PdfName.decodeName(((PdfName) obj).toString()));
+							int c[] = glyphList.nameToUnicode(PdfName.decodeName(((PdfName) obj).toString()));
 							if(c != null && c.length > 0)
 							{
 								uni2byte.put(c[0], currentNumber);
@@ -370,7 +372,7 @@ public class DocumentFont extends BaseFont
 			for(int k = 0; k < e.length; ++k)
 			{
 				int n = uni2byte.get(e[k]);
-				widths[n] = bf.getRawWidth(n, GlyphList.unicodeToName(e[k]));
+				widths[n] = bf.getRawWidth(n, glyphList.unicodeToName(e[k]));
 			}
 			if(diffmap != null)
 			{ //widths for diffmap must override existing ones
@@ -378,7 +380,7 @@ public class DocumentFont extends BaseFont
 				for(int k = 0; k < e.length; ++k)
 				{
 					int n = diffmap.get(e[k]);
-					widths[n] = bf.getRawWidth(n, GlyphList.unicodeToName(e[k]));
+					widths[n] = bf.getRawWidth(n, glyphList.unicodeToName(e[k]));
 				}
 				diffmap = null;
 			}
@@ -561,6 +563,7 @@ public class DocumentFont extends BaseFont
 	 * @param char2 the second char
 	 * @return the kerning to be applied
 	 */
+	@Override
 	public int getKerning(int char1, int char2)
 	{
 		return 0;
@@ -608,6 +611,7 @@ public class DocumentFont extends BaseFont
 	 * @throws IOException       on error
 	 * @throws DocumentException error in generating the object
 	 */
+	@Override
 	void writeFont(PdfWriter writer, PdfIndirectReference ref, Object[] params) throws DocumentException, IOException
 	{
 	}
@@ -767,6 +771,7 @@ public class DocumentFont extends BaseFont
 	{
 	}
 
+	@Override
 	public boolean setKerning(int char1, int char2, int kern)
 	{
 		return false;

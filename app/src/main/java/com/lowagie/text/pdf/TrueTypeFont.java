@@ -1246,6 +1246,7 @@ class TrueTypeFont extends BaseFont
 	 * @param char2 the second char
 	 * @return the kerning to be applied
 	 */
+	@Override
 	public int getKerning(int char1, int char2)
 	{
 		int metrics[] = getMetricsTT(char1);
@@ -1547,7 +1548,7 @@ class TrueTypeFont extends BaseFont
 						int[] metrics = null;
 						if(specialMap != null)
 						{
-							int[] cd = GlyphList.nameToUnicode(differences[k]);
+							int[] cd = new GlyphList().nameToUnicode(differences[k]);
 							if(cd != null)
 								metrics = getMetricsTT(cd[0]);
 						}

@@ -47,6 +47,7 @@
 
 package com.lowagie.text.pdf;
 
+import com.lowagie.text.Document;
 import com.lowagie.text.pdf.collection.PdfCollectionItem;
 
 import java.io.File;
@@ -211,9 +212,7 @@ public class PdfFileSpecification extends PdfDictionary
 					}
 					else
 					{
-						in = BaseFont.getResourceStream(filePath);
-						if(in == null)
-							throw new IOException(filePath + " not found as file or resource.");
+						in = Document.assetManager.open(filePath);
 					}
 				}
 				stream = new PdfEFStream(in, writer);

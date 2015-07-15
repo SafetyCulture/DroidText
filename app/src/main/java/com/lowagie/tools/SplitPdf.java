@@ -49,6 +49,7 @@
 
 package com.lowagie.tools;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -72,7 +73,7 @@ public class SplitPdf extends java.lang.Object
 	 *
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[])
+	public static void main(String args[], AssetManager manager)
 	{
 		if(args.length != 4)
 		{
@@ -97,11 +98,11 @@ public class SplitPdf extends java.lang.Object
 				}
 
 				// step 1: creation of a document-object
-				Document document1 = new Document(reader.getPageSizeWithRotation(1));
-				Document document2 = new Document(reader.getPageSizeWithRotation(pagenumber));
+				Document document1 = new Document(reader.getPageSizeWithRotation(1), manager);
+				Document document2 = new Document(reader.getPageSizeWithRotation(pagenumber), manager);
 				// step 2: we create a writer that listens to the document
-				PdfWriter writer1 = PdfWriter.getInstance(document1, new FileOutputStream(args[1]));
-				PdfWriter writer2 = PdfWriter.getInstance(document2, new FileOutputStream(args[2]));
+				PdfWriter writer1 = PdfWriter.getInstance(document1, new FileOutputStream(args[1]), manager);
+				PdfWriter writer2 = PdfWriter.getInstance(document2, new FileOutputStream(args[2]), manager);
 				// step 3: we open the document
 				document1.open();
 				PdfContentByte cb1 = writer1.getDirectContent();

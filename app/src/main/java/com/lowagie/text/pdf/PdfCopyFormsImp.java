@@ -49,6 +49,7 @@
 
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocumentException;
 
 import java.io.OutputStream;
@@ -69,9 +70,9 @@ class PdfCopyFormsImp extends PdfCopyFieldsImp
 	 * @param os The Outputstream pointing to the output document
 	 * @throws DocumentException
 	 */
-	PdfCopyFormsImp(OutputStream os) throws DocumentException
+	PdfCopyFormsImp(OutputStream os, AssetManager manager) throws DocumentException
 	{
-		super(os);
+		super(os, manager);
 	}
 
 	/**

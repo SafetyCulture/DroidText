@@ -49,6 +49,8 @@
 
 package com.lowagie.text;
 
+import android.content.res.AssetManager;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -227,15 +229,17 @@ public class Document implements DocListener
 	 */
 	protected int chapternumber = 0;
 
+	public static AssetManager assetManager = null;
+
 	// constructor
 
 	/**
 	 * Constructs a new <CODE>Document</CODE> -object.
 	 */
 
-	public Document()
+	public Document(AssetManager assetManager)
 	{
-		this(PageSize.A4);
+		this(PageSize.A4, assetManager);
 	}
 
 	/**
@@ -244,9 +248,9 @@ public class Document implements DocListener
 	 * @param pageSize the pageSize
 	 */
 
-	public Document(Rectangle pageSize)
+	public Document(Rectangle pageSize, AssetManager assetManager)
 	{
-		this(pageSize, 36, 36, 36, 36);
+		this(pageSize, 36, 36, 36, 36, assetManager);
 	}
 
 	/**
@@ -259,13 +263,14 @@ public class Document implements DocListener
 	 * @param marginBottom the margin on the bottom
 	 */
 
-	public Document(Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom)
+	public Document(Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom, AssetManager assetManager)
 	{
 		this.pageSize = pageSize;
 		this.marginLeft = marginLeft;
 		this.marginRight = marginRight;
 		this.marginTop = marginTop;
 		this.marginBottom = marginBottom;
+		Document.assetManager = assetManager;
 	}
 
 	// listener methods
@@ -331,6 +336,9 @@ public class Document implements DocListener
 			if(!e.isComplete())
 				e.flushContent();
 		}
+
+		assetManager = null;
+
 		return success;
 	}
 

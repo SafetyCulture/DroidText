@@ -193,6 +193,7 @@ public class Type3Font extends BaseFont
 		return new String[][]{{"4", "", "", "", ""}};
 	}
 
+	@Override
 	public int getKerning(int char1, int char2)
 	{
 		return 0;
@@ -218,6 +219,7 @@ public class Type3Font extends BaseFont
 		return false;
 	}
 
+	@Override
 	public boolean setKerning(int char1, int char2, int kern)
 	{
 		return false;
@@ -227,6 +229,7 @@ public class Type3Font extends BaseFont
 	{
 	}
 
+	@Override
 	void writeFont(PdfWriter writer, PdfIndirectReference ref, Object[] params)
 			throws com.lowagie.text.DocumentException, java.io.IOException
 	{
@@ -262,6 +265,7 @@ public class Type3Font extends BaseFont
 				widths[w] = widths3.get(u);
 			}
 		}
+		GlyphList glyphList = new GlyphList();
 		PdfArray diffs = new PdfArray();
 		PdfDictionary charprocs = new PdfDictionary();
 		int last = -1;
@@ -275,7 +279,7 @@ public class Type3Font extends BaseFont
 			}
 			++last;
 			int c2 = invOrd[k];
-			String s = GlyphList.unicodeToName(c2);
+			String s = glyphList.unicodeToName(c2);
 			if(s == null)
 				s = "a" + c2;
 			PdfName n = new PdfName(s);
@@ -312,6 +316,7 @@ public class Type3Font extends BaseFont
 	 * @return null
 	 * @since 2.1.3
 	 */
+	@Override
 	public PdfStream getFullFontStream()
 	{
 		return null;

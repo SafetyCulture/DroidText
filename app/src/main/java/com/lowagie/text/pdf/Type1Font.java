@@ -51,7 +51,6 @@ package com.lowagie.text.pdf;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.pdf.fonts.FontsResourceAnchor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -66,8 +65,6 @@ import java.util.StringTokenizer;
  */
 class Type1Font extends BaseFont
 {
-	private static FontsResourceAnchor resourceAnchor;
-
 	/**
 	 * The PFB file if the input was made with a <CODE>byte</CODE> array.
 	 */
@@ -218,15 +215,7 @@ class Type1Font extends BaseFont
 			byte buf[] = new byte[1024];
 			try
 			{
-				if(resourceAnchor == null)
-					resourceAnchor = new FontsResourceAnchor();
-				is = getResourceStream(RESOURCE_PATH + afmFile + ".afm", resourceAnchor.getClass().getClassLoader());
-				if(is == null)
-				{
-					String msg = afmFile + " not found as resource. (The *.afm files must exist as resources in the package com.lowagie.text.pdf.fonts)";
-					System.err.println(msg);
-					throw new DocumentException(msg);
-				}
+				is = Document.assetManager.open(afmFile + ".afm");
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				while(true)
 				{
@@ -374,12 +363,15 @@ class Type1Font extends BaseFont
 	 * @param char2 the second char
 	 * @return the kerning to be applied
 	 */
+	@Override
 	public int getKerning(int char1, int char2)
 	{
-		String first = GlyphList.unicodeToName(char1);
+		GlyphList glyphList = new GlyphList();
+
+		String first = glyphList.unicodeToName(char1);
 		if(first == null)
 			return 0;
-		String second = GlyphList.unicodeToName(char2);
+		String second = glyphList.unicodeToName(char2);
 		if(second == null)
 			return 0;
 		Object obj[] = (Object[]) KernPairs.get(first);
@@ -740,6 +732,7 @@ class Type1Font extends BaseFont
 	 * @throws IOException       on error
 	 * @throws DocumentException error in generating the object
 	 */
+	@Override
 	void writeFont(PdfWriter writer, PdfIndirectReference ref, Object params[]) throws DocumentException, IOException
 	{
 		int firstChar = ((Integer) params[0]).intValue();
@@ -900,12 +893,15 @@ class Type1Font extends BaseFont
 	 * @param kern  the kerning to apply in normalized 1000 units
 	 * @return <code>true</code> if the kerning was applied, <code>false</code> otherwise
 	 */
+	@Override
 	public boolean setKerning(int char1, int char2, int kern)
 	{
-		String first = GlyphList.unicodeToName(char1);
+		GlyphList glyphList = new GlyphList();
+
+		String first = glyphList.unicodeToName(char1);
 		if(first == null)
 			return false;
-		String second = GlyphList.unicodeToName(char2);
+		String second = glyphList.unicodeToName(char2);
 		if(second == null)
 			return false;
 		Object obj[] = (Object[]) KernPairs.get(first);

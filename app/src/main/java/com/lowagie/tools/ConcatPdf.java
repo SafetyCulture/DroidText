@@ -49,6 +49,7 @@
 
 package com.lowagie.tools;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfImportedPage;
@@ -73,7 +74,7 @@ public class ConcatPdf
 	 *
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[])
+	public static void main(String args[], AssetManager manager)
 	{
 		if(args.length < 2)
 		{
@@ -109,10 +110,10 @@ public class ConcatPdf
 					if(f == 0)
 					{
 						// step 1: creation of a document-object
-						document = new Document(reader.getPageSizeWithRotation(1));
+						document = new Document(reader.getPageSizeWithRotation(1), manager);
 						// step 2: we create a writer that listens to the
 						// document
-						writer = new PdfCopy(document, new FileOutputStream(outFile));
+						writer = new PdfCopy(document, new FileOutputStream(outFile), manager);
 						// step 3: we open the document
 						document.open();
 					}

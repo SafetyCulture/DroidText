@@ -49,6 +49,7 @@
 
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocListener;
 import com.lowagie.text.DocWriter;
 import com.lowagie.text.Document;
@@ -679,10 +680,10 @@ public class PdfWriter extends DocWriter implements
 	 * @throws DocumentException on error
 	 */
 
-	public static PdfWriter getInstance(Document document, OutputStream os)
+	public static PdfWriter getInstance(Document document, OutputStream os, AssetManager manager)
 			throws DocumentException
 	{
-		PdfDocument pdf = new PdfDocument();
+		PdfDocument pdf = new PdfDocument(manager);
 		document.addDocListener(pdf);
 		PdfWriter writer = new PdfWriter(pdf, os);
 		pdf.addWriter(writer);
@@ -699,10 +700,10 @@ public class PdfWriter extends DocWriter implements
 	 * @throws DocumentException on error
 	 */
 
-	public static PdfWriter getInstance(Document document, OutputStream os, DocListener listener)
+	public static PdfWriter getInstance(Document document, OutputStream os, DocListener listener, AssetManager manager)
 			throws DocumentException
 	{
-		PdfDocument pdf = new PdfDocument();
+		PdfDocument pdf = new PdfDocument(manager);
 		pdf.addDocListener(listener);
 		document.addDocListener(pdf);
 		PdfWriter writer = new PdfWriter(pdf, os);
@@ -2137,7 +2138,6 @@ public class PdfWriter extends DocWriter implements
 	 * @param outputCondition           a value, "PDFA/A" to force GTS_PDFA1, otherwise cued by pdfxConformance.
 	 * @param registryName              a value
 	 * @param info                      a value
-	 * @param colorProfile              a value
 	 * @throws IOException on error
 	 * @since 2.1.5
 	 */

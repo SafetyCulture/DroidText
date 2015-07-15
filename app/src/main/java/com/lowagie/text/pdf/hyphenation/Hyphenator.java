@@ -16,10 +16,11 @@
 
 package com.lowagie.text.pdf.hyphenation;
 
-import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
@@ -102,21 +103,27 @@ public class Hyphenator
 	 */
 	public static HyphenationTree getResourceHyphenationTree(String key)
 	{
+		InputStream stream;
+
 		try
 		{
-			InputStream stream = BaseFont.getResourceStream(defaultHyphLocation + key + ".xml");
-			if(stream == null && key.length() > 2)
-				stream = BaseFont.getResourceStream(defaultHyphLocation + key.substring(0, 2) + ".xml");
-			if(stream == null)
-				return null;
-			HyphenationTree hTree = new HyphenationTree();
-			hTree.loadSimplePatterns(stream);
-			return hTree;
+			stream = Document.assetManager.open(key + ".xml");
 		}
-		catch(Exception e)
+		catch(IOException e1)
 		{
-			return null;
+			try
+			{
+				stream = Document.assetManager.open(key.substring(0, 2) + ".xml");
+			}
+			catch(IOException e2)
+			{
+				return null;
+			}
 		}
+
+		HyphenationTree hTree = new HyphenationTree();
+		hTree.loadSimplePatterns(stream);
+		return hTree;
 	}
 
 	/**

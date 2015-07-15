@@ -47,9 +47,11 @@
 
 package com.lowagie.text.pdf;
 
+import com.lowagie.text.Document;
 import com.lowagie.text.ExceptionConverter;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -497,10 +499,8 @@ public class PdfEncodings
 
 	static void readCmap(String name, ArrayList planes) throws IOException
 	{
-		String fullName = BaseFont.RESOURCE_PATH + "cmaps/" + name;
-		InputStream in = BaseFont.getResourceStream(fullName);
-		if(in == null)
-			throw new IOException("The Cmap " + name + " was not found.");
+		String fullName = "cmaps" + File.pathSeparator + name;
+		InputStream in = Document.assetManager.open(fullName);
 		encodeStream(in, planes);
 		in.close();
 	}

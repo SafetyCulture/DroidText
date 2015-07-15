@@ -46,6 +46,7 @@
  */
 package com.lowagie.text.pdf;
 
+import android.content.res.AssetManager;
 import com.lowagie.text.DocWriter;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.interfaces.PdfEncryptionSettings;
@@ -75,9 +76,9 @@ public class PdfCopyFields
 	 * @param os the output stream
 	 * @throws DocumentException on error
 	 */
-	public PdfCopyFields(OutputStream os) throws DocumentException
+	public PdfCopyFields(OutputStream os, AssetManager manager) throws DocumentException
 	{
-		fc = new PdfCopyFieldsImp(os);
+		fc = new PdfCopyFieldsImp(os, manager);
 	}
 
 	/**
@@ -87,9 +88,9 @@ public class PdfCopyFields
 	 * @param pdfVersion the pdf version the output will have
 	 * @throws DocumentException on error
 	 */
-	public PdfCopyFields(OutputStream os, char pdfVersion) throws DocumentException
+	public PdfCopyFields(OutputStream os, char pdfVersion, AssetManager manager) throws DocumentException
 	{
-		fc = new PdfCopyFieldsImp(os, pdfVersion);
+		fc = new PdfCopyFieldsImp(os, pdfVersion, manager);
 	}
 
 	/**

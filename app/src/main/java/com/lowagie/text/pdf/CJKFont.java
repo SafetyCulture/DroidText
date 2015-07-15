@@ -49,6 +49,7 @@
 
 package com.lowagie.text.pdf;
 
+import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 
 import java.io.IOException;
@@ -113,10 +114,10 @@ class CJKFont extends BaseFont
 				return;
 			try
 			{
-				InputStream is = getResourceStream(RESOURCE_PATH + "cjkfonts.properties");
+				InputStream is = Document.assetManager.open("cjkfonts.properties");
 				cjkFonts.load(is);
 				is.close();
-				is = getResourceStream(RESOURCE_PATH + "cjkencodings.properties");
+				is = Document.assetManager.open("cjkencodings.properties");
 				cjkEncodings.load(is);
 				is.close();
 			}
@@ -272,6 +273,7 @@ class CJKFont extends BaseFont
 		return 0;
 	}
 
+	@Override
 	public int getKerning(int char1, int char2)
 	{
 		return 0;
@@ -334,6 +336,7 @@ class CJKFont extends BaseFont
 		return dic;
 	}
 
+	@Override
 	void writeFont(PdfWriter writer, PdfIndirectReference ref, Object params[]) throws DocumentException, IOException
 	{
 		IntHashtable cjkTag = (IntHashtable) params[0];
@@ -477,7 +480,7 @@ class CJKFont extends BaseFont
 		try
 		{
 			name = name + ".cmap";
-			InputStream is = getResourceStream(RESOURCE_PATH + name);
+			InputStream is = Document.assetManager.open(name);
 			char c[] = new char[0x10000];
 			for(int k = 0; k < 0x10000; ++k)
 				c[k] = (char) ((is.read() << 8) + is.read());
@@ -677,7 +680,7 @@ class CJKFont extends BaseFont
 		try
 		{
 			name += ".properties";
-			InputStream is = getResourceStream(RESOURCE_PATH + name);
+			InputStream is = Document.assetManager.open(name);
 			Properties p = new Properties();
 			p.load(is);
 			is.close();

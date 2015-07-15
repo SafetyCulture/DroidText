@@ -192,6 +192,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener
 		cprops.addToChain("body", h);
 	}
 
+	@Override
 	public void startElement(String tag, HashMap h)
 	{
 		if(!tagsSupported.containsKey(tag))
@@ -719,6 +720,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener
 		}
 	}
 
+	@Override
 	public void text(String str)
 	{
 		if(skipText)
