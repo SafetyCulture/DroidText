@@ -60,6 +60,8 @@ import com.lowagie.text.pdf.events.PdfPCellEventForwarder;
 
 import java.util.List;
 
+import static com.lowagie.text.pdf.PdfWriter.RUN_DIRECTION_LTR;
+
 /**
  * A cell in a PdfPTable.
  */
@@ -180,6 +182,7 @@ public class PdfPCell extends Rectangle
 		super(0, 0, 0, 0);
 		borderWidth = 0.5f;
 		border = BOX;
+		setRunDirectionOnPhraseForArabicText(phrase);
 		column.addText(this.phrase = phrase);
 		column.setLeading(0, 1);
 	}
@@ -312,6 +315,11 @@ public class PdfPCell extends Rectangle
 			table = null;
 			column.setText(null);
 		}
+		if(element instanceof Phrase)
+		{
+			Phrase phrase = (Phrase) element;
+			setRunDirectionOnPhraseForArabicText(phrase);
+		}
 		column.addElement(element);
 	}
 
@@ -334,6 +342,7 @@ public class PdfPCell extends Rectangle
 	{
 		table = null;
 		image = null;
+		setRunDirectionOnPhraseForArabicText(phrase);
 		column.setText(this.phrase = phrase);
 	}
 
@@ -1144,5 +1153,11 @@ public class PdfPCell extends Rectangle
 		else if(height < getMinimumHeight())
 			height = getMinimumHeight();
 		return height;
+	}
+
+	private void setRunDirectionOnPhraseForArabicText(Phrase phrase)
+	{
+		if(phrase != null && phrase.hasArabicText())
+			setRunDirection(RUN_DIRECTION_LTR);
 	}
 }
