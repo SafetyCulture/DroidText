@@ -592,6 +592,18 @@ public class Phrase extends ArrayList implements TextElementArray
 		this.hyphenation = hyphenation;
 	}
 
+	public boolean hasArabicText()
+	{
+		for(Object chunk : getChunks())
+		{
+			Font font = ((Chunk) chunk).getFont();
+			if(font.getFamilyname().toLowerCase().contains("arabic"))
+				return true;
+		}
+
+		return false;
+	}
+
 	// kept for historical reasons; people should use FontSelector
 	// eligible for deprecation, but the methods are mentioned in the book p277.
 
